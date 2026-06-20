@@ -1,0 +1,109 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "5.4.1",
+      "isInstalled": true,
+      "creationTime": "06/20/2026 14:55:35 +00:00"
+    },
+    "Volo.Abp.Account": {
+      "version": "10.4.1",
+      "isInstalled": true,
+      "creationTime": "06/20/2026 14:55:35 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "10.4.1",
+      "isInstalled": true,
+      "creationTime": "06/20/2026 14:55:35 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "10.4.1",
+      "isInstalled": true,
+      "creationTime": "06/20/2026 14:55:35 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.4.1",
+      "isInstalled": true,
+      "creationTime": "06/20/2026 14:55:35 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.4.1",
+      "isInstalled": true,
+      "creationTime": "06/20/2026 14:55:35 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.4.1",
+      "isInstalled": true,
+      "creationTime": "06/20/2026 14:55:35 +00:00"
+    },
+    "Volo.Abp.BlobStoring.Database": {
+      "version": "10.4.1",
+      "isInstalled": true,
+      "creationTime": "06/20/2026 14:55:35 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "kareem_fullstack_portfolio.Application": {
+      "path": "src/kareem_fullstack_portfolio.Application/kareem_fullstack_portfolio.Application.abppkg",
+      "folder": "src"
+    },
+    "kareem_fullstack_portfolio.Application.Tests": {
+      "path": "test/kareem_fullstack_portfolio.Application.Tests/kareem_fullstack_portfolio.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "kareem_fullstack_portfolio.Domain.Shared": {
+      "path": "src/kareem_fullstack_portfolio.Domain.Shared/kareem_fullstack_portfolio.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "kareem_fullstack_portfolio.Application.Contracts": {
+      "path": "src/kareem_fullstack_portfolio.Application.Contracts/kareem_fullstack_portfolio.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "kareem_fullstack_portfolio.HttpApi": {
+      "path": "src/kareem_fullstack_portfolio.HttpApi/kareem_fullstack_portfolio.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "kareem_fullstack_portfolio.HttpApi.Client": {
+      "path": "src/kareem_fullstack_portfolio.HttpApi.Client/kareem_fullstack_portfolio.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "kareem_fullstack_portfolio.EntityFrameworkCore.Tests": {
+      "path": "test/kareem_fullstack_portfolio.EntityFrameworkCore.Tests/kareem_fullstack_portfolio.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "kareem_fullstack_portfolio.EntityFrameworkCore": {
+      "path": "src/kareem_fullstack_portfolio.EntityFrameworkCore/kareem_fullstack_portfolio.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "kareem_fullstack_portfolio.TestBase": {
+      "path": "test/kareem_fullstack_portfolio.TestBase/kareem_fullstack_portfolio.TestBase.abppkg",
+      "folder": "test"
+    },
+    "kareem_fullstack_portfolio.Domain.Tests": {
+      "path": "test/kareem_fullstack_portfolio.Domain.Tests/kareem_fullstack_portfolio.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "kareem_fullstack_portfolio.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/kareem_fullstack_portfolio.HttpApi.Client.ConsoleTestApp/kareem_fullstack_portfolio.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "kareem_fullstack_portfolio.DbMigrator": {
+      "path": "src/kareem_fullstack_portfolio.DbMigrator/kareem_fullstack_portfolio.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "kareem_fullstack_portfolio.HttpApi.Host": {
+      "path": "src/kareem_fullstack_portfolio.HttpApi.Host/kareem_fullstack_portfolio.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "kareem_fullstack_portfolio.Domain": {
+      "path": "src/kareem_fullstack_portfolio.Domain/kareem_fullstack_portfolio.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}

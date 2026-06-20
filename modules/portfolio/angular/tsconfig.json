@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.prod.json",
+  "compilerOptions": {
+    "paths": {
+      "@portfolio": ["projects/portfolio/src/public-api.ts"],
+      "@portfolio/config": [
+        "projects/portfolio/config/src/public-api.ts"
+      ]
+    }
+  }
+}

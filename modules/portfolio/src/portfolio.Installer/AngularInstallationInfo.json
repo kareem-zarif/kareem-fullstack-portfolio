@@ -1,0 +1,46 @@
+﻿{
+  "packages":[
+    {
+      "appRoutingModuleConfiguration":{
+        "imports":[
+          {
+            "names":[
+              "PORTFOLIO_ROUTES"
+            ],
+            "namespace": "@portfolio"
+          } 
+        ],
+        "routes":[
+          "{ path: 'portfolio', children: PORTFOLIO_ROUTES, canActivate: [authGuard] }"
+        ]
+      },
+      "appModuleConfiguration":{
+        "imports":[
+          {
+            "names":[
+              "provideportfolio"
+            ],
+            "namespace": "@portfolio/config"
+          }
+        ],
+        "providerNames":[
+          "provideportfolio()"
+        ]
+      },
+      "tsJsonPathRecordConfigurations":[
+        {
+          "name": "@portfolio",
+          "paths": [
+            "angular/projects/portfolio/src/public-api.ts"
+          ]
+        },
+        {
+          "name": "@portfolio/config",
+          "paths": [
+            "angular/projects/portfolio/config/src/public-api.ts"
+          ]
+        }
+      ]
+    }
+  ]
+}

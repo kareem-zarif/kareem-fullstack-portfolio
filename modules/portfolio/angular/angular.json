@@ -1,0 +1,55 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false
+  },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "dev-app": {
+      "projectType": "application",
+      "root": "projects/dev-app",
+      "sourceRoot": "projects/dev-app/src"
+    },
+    "portfolio": {
+      "projectType": "library",
+      "root": "projects/portfolio",
+      "sourceRoot": "projects/portfolio/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/portfolio/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/portfolio/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/portfolio/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/portfolio/tsconfig.spec.json",
+            "buildTarget": "projects/portfolio:build",
+            "runner": "vitest"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/portfolio/**/*.ts",
+              "projects/portfolio/**/*.html"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

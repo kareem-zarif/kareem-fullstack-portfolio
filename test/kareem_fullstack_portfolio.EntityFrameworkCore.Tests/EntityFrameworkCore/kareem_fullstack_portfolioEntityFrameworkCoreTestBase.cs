@@ -1,0 +1,8 @@
+﻿using Volo.Abp;
+
+namespace kareem_fullstack_portfolio.EntityFrameworkCore;
+
+public abstract class kareem_fullstack_portfolioEntityFrameworkCoreTestBase : kareem_fullstack_portfolioTestBase<kareem_fullstack_portfolioEntityFrameworkCoreTestModule>
+{
+
+}

@@ -1,0 +1,10 @@
+using kareem_fullstack_portfolio.Samples;
+using Xunit;
+
+namespace kareem_fullstack_portfolio.EntityFrameworkCore.Applications;
+
+[Collection(kareem_fullstack_portfolioTestConsts.CollectionDefinitionName)]
+public class EfCoreSampleAppServiceTests : SampleAppServiceTests<kareem_fullstack_portfolioEntityFrameworkCoreTestModule>
+{
+
+}

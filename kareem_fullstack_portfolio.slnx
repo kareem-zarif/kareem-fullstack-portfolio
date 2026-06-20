@@ -1,0 +1,23 @@
+<Solution>
+    <Configurations>
+        <Platform Name="Any CPU" />
+    </Configurations>
+    <Folder Name="/src/">
+        <Project Path="src/kareem_fullstack_portfolio.Domain/kareem_fullstack_portfolio.Domain.csproj" />
+        <Project Path="src/kareem_fullstack_portfolio.Application/kareem_fullstack_portfolio.Application.csproj" />
+        <Project Path="src/kareem_fullstack_portfolio.EntityFrameworkCore/kareem_fullstack_portfolio.EntityFrameworkCore.csproj" />
+        <Project Path="src/kareem_fullstack_portfolio.Domain.Shared/kareem_fullstack_portfolio.Domain.Shared.csproj" />
+        <Project Path="src/kareem_fullstack_portfolio.Application.Contracts/kareem_fullstack_portfolio.Application.Contracts.csproj" />
+        <Project Path="src/kareem_fullstack_portfolio.HttpApi/kareem_fullstack_portfolio.HttpApi.csproj" />
+        <Project Path="src/kareem_fullstack_portfolio.HttpApi.Client/kareem_fullstack_portfolio.HttpApi.Client.csproj" />
+        <Project Path="src/kareem_fullstack_portfolio.HttpApi.Host/kareem_fullstack_portfolio.HttpApi.Host.csproj" />
+        <Project Path="src/kareem_fullstack_portfolio.DbMigrator/kareem_fullstack_portfolio.DbMigrator.csproj" />
+    </Folder>
+    <Folder Name="/test/">
+        <Project Path="test/kareem_fullstack_portfolio.Application.Tests/kareem_fullstack_portfolio.Application.Tests.csproj" />
+        <Project Path="test/kareem_fullstack_portfolio.EntityFrameworkCore.Tests/kareem_fullstack_portfolio.EntityFrameworkCore.Tests.csproj" />
+        <Project Path="test/kareem_fullstack_portfolio.TestBase/kareem_fullstack_portfolio.TestBase.csproj" />
+        <Project Path="test/kareem_fullstack_portfolio.Domain.Tests/kareem_fullstack_portfolio.Domain.Tests.csproj" />
+        <Project Path="test/kareem_fullstack_portfolio.HttpApi.Client.ConsoleTestApp/kareem_fullstack_portfolio.HttpApi.Client.ConsoleTestApp.csproj" />
+    </Folder>
+</Solution>

@@ -1,0 +1,9 @@
+﻿using kareem_fullstack_portfolio.EntityFrameworkCore;
+using Xunit;
+
+namespace kareem_fullstack_portfolio.EntityFrameworkCore;
+
+public class kareem_fullstack_portfolioEntityFrameworkCoreCollectionFixtureBase : ICollectionFixture<kareem_fullstack_portfolioEntityFrameworkCoreFixture>
+{
+
+}
