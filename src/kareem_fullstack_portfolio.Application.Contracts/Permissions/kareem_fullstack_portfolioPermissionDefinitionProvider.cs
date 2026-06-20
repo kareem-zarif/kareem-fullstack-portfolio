@@ -11,8 +11,7 @@ public class kareem_fullstack_portfolioPermissionDefinitionProvider : Permission
     {
         var myGroup = context.AddGroup(kareem_fullstack_portfolioPermissions.GroupName);
 
-        //Define your own permissions here. Example:
-        //myGroup.AddPermission(kareem_fullstack_portfolioPermissions.MyPermission1, L("Permission:MyPermission1"));
+        myGroup.AddPermission(kareem_fullstack_portfolioPermissions.Admin.Access, L("Permission:Admin.Access"));
     }
 
     private static LocalizableString L(string name)
