@@ -84,6 +84,14 @@
     "Enum:PortfolioHomeBusinessValueType.BusinessWorkflowThinking": "تفكير سير عمل الأعمال",
     "Enum:PortfolioHomeBusinessValueType.FullStackDelivery": "تسليم Full Stack",
     "Enum:PortfolioHomeBusinessValueType.SecurityAndPermissions": "الأمان والصلاحيات",
+    "Enum:PortfolioExperienceTimelineItemType.EngineeringFoundation": "الأساس الهندسي",
+    "Enum:PortfolioExperienceTimelineItemType.SearchAdsEvaluatorExperience": "خبرة تقييم إعلانات البحث",
+    "Enum:PortfolioExperienceTimelineItemType.DotNetFullStackTraining": "تدريب ITI على .NET Full Stack",
+    "Enum:PortfolioExperienceTimelineItemType.EnterpriseErpDelivery": "تنفيذ ERP المؤسسي",
+    "Enum:PortfolioExperienceHighlightType.AnalyticalThinking": "التفكير التحليلي",
+    "Enum:PortfolioExperienceHighlightType.BusinessUnderstanding": "فهم الأعمال",
+    "Enum:PortfolioExperienceHighlightType.StructuredProblemSolving": "حل المشكلات بشكل منظم",
+    "Enum:PortfolioExperienceHighlightType.WorkflowAwareness": "الوعي بسير العمل",
     "Permission:Admin.Access": "الوصول إلى واجهة إدارة البورتفوليو",
     "kareem_fullstack_portfolio:010001": "يجب أن تحتوي هوية البورتفوليو على الاسم الكامل لكريم.",
     "kareem_fullstack_portfolio:010002": "يجب أن يوضح العنوان المهني تموضع .NET Full Stack بوضوح.",
@@ -107,6 +115,14 @@
     "kareem_fullstack_portfolio:010207": "يجب أن يتضمن تمييز خبرة ERP مسار صفحة المشروع.",
     "kareem_fullstack_portfolio:010208": "تمييز خبرة ERP يفتقد قدرة مطلوبة: {ErpCapabilityType}.",
     "kareem_fullstack_portfolio:010209": "الصفحة الرئيسية تفتقد عنصرا مطلوبا في قسم القيمة التجارية: {BusinessValueType}.",
-    "kareem_fullstack_portfolio:010210": "يجب أن يشير زر التواصل في الصفحة الرئيسية إلى تجربة التواصل."
+    "kareem_fullstack_portfolio:010210": "يجب أن يشير زر التواصل في الصفحة الرئيسية إلى تجربة التواصل.",
+    "kareem_fullstack_portfolio:010301": "يجب أن يتضمن قسم الخبرة عنوانا.",
+    "kareem_fullstack_portfolio:010302": "يجب أن يتضمن قسم الخبرة ملخصا قصيرا.",
+    "kareem_fullstack_portfolio:010303": "يجب أن يبقى ملخص الخبرة مختصرا ولا يتجاوز {MaxLength} حرفا.",
+    "kareem_fullstack_portfolio:010304": "الخط الزمني للخبرة يفتقد عنصرا مطلوبا: {TimelineItemType}.",
+    "kareem_fullstack_portfolio:010305": "يجب أن يحدد قسم الخبرة تنفيذ ERP كخبرة البرمجيات المهنية الأساسية.",
+    "kareem_fullstack_portfolio:010306": "قسم الخبرة يفتقد شارة مطلوبة: {HighlightType}.",
+    "kareem_fullstack_portfolio:010307": "عنصر الخط الزمني للخبرة يفتقد حقلا مطلوبا: {TimelineItemType}.{FieldName}.",
+    "kareem_fullstack_portfolio:010308": "نص عنصر الخط الزمني للخبرة طويل جدا: {TimelineItemType}.{FieldName} يتجاوز {MaxLength} حرفا."
   }
 }

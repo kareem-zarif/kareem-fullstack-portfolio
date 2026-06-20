@@ -51,6 +51,14 @@
     "Enum:PortfolioHomeBusinessValueType.BusinessWorkflowThinking": "Business workflow thinking",
     "Enum:PortfolioHomeBusinessValueType.FullStackDelivery": "Full-stack delivery",
     "Enum:PortfolioHomeBusinessValueType.SecurityAndPermissions": "Security and permissions",
+    "Enum:PortfolioExperienceTimelineItemType.EngineeringFoundation": "Engineering foundation",
+    "Enum:PortfolioExperienceTimelineItemType.SearchAdsEvaluatorExperience": "Search Ads Evaluator experience",
+    "Enum:PortfolioExperienceTimelineItemType.DotNetFullStackTraining": "ITI .NET full-stack training",
+    "Enum:PortfolioExperienceTimelineItemType.EnterpriseErpDelivery": "Enterprise ERP delivery",
+    "Enum:PortfolioExperienceHighlightType.AnalyticalThinking": "Analytical thinking",
+    "Enum:PortfolioExperienceHighlightType.BusinessUnderstanding": "Business understanding",
+    "Enum:PortfolioExperienceHighlightType.StructuredProblemSolving": "Structured problem solving",
+    "Enum:PortfolioExperienceHighlightType.WorkflowAwareness": "Workflow awareness",
     "Permission:Admin.Access": "Access portfolio admin shell",
     "kareem_fullstack_portfolio:010001": "Portfolio identity must include Kareem's full name.",
     "kareem_fullstack_portfolio:010002": "Portfolio identity title must clearly show .NET full-stack positioning.",
@@ -74,6 +82,14 @@
     "kareem_fullstack_portfolio:010207": "Portfolio home page ERP highlight must include a project route.",
     "kareem_fullstack_portfolio:010208": "Portfolio home page ERP highlight is missing a required capability: {ErpCapabilityType}.",
     "kareem_fullstack_portfolio:010209": "Portfolio home page is missing a required business value item: {BusinessValueType}.",
-    "kareem_fullstack_portfolio:010210": "Portfolio home page contact call-to-action must point to the contact experience."
+    "kareem_fullstack_portfolio:010210": "Portfolio home page contact call-to-action must point to the contact experience.",
+    "kareem_fullstack_portfolio:010301": "Portfolio experience section must include a headline.",
+    "kareem_fullstack_portfolio:010302": "Portfolio experience section must include a short summary.",
+    "kareem_fullstack_portfolio:010303": "Portfolio experience summary must stay concise and no longer than {MaxLength} characters.",
+    "kareem_fullstack_portfolio:010304": "Portfolio experience timeline is missing a required item: {TimelineItemType}.",
+    "kareem_fullstack_portfolio:010305": "Portfolio experience must mark ERP delivery as the primary professional software experience.",
+    "kareem_fullstack_portfolio:010306": "Portfolio experience section is missing a required highlight: {HighlightType}.",
+    "kareem_fullstack_portfolio:010307": "Portfolio experience timeline item is missing a required field: {TimelineItemType}.{FieldName}.",
+    "kareem_fullstack_portfolio:010308": "Portfolio experience timeline item text is too long: {TimelineItemType}.{FieldName} exceeds {MaxLength} characters."
   }
 }

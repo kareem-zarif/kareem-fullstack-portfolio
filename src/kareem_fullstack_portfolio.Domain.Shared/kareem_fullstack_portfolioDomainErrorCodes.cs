@@ -25,4 +25,12 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string HomePageMissingErpCapability = "kareem_fullstack_portfolio:010208";
     public const string HomePageMissingBusinessValueItem = "kareem_fullstack_portfolio:010209";
     public const string HomePageContactCallToActionInvalid = "kareem_fullstack_portfolio:010210";
+    public const string PortfolioExperienceHeadlineRequired = "kareem_fullstack_portfolio:010301";
+    public const string PortfolioExperienceSummaryRequired = "kareem_fullstack_portfolio:010302";
+    public const string PortfolioExperienceSummaryTooLong = "kareem_fullstack_portfolio:010303";
+    public const string PortfolioExperienceMissingTimelineItem = "kareem_fullstack_portfolio:010304";
+    public const string PortfolioExperiencePrimaryItemMustBeErp = "kareem_fullstack_portfolio:010305";
+    public const string PortfolioExperienceMissingHighlight = "kareem_fullstack_portfolio:010306";
+    public const string PortfolioExperienceTimelineItemFieldRequired = "kareem_fullstack_portfolio:010307";
+    public const string PortfolioExperienceTimelineItemTextTooLong = "kareem_fullstack_portfolio:010308";
 }

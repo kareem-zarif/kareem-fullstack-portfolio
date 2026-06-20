@@ -57,6 +57,14 @@
     "Enum:PortfolioHomeBusinessValueType.BusinessWorkflowThinking": "Business-Workflow-Denken",
     "Enum:PortfolioHomeBusinessValueType.FullStackDelivery": "Full-Stack-Delivery",
     "Enum:PortfolioHomeBusinessValueType.SecurityAndPermissions": "Sicherheit und Berechtigungen",
+    "Enum:PortfolioExperienceTimelineItemType.EngineeringFoundation": "Ingenieurtechnische Grundlage",
+    "Enum:PortfolioExperienceTimelineItemType.SearchAdsEvaluatorExperience": "Erfahrung als Search Ads Evaluator",
+    "Enum:PortfolioExperienceTimelineItemType.DotNetFullStackTraining": ".NET-Full-Stack-Training bei ITI",
+    "Enum:PortfolioExperienceTimelineItemType.EnterpriseErpDelivery": "Enterprise-ERP-Umsetzung",
+    "Enum:PortfolioExperienceHighlightType.AnalyticalThinking": "Analytisches Denken",
+    "Enum:PortfolioExperienceHighlightType.BusinessUnderstanding": "Business-Verständnis",
+    "Enum:PortfolioExperienceHighlightType.StructuredProblemSolving": "Strukturiertes Problemlösen",
+    "Enum:PortfolioExperienceHighlightType.WorkflowAwareness": "Workflow-Bewusstsein",
     "kareem_fullstack_portfolio:010201": "Der Portfolio-Startseite fehlt die erforderliche Zielgruppe: {TargetAudience}.",
     "kareem_fullstack_portfolio:010202": "Die Portfolio-Startseite muss die .NET- und Angular-Spezialisierung klar zeigen.",
     "kareem_fullstack_portfolio:010203": "Der Portfolio-Startseite fehlt die erforderliche Tech-Stack-Karte: {TechStackCardType}.",
@@ -66,6 +74,14 @@
     "kareem_fullstack_portfolio:010207": "Das ERP-Highlight der Portfolio-Startseite muss eine Projektroute enthalten.",
     "kareem_fullstack_portfolio:010208": "Dem ERP-Highlight der Portfolio-Startseite fehlt die erforderliche Fähigkeit: {ErpCapabilityType}.",
     "kareem_fullstack_portfolio:010209": "Der Portfolio-Startseite fehlt das erforderliche Business-Value-Element: {BusinessValueType}.",
-    "kareem_fullstack_portfolio:010210": "Der Kontakt-Call-to-Action der Portfolio-Startseite muss auf die Kontakt-Erfahrung verweisen."
+    "kareem_fullstack_portfolio:010210": "Der Kontakt-Call-to-Action der Portfolio-Startseite muss auf die Kontakt-Erfahrung verweisen.",
+    "kareem_fullstack_portfolio:010301": "Der Portfolio-Erfahrungsbereich muss eine Überschrift enthalten.",
+    "kareem_fullstack_portfolio:010302": "Der Portfolio-Erfahrungsbereich muss eine kurze Zusammenfassung enthalten.",
+    "kareem_fullstack_portfolio:010303": "Die Zusammenfassung der Portfolio-Erfahrung muss knapp bleiben und darf höchstens {MaxLength} Zeichen lang sein.",
+    "kareem_fullstack_portfolio:010304": "Der Portfolio-Erfahrungszeitstrahl enthält nicht den erforderlichen Eintrag: {TimelineItemType}.",
+    "kareem_fullstack_portfolio:010305": "Die Portfolio-Erfahrung muss die ERP-Umsetzung als wichtigste professionelle Software-Erfahrung markieren.",
+    "kareem_fullstack_portfolio:010306": "Dem Portfolio-Erfahrungsbereich fehlt das erforderliche Highlight: {HighlightType}.",
+    "kareem_fullstack_portfolio:010307": "Einem Zeitstrahl-Eintrag der Portfolio-Erfahrung fehlt ein Pflichtfeld: {TimelineItemType}.{FieldName}.",
+    "kareem_fullstack_portfolio:010308": "Der Text eines Zeitstrahl-Eintrags der Portfolio-Erfahrung ist zu lang: {TimelineItemType}.{FieldName} überschreitet {MaxLength} Zeichen."
   }
 }

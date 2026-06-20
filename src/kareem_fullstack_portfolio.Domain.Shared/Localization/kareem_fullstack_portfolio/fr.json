@@ -57,6 +57,14 @@
     "Enum:PortfolioHomeBusinessValueType.BusinessWorkflowThinking": "Reflexion workflow metier",
     "Enum:PortfolioHomeBusinessValueType.FullStackDelivery": "Livraison full stack",
     "Enum:PortfolioHomeBusinessValueType.SecurityAndPermissions": "Securite et permissions",
+    "Enum:PortfolioExperienceTimelineItemType.EngineeringFoundation": "Fondation en ingenierie",
+    "Enum:PortfolioExperienceTimelineItemType.SearchAdsEvaluatorExperience": "Experience comme evaluateur Search Ads",
+    "Enum:PortfolioExperienceTimelineItemType.DotNetFullStackTraining": "Formation ITI .NET full stack",
+    "Enum:PortfolioExperienceTimelineItemType.EnterpriseErpDelivery": "Livraison ERP d'entreprise",
+    "Enum:PortfolioExperienceHighlightType.AnalyticalThinking": "Reflexion analytique",
+    "Enum:PortfolioExperienceHighlightType.BusinessUnderstanding": "Compréhension metier",
+    "Enum:PortfolioExperienceHighlightType.StructuredProblemSolving": "Resolution structuree de problemes",
+    "Enum:PortfolioExperienceHighlightType.WorkflowAwareness": "Sensibilisation aux workflows",
     "kareem_fullstack_portfolio:010201": "La page d'accueil du portfolio n'a pas l'audience cible requise : {TargetAudience}.",
     "kareem_fullstack_portfolio:010202": "La page d'accueil du portfolio doit rendre evidente la specialisation .NET et Angular.",
     "kareem_fullstack_portfolio:010203": "La page d'accueil du portfolio n'a pas la carte de stack requise : {TechStackCardType}.",
@@ -66,6 +74,14 @@
     "kareem_fullstack_portfolio:010207": "La mise en avant ERP de la page d'accueil doit inclure une route de projet.",
     "kareem_fullstack_portfolio:010208": "La mise en avant ERP de la page d'accueil n'a pas la capacite requise : {ErpCapabilityType}.",
     "kareem_fullstack_portfolio:010209": "La page d'accueil du portfolio n'a pas l'element de valeur metier requis : {BusinessValueType}.",
-    "kareem_fullstack_portfolio:010210": "L'appel a l'action de contact de la page d'accueil doit pointer vers l'experience de contact."
+    "kareem_fullstack_portfolio:010210": "L'appel a l'action de contact de la page d'accueil doit pointer vers l'experience de contact.",
+    "kareem_fullstack_portfolio:010301": "La section experience du portfolio doit inclure un titre.",
+    "kareem_fullstack_portfolio:010302": "La section experience du portfolio doit inclure un court resume.",
+    "kareem_fullstack_portfolio:010303": "Le resume de l'experience du portfolio doit rester concis et ne pas depasser {MaxLength} caracteres.",
+    "kareem_fullstack_portfolio:010304": "La chronologie de l'experience du portfolio n'inclut pas l'element requis : {TimelineItemType}.",
+    "kareem_fullstack_portfolio:010305": "L'experience du portfolio doit marquer la livraison ERP comme experience logicielle professionnelle principale.",
+    "kareem_fullstack_portfolio:010306": "La section experience du portfolio n'a pas le highlight requis : {HighlightType}.",
+    "kareem_fullstack_portfolio:010307": "Un element de la chronologie de l'experience du portfolio n'a pas un champ requis : {TimelineItemType}.{FieldName}.",
+    "kareem_fullstack_portfolio:010308": "Le texte d'un element de la chronologie de l'experience du portfolio est trop long : {TimelineItemType}.{FieldName} depasse {MaxLength} caracteres."
   }
 }
