@@ -65,6 +65,14 @@
     "Enum:PortfolioExperienceHighlightType.BusinessUnderstanding": "Compréhension metier",
     "Enum:PortfolioExperienceHighlightType.StructuredProblemSolving": "Resolution structuree de problemes",
     "Enum:PortfolioExperienceHighlightType.WorkflowAwareness": "Sensibilisation aux workflows",
+    "Permission:Skills": "Voir les competences du portfolio",
+    "Permission:Skills.Manage": "Creer, modifier et supprimer les competences du portfolio",
+    "Enum:PortfolioSkillCategory.BackendApis": "Backend et APIs",
+    "Enum:PortfolioSkillCategory.Frontend": "Frontend",
+    "Enum:PortfolioSkillCategory.Database": "Base de donnees",
+    "Enum:PortfolioSkillCategory.Architecture": "Architecture",
+    "Enum:PortfolioSkillCategory.Tools": "Outils",
+    "Enum:PortfolioSkillCategory.BusinessAndSoftSkills": "Competences metier et relationnelles",
     "kareem_fullstack_portfolio:010201": "La page d'accueil du portfolio n'a pas l'audience cible requise : {TargetAudience}.",
     "kareem_fullstack_portfolio:010202": "La page d'accueil du portfolio doit rendre evidente la specialisation .NET et Angular.",
     "kareem_fullstack_portfolio:010203": "La page d'accueil du portfolio n'a pas la carte de stack requise : {TechStackCardType}.",
@@ -82,6 +90,11 @@
     "kareem_fullstack_portfolio:010305": "L'experience du portfolio doit marquer la livraison ERP comme experience logicielle professionnelle principale.",
     "kareem_fullstack_portfolio:010306": "La section experience du portfolio n'a pas le highlight requis : {HighlightType}.",
     "kareem_fullstack_portfolio:010307": "Un element de la chronologie de l'experience du portfolio n'a pas un champ requis : {TimelineItemType}.{FieldName}.",
-    "kareem_fullstack_portfolio:010308": "Le texte d'un element de la chronologie de l'experience du portfolio est trop long : {TimelineItemType}.{FieldName} depasse {MaxLength} caracteres."
+    "kareem_fullstack_portfolio:010308": "Le texte d'un element de la chronologie de l'experience du portfolio est trop long : {TimelineItemType}.{FieldName} depasse {MaxLength} caracteres.",
+    "kareem_fullstack_portfolio:010401": "La competence du portfolio est introuvable : {SkillId}.",
+    "kareem_fullstack_portfolio:010402": "Le nom de la competence du portfolio est requis.",
+    "kareem_fullstack_portfolio:010403": "Le nom de la competence du portfolio ne doit pas depasser {MaxLength} caracteres.",
+    "kareem_fullstack_portfolio:010404": "L'ordre d'affichage de la competence du portfolio doit etre superieur ou egal a zero.",
+    "kareem_fullstack_portfolio:010405": "La competence du portfolio '{Name}' existe deja dans la categorie '{Category}'."
   }
 }

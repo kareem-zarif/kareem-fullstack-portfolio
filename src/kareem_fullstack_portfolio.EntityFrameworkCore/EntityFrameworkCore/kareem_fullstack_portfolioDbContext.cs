@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using kareem_fullstack_portfolio.EntityFrameworkCore.Skills;
+using kareem_fullstack_portfolio.Skills;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
@@ -22,6 +24,7 @@ public class kareem_fullstack_portfolioDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<PortfolioSkill> PortfolioSkills { get; set; }
 
 
     #region Entities from the modules
@@ -71,12 +74,6 @@ public class kareem_fullstack_portfolioDbContext :
         builder.ConfigureBlobStoring();
 
         /* Configure your own tables/entities inside here */
-
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(kareem_fullstack_portfolioConsts.DbTablePrefix + "YourEntities", kareem_fullstack_portfolioConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.ApplyConfiguration(new PortfolioSkillConfiguration());
     }
 }

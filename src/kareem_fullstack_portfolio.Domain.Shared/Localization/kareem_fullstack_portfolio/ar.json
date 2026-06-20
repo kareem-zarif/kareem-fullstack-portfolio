@@ -93,6 +93,14 @@
     "Enum:PortfolioExperienceHighlightType.StructuredProblemSolving": "حل المشكلات بشكل منظم",
     "Enum:PortfolioExperienceHighlightType.WorkflowAwareness": "الوعي بسير العمل",
     "Permission:Admin.Access": "الوصول إلى واجهة إدارة البورتفوليو",
+    "Permission:Skills": "عرض مهارات البورتفوليو",
+    "Permission:Skills.Manage": "إنشاء وتعديل وحذف مهارات البورتفوليو",
+    "Enum:PortfolioSkillCategory.BackendApis": "الـ Backend والواجهات البرمجية",
+    "Enum:PortfolioSkillCategory.Frontend": "الواجهة الأمامية",
+    "Enum:PortfolioSkillCategory.Database": "قاعدة البيانات",
+    "Enum:PortfolioSkillCategory.Architecture": "المعمارية",
+    "Enum:PortfolioSkillCategory.Tools": "الأدوات",
+    "Enum:PortfolioSkillCategory.BusinessAndSoftSkills": "المهارات التجارية والشخصية",
     "kareem_fullstack_portfolio:010001": "يجب أن تحتوي هوية البورتفوليو على الاسم الكامل لكريم.",
     "kareem_fullstack_portfolio:010002": "يجب أن يوضح العنوان المهني تموضع .NET Full Stack بوضوح.",
     "kareem_fullstack_portfolio:010003": "يجب أن تركز الرسالة الرئيسية على أنظمة الأعمال.",
@@ -123,6 +131,11 @@
     "kareem_fullstack_portfolio:010305": "يجب أن يحدد قسم الخبرة تنفيذ ERP كخبرة البرمجيات المهنية الأساسية.",
     "kareem_fullstack_portfolio:010306": "قسم الخبرة يفتقد شارة مطلوبة: {HighlightType}.",
     "kareem_fullstack_portfolio:010307": "عنصر الخط الزمني للخبرة يفتقد حقلا مطلوبا: {TimelineItemType}.{FieldName}.",
-    "kareem_fullstack_portfolio:010308": "نص عنصر الخط الزمني للخبرة طويل جدا: {TimelineItemType}.{FieldName} يتجاوز {MaxLength} حرفا."
+    "kareem_fullstack_portfolio:010308": "نص عنصر الخط الزمني للخبرة طويل جدا: {TimelineItemType}.{FieldName} يتجاوز {MaxLength} حرفا.",
+    "kareem_fullstack_portfolio:010401": "لم يتم العثور على مهارة البورتفوليو: {SkillId}.",
+    "kareem_fullstack_portfolio:010402": "اسم مهارة البورتفوليو مطلوب.",
+    "kareem_fullstack_portfolio:010403": "يجب ألا يتجاوز اسم مهارة البورتفوليو {MaxLength} حرفا.",
+    "kareem_fullstack_portfolio:010404": "يجب أن يكون ترتيب عرض مهارة البورتفوليو صفرا أو أكبر.",
+    "kareem_fullstack_portfolio:010405": "مهارة البورتفوليو '{Name}' موجودة بالفعل ضمن الفئة '{Category}'."
   }
 }

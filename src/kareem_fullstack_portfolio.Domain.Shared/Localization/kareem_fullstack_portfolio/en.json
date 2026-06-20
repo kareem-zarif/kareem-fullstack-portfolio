@@ -60,6 +60,14 @@
     "Enum:PortfolioExperienceHighlightType.StructuredProblemSolving": "Structured problem solving",
     "Enum:PortfolioExperienceHighlightType.WorkflowAwareness": "Workflow awareness",
     "Permission:Admin.Access": "Access portfolio admin shell",
+    "Permission:Skills": "View portfolio skills",
+    "Permission:Skills.Manage": "Create, update, and delete portfolio skills",
+    "Enum:PortfolioSkillCategory.BackendApis": "Backend & APIs",
+    "Enum:PortfolioSkillCategory.Frontend": "Frontend",
+    "Enum:PortfolioSkillCategory.Database": "Database",
+    "Enum:PortfolioSkillCategory.Architecture": "Architecture",
+    "Enum:PortfolioSkillCategory.Tools": "Tools",
+    "Enum:PortfolioSkillCategory.BusinessAndSoftSkills": "Business & Soft Skills",
     "kareem_fullstack_portfolio:010001": "Portfolio identity must include Kareem's full name.",
     "kareem_fullstack_portfolio:010002": "Portfolio identity title must clearly show .NET full-stack positioning.",
     "kareem_fullstack_portfolio:010003": "Portfolio identity main message must focus on business systems.",
@@ -90,6 +98,11 @@
     "kareem_fullstack_portfolio:010305": "Portfolio experience must mark ERP delivery as the primary professional software experience.",
     "kareem_fullstack_portfolio:010306": "Portfolio experience section is missing a required highlight: {HighlightType}.",
     "kareem_fullstack_portfolio:010307": "Portfolio experience timeline item is missing a required field: {TimelineItemType}.{FieldName}.",
-    "kareem_fullstack_portfolio:010308": "Portfolio experience timeline item text is too long: {TimelineItemType}.{FieldName} exceeds {MaxLength} characters."
+    "kareem_fullstack_portfolio:010308": "Portfolio experience timeline item text is too long: {TimelineItemType}.{FieldName} exceeds {MaxLength} characters.",
+    "kareem_fullstack_portfolio:010401": "Portfolio skill was not found: {SkillId}.",
+    "kareem_fullstack_portfolio:010402": "Portfolio skill name is required.",
+    "kareem_fullstack_portfolio:010403": "Portfolio skill name must not exceed {MaxLength} characters.",
+    "kareem_fullstack_portfolio:010404": "Portfolio skill display order must be zero or greater.",
+    "kareem_fullstack_portfolio:010405": "Portfolio skill '{Name}' already exists in category '{Category}'."
   }
 }

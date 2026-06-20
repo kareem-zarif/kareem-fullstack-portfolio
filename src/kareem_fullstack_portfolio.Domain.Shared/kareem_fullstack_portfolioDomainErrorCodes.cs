@@ -33,4 +33,9 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string PortfolioExperienceMissingHighlight = "kareem_fullstack_portfolio:010306";
     public const string PortfolioExperienceTimelineItemFieldRequired = "kareem_fullstack_portfolio:010307";
     public const string PortfolioExperienceTimelineItemTextTooLong = "kareem_fullstack_portfolio:010308";
+    public const string PortfolioSkillNotFound = "kareem_fullstack_portfolio:010401";
+    public const string PortfolioSkillNameRequired = "kareem_fullstack_portfolio:010402";
+    public const string PortfolioSkillNameTooLong = "kareem_fullstack_portfolio:010403";
+    public const string PortfolioSkillDisplayOrderMustBeZeroOrPositive = "kareem_fullstack_portfolio:010404";
+    public const string PortfolioSkillDuplicateNameInCategory = "kareem_fullstack_portfolio:010405";
 }

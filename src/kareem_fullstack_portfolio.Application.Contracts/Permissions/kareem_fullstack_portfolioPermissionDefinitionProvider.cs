@@ -11,7 +11,17 @@ public class kareem_fullstack_portfolioPermissionDefinitionProvider : Permission
     {
         var myGroup = context.AddGroup(kareem_fullstack_portfolioPermissions.GroupName);
 
-        myGroup.AddPermission(kareem_fullstack_portfolioPermissions.Admin.Access, L("Permission:Admin.Access"));
+        var adminAccess = myGroup.AddPermission(
+            kareem_fullstack_portfolioPermissions.Admin.Access,
+            L("Permission:Admin.Access"));
+
+        var skillsPermission = adminAccess.AddChild(
+            kareem_fullstack_portfolioPermissions.Skills.Default,
+            L("Permission:Skills"));
+
+        skillsPermission.AddChild(
+            kareem_fullstack_portfolioPermissions.Skills.Manage,
+            L("Permission:Skills.Manage"));
     }
 
     private static LocalizableString L(string name)

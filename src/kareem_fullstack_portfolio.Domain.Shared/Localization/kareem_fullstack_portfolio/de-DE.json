@@ -65,6 +65,14 @@
     "Enum:PortfolioExperienceHighlightType.BusinessUnderstanding": "Business-Verständnis",
     "Enum:PortfolioExperienceHighlightType.StructuredProblemSolving": "Strukturiertes Problemlösen",
     "Enum:PortfolioExperienceHighlightType.WorkflowAwareness": "Workflow-Bewusstsein",
+    "Permission:Skills": "Portfolio-Faehigkeiten anzeigen",
+    "Permission:Skills.Manage": "Portfolio-Faehigkeiten erstellen, bearbeiten und loeschen",
+    "Enum:PortfolioSkillCategory.BackendApis": "Backend und APIs",
+    "Enum:PortfolioSkillCategory.Frontend": "Frontend",
+    "Enum:PortfolioSkillCategory.Database": "Datenbank",
+    "Enum:PortfolioSkillCategory.Architecture": "Architektur",
+    "Enum:PortfolioSkillCategory.Tools": "Werkzeuge",
+    "Enum:PortfolioSkillCategory.BusinessAndSoftSkills": "Business- und Soft-Skills",
     "kareem_fullstack_portfolio:010201": "Der Portfolio-Startseite fehlt die erforderliche Zielgruppe: {TargetAudience}.",
     "kareem_fullstack_portfolio:010202": "Die Portfolio-Startseite muss die .NET- und Angular-Spezialisierung klar zeigen.",
     "kareem_fullstack_portfolio:010203": "Der Portfolio-Startseite fehlt die erforderliche Tech-Stack-Karte: {TechStackCardType}.",
@@ -82,6 +90,11 @@
     "kareem_fullstack_portfolio:010305": "Die Portfolio-Erfahrung muss die ERP-Umsetzung als wichtigste professionelle Software-Erfahrung markieren.",
     "kareem_fullstack_portfolio:010306": "Dem Portfolio-Erfahrungsbereich fehlt das erforderliche Highlight: {HighlightType}.",
     "kareem_fullstack_portfolio:010307": "Einem Zeitstrahl-Eintrag der Portfolio-Erfahrung fehlt ein Pflichtfeld: {TimelineItemType}.{FieldName}.",
-    "kareem_fullstack_portfolio:010308": "Der Text eines Zeitstrahl-Eintrags der Portfolio-Erfahrung ist zu lang: {TimelineItemType}.{FieldName} überschreitet {MaxLength} Zeichen."
+    "kareem_fullstack_portfolio:010308": "Der Text eines Zeitstrahl-Eintrags der Portfolio-Erfahrung ist zu lang: {TimelineItemType}.{FieldName} überschreitet {MaxLength} Zeichen.",
+    "kareem_fullstack_portfolio:010401": "Die Portfolio-Faehigkeit wurde nicht gefunden: {SkillId}.",
+    "kareem_fullstack_portfolio:010402": "Der Name der Portfolio-Faehigkeit ist erforderlich.",
+    "kareem_fullstack_portfolio:010403": "Der Name der Portfolio-Faehigkeit darf {MaxLength} Zeichen nicht ueberschreiten.",
+    "kareem_fullstack_portfolio:010404": "Die Anzeigereihenfolge der Portfolio-Faehigkeit muss null oder groesser sein.",
+    "kareem_fullstack_portfolio:010405": "Die Portfolio-Faehigkeit '{Name}' existiert bereits in der Kategorie '{Category}'."
   }
 }
