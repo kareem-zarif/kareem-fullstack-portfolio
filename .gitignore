@@ -281,3 +281,14 @@ src/kareem_fullstack_portfolio.Blazor.Server.Tiered/Logs/*
 # IdentityServer temp files
 tempkey.rsa
 tempkey.jwk
+
+appsettings.secrets.json
+**/appsettings.secrets.json
+.DS_Store
+**/.DS_Store
+node_modules/
+bin/
+obj/
+.vs/
+.angular/
+dist/
