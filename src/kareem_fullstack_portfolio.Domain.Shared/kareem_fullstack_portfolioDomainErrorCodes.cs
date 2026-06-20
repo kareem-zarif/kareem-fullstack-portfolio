@@ -15,4 +15,14 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string AppShellMissingFooterLink = "kareem_fullstack_portfolio:010106";
     public const string AppShellNotFoundRouteInvalid = "kareem_fullstack_portfolio:010107";
     public const string AppShellAdminRouteMissingPermission = "kareem_fullstack_portfolio:010108";
+    public const string HomePageMissingRequiredAudience = "kareem_fullstack_portfolio:010201";
+    public const string HomePageMustShowDotNetAndAngularSpecialization = "kareem_fullstack_portfolio:010202";
+    public const string HomePageMissingRequiredTechStackCard = "kareem_fullstack_portfolio:010203";
+    public const string HomePageMustIncludeMultipleFeaturedProjects = "kareem_fullstack_portfolio:010204";
+    public const string HomePageMissingFeaturedProject = "kareem_fullstack_portfolio:010205";
+    public const string HomePageMissingProfessionalLink = "kareem_fullstack_portfolio:010206";
+    public const string HomePageErpHighlightProjectRouteRequired = "kareem_fullstack_portfolio:010207";
+    public const string HomePageMissingErpCapability = "kareem_fullstack_portfolio:010208";
+    public const string HomePageMissingBusinessValueItem = "kareem_fullstack_portfolio:010209";
+    public const string HomePageContactCallToActionInvalid = "kareem_fullstack_portfolio:010210";
 }
