@@ -4,6 +4,20 @@
     "AppName": "kareem_fullstack_portfolio",
     "Menu:Home": "Home",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit",
-    "Welcome": "Welcome"
+    "Welcome": "Welcome",
+    "Enum:PortfolioCallToActionType.ViewProjects": "View Projects",
+    "Enum:PortfolioCallToActionType.DownloadCv": "Download CV",
+    "Enum:PortfolioCallToActionType.ContactMe": "Contact Me",
+    "Enum:PortfolioCallToActionType.GitHub": "GitHub",
+    "Enum:PortfolioTargetAudienceType.Recruiters": "Recruiters",
+    "Enum:PortfolioTargetAudienceType.SoftwareCompanies": "Software companies",
+    "Enum:PortfolioTargetAudienceType.FreelanceClients": "Freelance clients",
+    "Enum:PortfolioTargetAudienceType.TechnicalLeads": "Technical leads",
+    "Enum:PortfolioTargetAudienceType.BusinessOwners": "Business owners looking for ERP / CRM / web application development",
+    "kareem_fullstack_portfolio:010001": "Portfolio identity must include Kareem's full name.",
+    "kareem_fullstack_portfolio:010002": "Portfolio identity title must clearly show .NET full-stack positioning.",
+    "kareem_fullstack_portfolio:010003": "Portfolio identity main message must focus on business systems.",
+    "kareem_fullstack_portfolio:010004": "Portfolio identity must include a business-oriented summary.",
+    "kareem_fullstack_portfolio:010005": "Portfolio identity is missing a required call-to-action: {CallToAction}."
   }
 }

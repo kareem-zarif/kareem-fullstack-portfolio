@@ -37,6 +37,20 @@
     "Unspecified": "نظام",
     "SeeAllUsers": "رؤية كافة المستخدمين",
     "TakePhoto": "تصوير",
-    "ChoosePhoto": "اختر صورة"
+    "ChoosePhoto": "اختر صورة",
+    "Enum:PortfolioCallToActionType.ViewProjects": "عرض المشاريع",
+    "Enum:PortfolioCallToActionType.DownloadCv": "تحميل السيرة الذاتية",
+    "Enum:PortfolioCallToActionType.ContactMe": "تواصل معي",
+    "Enum:PortfolioCallToActionType.GitHub": "GitHub",
+    "Enum:PortfolioTargetAudienceType.Recruiters": "مسؤولو التوظيف",
+    "Enum:PortfolioTargetAudienceType.SoftwareCompanies": "شركات البرمجيات",
+    "Enum:PortfolioTargetAudienceType.FreelanceClients": "عملاء العمل الحر",
+    "Enum:PortfolioTargetAudienceType.TechnicalLeads": "القادة التقنيون",
+    "Enum:PortfolioTargetAudienceType.BusinessOwners": "أصحاب الأعمال الباحثون عن تطوير ERP / CRM / تطبيقات ويب",
+    "kareem_fullstack_portfolio:010001": "يجب أن تحتوي هوية البورتفوليو على الاسم الكامل لكريم.",
+    "kareem_fullstack_portfolio:010002": "يجب أن يوضح العنوان المهني تموضع .NET Full Stack بوضوح.",
+    "kareem_fullstack_portfolio:010003": "يجب أن تركز الرسالة الرئيسية على أنظمة الأعمال.",
+    "kareem_fullstack_portfolio:010004": "يجب أن تحتوي هوية البورتفوليو على ملخص موجه للأعمال.",
+    "kareem_fullstack_portfolio:010005": "هوية البورتفوليو تفتقد زر إجراء مطلوب: {CallToAction}."
   }
 }
