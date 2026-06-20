@@ -172,6 +172,10 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "ssl": true,
+            "port": 4200
+          },
           "configurations": {
             "production": {
               "buildTarget": "kareem_fullstack_portfolio:build:production"
