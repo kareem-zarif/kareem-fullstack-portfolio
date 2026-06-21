@@ -1,7 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using kareem_fullstack_portfolio.ContactMessages;
+using kareem_fullstack_portfolio.EntityFrameworkCore.ContactMessages;
+using kareem_fullstack_portfolio.EntityFrameworkCore.Experience;
 using kareem_fullstack_portfolio.EntityFrameworkCore.Skills;
 using kareem_fullstack_portfolio.EntityFrameworkCore.Projects;
+using kareem_fullstack_portfolio.EntityFrameworkCore.SiteSettings;
+using kareem_fullstack_portfolio.Experience;
 using kareem_fullstack_portfolio.Projects;
+using kareem_fullstack_portfolio.SiteSettings;
 using kareem_fullstack_portfolio.Skills;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -29,6 +35,10 @@ public class kareem_fullstack_portfolioDbContext :
     public DbSet<PortfolioSkill> PortfolioSkills { get; set; }
     public DbSet<PortfolioProject> PortfolioProjects { get; set; }
     public DbSet<PortfolioProjectTechnology> PortfolioProjectTechnologies { get; set; }
+    public DbSet<PortfolioExperience> PortfolioExperiences { get; set; }
+    public DbSet<PortfolioExperienceHighlight> PortfolioExperienceHighlights { get; set; }
+    public DbSet<PortfolioContactMessage> PortfolioContactMessages { get; set; }
+    public DbSet<PortfolioSiteSetting> PortfolioSiteSettings { get; set; }
 
 
     #region Entities from the modules
@@ -81,5 +91,9 @@ public class kareem_fullstack_portfolioDbContext :
         builder.ApplyConfiguration(new PortfolioSkillConfiguration());
         builder.ApplyConfiguration(new PortfolioProjectConfiguration());
         builder.ApplyConfiguration(new PortfolioProjectTechnologyConfiguration());
+        builder.ApplyConfiguration(new PortfolioExperienceConfiguration());
+        builder.ApplyConfiguration(new PortfolioExperienceHighlightConfiguration());
+        builder.ApplyConfiguration(new PortfolioContactMessageConfiguration());
+        builder.ApplyConfiguration(new PortfolioSiteSettingConfiguration());
     }
 }
