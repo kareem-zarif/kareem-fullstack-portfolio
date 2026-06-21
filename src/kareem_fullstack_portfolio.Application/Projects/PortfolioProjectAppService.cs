@@ -22,7 +22,7 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
         _portfolioProjectCaseStudyDefinitionProvider = portfolioProjectCaseStudyDefinitionProvider;
     }
 
-    public async Task<PortfolioProjectListDto> GetPublicListAsync(GetPortfolioProjectListInput input)
+    public async Task<PortfolioProjectListDto> GetListAsync(GetPortfolioProjectListInput input)
     {
         input ??= new GetPortfolioProjectListInput();
 
@@ -63,7 +63,7 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
         };
     }
 
-    public async Task<PortfolioProjectCaseStudyDto> GetPublicCaseStudyAsync(string slug)
+    public async Task<PortfolioProjectCaseStudyDto> GetBySlugAsync(string slug)
     {
         var normalizedSlug = NormalizeSlug(slug);
 

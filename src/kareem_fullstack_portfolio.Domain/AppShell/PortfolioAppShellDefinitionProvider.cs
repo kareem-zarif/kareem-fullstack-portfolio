@@ -17,11 +17,11 @@ public class PortfolioAppShellDefinitionProvider : IPortfolioAppShellDefinitionP
                 new(PortfolioRouteType.Experience, "/experience", PortfolioLayoutType.Public, false, null, true, true, 4),
                 new(PortfolioRouteType.Contact, "/contact", PortfolioLayoutType.Public, false, null, true, true, 5),
                 new(PortfolioRouteType.AdminLogin, "/admin/login", PortfolioLayoutType.Admin, false, null, false, true, 100),
-                new(PortfolioRouteType.AdminDashboard, "/admin/dashboard", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.AdminAccess, true, true, 101),
-                new(PortfolioRouteType.AdminProjects, "/admin/projects", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.AdminAccess, true, true, 102),
-                new(PortfolioRouteType.AdminSkills, "/admin/skills", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.AdminAccess, true, true, 103),
-                new(PortfolioRouteType.AdminExperience, "/admin/experience", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.AdminAccess, true, true, 104),
-                new(PortfolioRouteType.AdminMessages, "/admin/messages", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.AdminAccess, true, true, 105),
+                new(PortfolioRouteType.AdminDashboard, "/admin/dashboard", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.Dashboard, true, true, 101),
+                new(PortfolioRouteType.AdminProjects, "/admin/projects", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.Projects, true, true, 102),
+                new(PortfolioRouteType.AdminSkills, "/admin/skills", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.Skills, true, true, 103),
+                new(PortfolioRouteType.AdminExperience, "/admin/experience", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.Experience, true, true, 104),
+                new(PortfolioRouteType.AdminMessages, "/admin/messages", PortfolioLayoutType.Admin, true, PortfolioAppShellAuthorizationNames.Messages, true, true, 105),
                 new(PortfolioRouteType.NotFound, "**", PortfolioLayoutType.Public, false, null, false, false, 999)
             },
             footerLinks: new List<PortfolioFooterLinkDefinition>

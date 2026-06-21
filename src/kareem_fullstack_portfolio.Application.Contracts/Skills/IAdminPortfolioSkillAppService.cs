@@ -5,11 +5,9 @@ using Volo.Abp.Application.Services;
 
 namespace kareem_fullstack_portfolio.Skills;
 
-public interface IPortfolioSkillAppService : IApplicationService
+public interface IAdminPortfolioSkillAppService : IApplicationService
 {
-    Task<IReadOnlyList<PortfolioSkillCategoryDto>> GetPublicListAsync();
-
-    Task<IReadOnlyList<PortfolioSkillAdminDto>> GetAdminListAsync();
+    Task<IReadOnlyList<PortfolioSkillAdminDto>> GetListAsync();
 
     Task<PortfolioSkillAdminDto> GetAsync(Guid id);
 

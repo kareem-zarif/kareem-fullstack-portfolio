@@ -1,45 +1,23 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using kareem_fullstack_portfolio.Permissions;
-using Microsoft.AspNetCore.Authorization;
 
 namespace kareem_fullstack_portfolio.AppShell;
 
-public class PortfolioAppShellAppService : kareem_fullstack_portfolioAppService, IPortfolioAppShellAppService
+public abstract class PortfolioAppShellAppServiceBase : kareem_fullstack_portfolioAppService
 {
     private readonly IPortfolioAppShellDefinitionProvider _appShellDefinitionProvider;
 
-    public PortfolioAppShellAppService(IPortfolioAppShellDefinitionProvider appShellDefinitionProvider)
+    protected PortfolioAppShellAppServiceBase(IPortfolioAppShellDefinitionProvider appShellDefinitionProvider)
     {
         _appShellDefinitionProvider = appShellDefinitionProvider;
     }
 
-    [AllowAnonymous]
-    public Task<PortfolioAppShellDto> GetPublicAsync()
+    protected PortfolioAppShellDefinition GetDefinition()
     {
-        var definition = _appShellDefinitionProvider.Get();
-        var routes = definition.Routes
-            .Where(route => route.Layout == PortfolioLayoutType.Public || route.Type == PortfolioRouteType.AdminLogin)
-            .OrderBy(route => route.DisplayOrder)
-            .ToList();
-
-        return Task.FromResult(CreateShellDto(definition, PortfolioLayoutType.Public, routes));
+        return _appShellDefinitionProvider.Get();
     }
 
-    [Authorize(kareem_fullstack_portfolioPermissions.Admin.Access)]
-    public Task<PortfolioAppShellDto> GetAdminAsync()
-    {
-        var definition = _appShellDefinitionProvider.Get();
-        var routes = definition.Routes
-            .Where(route => route.Layout == PortfolioLayoutType.Admin && route.RequiresAuthentication)
-            .OrderBy(route => route.DisplayOrder)
-            .ToList();
-
-        return Task.FromResult(CreateShellDto(definition, PortfolioLayoutType.Admin, routes));
-    }
-
-    private PortfolioAppShellDto CreateShellDto(
+    protected PortfolioAppShellDto CreateShellDto(
         PortfolioAppShellDefinition definition,
         PortfolioLayoutType layout,
         IReadOnlyList<PortfolioRouteDefinition> routes)

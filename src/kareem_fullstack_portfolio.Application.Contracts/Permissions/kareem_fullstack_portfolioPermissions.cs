@@ -17,9 +17,32 @@ public static class kareem_fullstack_portfolioPermissions
         public const string Access = PortfolioAppShellAuthorizationNames.AdminAccess;
     }
 
+    public static class Dashboard
+    {
+        public const string Default = PortfolioAppShellAuthorizationNames.Dashboard;
+    }
+
+    public static class Projects
+    {
+        public const string Default = PortfolioAppShellAuthorizationNames.Projects;
+        public const string Manage = Default + ".Manage";
+    }
+
     public static class Skills
     {
-        public const string Default = GroupName + ".Skills";
+        public const string Default = PortfolioAppShellAuthorizationNames.Skills;
+        public const string Manage = Default + ".Manage";
+    }
+
+    public static class Experience
+    {
+        public const string Default = PortfolioAppShellAuthorizationNames.Experience;
+        public const string Manage = Default + ".Manage";
+    }
+
+    public static class Messages
+    {
+        public const string Default = PortfolioAppShellAuthorizationNames.Messages;
         public const string Manage = Default + ".Manage";
     }
 }
