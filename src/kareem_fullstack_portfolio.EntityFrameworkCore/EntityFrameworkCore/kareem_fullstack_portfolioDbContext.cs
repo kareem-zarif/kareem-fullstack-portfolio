@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using kareem_fullstack_portfolio.EntityFrameworkCore.Skills;
+using kareem_fullstack_portfolio.EntityFrameworkCore.Projects;
+using kareem_fullstack_portfolio.Projects;
 using kareem_fullstack_portfolio.Skills;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -25,6 +27,8 @@ public class kareem_fullstack_portfolioDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<PortfolioSkill> PortfolioSkills { get; set; }
+    public DbSet<PortfolioProject> PortfolioProjects { get; set; }
+    public DbSet<PortfolioProjectTechnology> PortfolioProjectTechnologies { get; set; }
 
 
     #region Entities from the modules
@@ -75,5 +79,7 @@ public class kareem_fullstack_portfolioDbContext :
 
         /* Configure your own tables/entities inside here */
         builder.ApplyConfiguration(new PortfolioSkillConfiguration());
+        builder.ApplyConfiguration(new PortfolioProjectConfiguration());
+        builder.ApplyConfiguration(new PortfolioProjectTechnologyConfiguration());
     }
 }

@@ -38,4 +38,21 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string PortfolioSkillNameTooLong = "kareem_fullstack_portfolio:010403";
     public const string PortfolioSkillDisplayOrderMustBeZeroOrPositive = "kareem_fullstack_portfolio:010404";
     public const string PortfolioSkillDuplicateNameInCategory = "kareem_fullstack_portfolio:010405";
+    public const string PortfolioProjectNotFound = "kareem_fullstack_portfolio:010501";
+    public const string PortfolioProjectTitleRequired = "kareem_fullstack_portfolio:010502";
+    public const string PortfolioProjectTitleTooLong = "kareem_fullstack_portfolio:010503";
+    public const string PortfolioProjectSlugRequired = "kareem_fullstack_portfolio:010504";
+    public const string PortfolioProjectSlugInvalid = "kareem_fullstack_portfolio:010505";
+    public const string PortfolioProjectSlugTooLong = "kareem_fullstack_portfolio:010506";
+    public const string PortfolioProjectShortSummaryRequired = "kareem_fullstack_portfolio:010507";
+    public const string PortfolioProjectShortSummaryTooLong = "kareem_fullstack_portfolio:010508";
+    public const string PortfolioProjectBusinessValueRequired = "kareem_fullstack_portfolio:010509";
+    public const string PortfolioProjectBusinessValueTooLong = "kareem_fullstack_portfolio:010510";
+    public const string PortfolioProjectTechStackRequired = "kareem_fullstack_portfolio:010511";
+    public const string PortfolioProjectDisplayOrderMustBeZeroOrPositive = "kareem_fullstack_portfolio:010512";
+    public const string PortfolioProjectDuplicateSlug = "kareem_fullstack_portfolio:010513";
+    public const string PortfolioProjectTechnologyNameRequired = "kareem_fullstack_portfolio:010514";
+    public const string PortfolioProjectTechnologyNameTooLong = "kareem_fullstack_portfolio:010515";
+    public const string PortfolioProjectDuplicateTechnology = "kareem_fullstack_portfolio:010516";
+    public const string PortfolioProjectExternalUrlInvalid = "kareem_fullstack_portfolio:010517";
 }
