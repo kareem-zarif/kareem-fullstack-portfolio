@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Text.Json;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -10,6 +11,10 @@ namespace kareem_fullstack_portfolio.Projects;
 public class PortfolioProject : FullAuditedAggregateRoot<Guid>
 {
     private static readonly Regex SlugRegex = new("^[a-z0-9]+(?:-[a-z0-9]+)*$", RegexOptions.Compiled);
+    private static readonly JsonSerializerOptions CaseStudyContentSerializerOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
 
     public string Title { get; private set; } = string.Empty;
 
@@ -94,6 +99,56 @@ public class PortfolioProject : FullAuditedAggregateRoot<Guid>
     public string GetCaseStudyRoute()
     {
         return $"/projects/{Slug}";
+    }
+
+    public void SetCaseStudyContent(PortfolioProjectCaseStudyContent caseStudyContent)
+    {
+        ArgumentNullException.ThrowIfNull(caseStudyContent);
+
+        var normalizedDefinition = caseStudyContent.ToDefinition(Slug);
+        var normalizedContent = PortfolioProjectCaseStudyContent.FromDefinition(normalizedDefinition);
+        ExtraProperties[PortfolioProjectCaseStudyConsts.ExtraPropertyName] =
+            JsonSerializer.Serialize(normalizedContent, CaseStudyContentSerializerOptions);
+    }
+
+    public PortfolioProjectCaseStudyContent? GetCaseStudyContent()
+    {
+        if (!ExtraProperties.TryGetValue(PortfolioProjectCaseStudyConsts.ExtraPropertyName, out var rawValue) || rawValue is null)
+        {
+            return null;
+        }
+
+        var json = rawValue switch
+        {
+            string stringValue => stringValue,
+            JsonElement { ValueKind: JsonValueKind.String } jsonElement => jsonElement.GetString(),
+            JsonElement jsonElement => jsonElement.GetRawText(),
+            _ => rawValue.ToString()
+        };
+
+        if (json.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        var content = JsonSerializer.Deserialize<PortfolioProjectCaseStudyContent>(json, CaseStudyContentSerializerOptions);
+
+        return content;
+    }
+
+    public bool HasCaseStudyContent()
+    {
+        return GetCaseStudyContent() is not null;
+    }
+
+    public void SetFeatured(bool isFeatured)
+    {
+        IsFeatured = isFeatured;
+    }
+
+    public void SetActive(bool isActive)
+    {
+        IsActive = isActive;
     }
 
     private void SetTitle(string title)

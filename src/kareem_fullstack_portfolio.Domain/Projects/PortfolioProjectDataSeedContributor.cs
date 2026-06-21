@@ -11,10 +11,14 @@ namespace kareem_fullstack_portfolio.Projects;
 public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
     private readonly IRepository<PortfolioProject, Guid> _portfolioProjectRepository;
+    private readonly IPortfolioProjectCaseStudyDefinitionProvider _portfolioProjectCaseStudyDefinitionProvider;
 
-    public PortfolioProjectDataSeedContributor(IRepository<PortfolioProject, Guid> portfolioProjectRepository)
+    public PortfolioProjectDataSeedContributor(
+        IRepository<PortfolioProject, Guid> portfolioProjectRepository,
+        IPortfolioProjectCaseStudyDefinitionProvider portfolioProjectCaseStudyDefinitionProvider)
     {
         _portfolioProjectRepository = portfolioProjectRepository;
+        _portfolioProjectCaseStudyDefinitionProvider = portfolioProjectCaseStudyDefinitionProvider;
     }
 
     [UnitOfWork]
@@ -40,6 +44,13 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 seed.GitHubUrl,
                 seed.LiveDemoUrl,
                 seed.DisplayOrder);
+
+            var caseStudyDefinition = _portfolioProjectCaseStudyDefinitionProvider.FindBySlug(seed.Slug);
+
+            if (caseStudyDefinition is not null)
+            {
+                project.SetCaseStudyContent(PortfolioProjectCaseStudyContent.FromDefinition(caseStudyDefinition));
+            }
 
             await _portfolioProjectRepository.InsertAsync(project, autoSave: true);
         }

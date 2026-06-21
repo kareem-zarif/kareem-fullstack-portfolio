@@ -11,17 +11,13 @@ namespace kareem_fullstack_portfolio.Projects;
 
 [AllowAnonymous]
 [Route("api/projects")]
-public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, IPortfolioProjectAppService
+public class PortfolioProjectAppService : PortfolioProjectAppServiceBase, IPortfolioProjectAppService
 {
-    private readonly IRepository<PortfolioProject, Guid> _portfolioProjectRepository;
-    private readonly IPortfolioProjectCaseStudyDefinitionProvider _portfolioProjectCaseStudyDefinitionProvider;
-
     public PortfolioProjectAppService(
         IRepository<PortfolioProject, Guid> portfolioProjectRepository,
         IPortfolioProjectCaseStudyDefinitionProvider portfolioProjectCaseStudyDefinitionProvider)
+        : base(portfolioProjectRepository, portfolioProjectCaseStudyDefinitionProvider)
     {
-        _portfolioProjectRepository = portfolioProjectRepository;
-        _portfolioProjectCaseStudyDefinitionProvider = portfolioProjectCaseStudyDefinitionProvider;
     }
 
     [HttpGet]
@@ -43,16 +39,7 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
             Items = filteredProjects
                 .Select(MapCardDto)
                 .ToList(),
-            AvailableProjectTypes = activeProjects
-                .Select(project => project.ProjectType)
-                .Distinct()
-                .OrderBy(projectType => projectType)
-                .Select(projectType => new PortfolioProjectTypeFilterOptionDto
-                {
-                    Value = projectType,
-                    Label = L[$"Enum:PortfolioProjectType.{projectType}"]
-                })
-                .ToList(),
+            AvailableProjectTypes = CreateProjectTypeOptions(activeProjects),
             AvailableTechnologies = activeProjects
                 .SelectMany(project => project.TechStack)
                 .OrderBy(technology => technology.DisplayOrder)
@@ -69,16 +56,20 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
     [HttpGet("{slug}")]
     public async Task<PortfolioProjectCaseStudyDto> GetBySlugAsync(string slug)
     {
-        var normalizedSlug = NormalizeSlug(slug);
+        var normalizedSlug = slug.IsNullOrWhiteSpace()
+            ? null
+            : slug.Trim().ToLowerInvariant();
 
-        if (normalizedSlug.IsNullOrWhiteSpace())
+        if (normalizedSlug is null)
         {
             throw new BusinessException(kareem_fullstack_portfolioDomainErrorCodes.PortfolioProjectNotFoundBySlug)
                 .WithData("Slug", slug ?? string.Empty);
         }
 
         var project = await GetActiveProjectBySlugAsync(normalizedSlug);
-        var definition = _portfolioProjectCaseStudyDefinitionProvider.FindBySlug(normalizedSlug);
+        var definition = project is null
+            ? null
+            : ResolveCaseStudyDefinition(project);
 
         if (project is null || definition is null)
         {
@@ -126,29 +117,28 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
 
     private async Task<List<PortfolioProject>> GetActiveProjectsAsync()
     {
-        var queryable = await _portfolioProjectRepository.WithDetailsAsync(project => project.TechStack);
+        var projects = await GetProjectsWithDetailsAsync();
 
-        return await AsyncExecuter.ToListAsync(
-            queryable
-                .Where(project => project.IsActive)
-                .OrderByDescending(project => project.IsFeatured)
-                .ThenBy(project => project.DisplayOrder)
-                .ThenBy(project => project.Title));
+        return projects
+            .Where(project => project.IsActive)
+            .OrderByDescending(project => project.IsFeatured)
+            .ThenBy(project => project.DisplayOrder)
+            .ThenBy(project => project.Title)
+            .ToList();
     }
 
     private async Task<PortfolioProject?> GetActiveProjectBySlugAsync(string slug)
     {
-        var queryable = await _portfolioProjectRepository.WithDetailsAsync(project => project.TechStack);
+        var projects = await GetProjectsWithDetailsAsync();
 
-        return await AsyncExecuter.FirstOrDefaultAsync(
-            queryable.Where(project => project.IsActive && project.Slug == slug));
+        return projects.FirstOrDefault(project => project.IsActive && project.Slug == slug);
     }
 
     private PortfolioProjectCardDto MapCardDto(PortfolioProject project)
     {
         var shortSummaryPreview = CreatePreview(project.ShortSummary, PortfolioProjectConsts.SummaryPreviewMaxLength, out var isShortSummaryTruncated);
         var businessValuePreview = CreatePreview(project.BusinessValue, PortfolioProjectConsts.BusinessValuePreviewMaxLength, out var isBusinessValueTruncated);
-        var hasCaseStudyLink = _portfolioProjectCaseStudyDefinitionProvider.HasDefinition(project.Slug);
+        var hasCaseStudyLink = ResolveCaseStudyDefinition(project) is not null;
 
         return new PortfolioProjectCardDto
         {
@@ -267,30 +257,10 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
             DisplayOrder = displayOrder
         };
     }
-
-    private static string CreatePreview(string value, int maxLength, out bool isTruncated)
-    {
-        if (value.Length <= maxLength)
-        {
-            isTruncated = false;
-            return value;
-        }
-
-        isTruncated = true;
-        return value[..(maxLength - 3)].TrimEnd() + "...";
-    }
-
     private static string? NormalizeTechnology(string? technology)
     {
         return technology.IsNullOrWhiteSpace()
             ? null
             : technology.Trim();
-    }
-
-    private static string? NormalizeSlug(string? slug)
-    {
-        return slug.IsNullOrWhiteSpace()
-            ? null
-            : slug.Trim().ToLowerInvariant();
     }
 }

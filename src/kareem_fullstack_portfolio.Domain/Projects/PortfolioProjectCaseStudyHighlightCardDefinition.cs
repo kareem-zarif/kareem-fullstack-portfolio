@@ -4,8 +4,8 @@ namespace kareem_fullstack_portfolio.Projects;
 
 public class PortfolioProjectCaseStudyHighlightCardDefinition
 {
-    public const int MaxTitleLength = 80;
-    public const int MaxSummaryLength = 220;
+    public const int MaxTitleLength = PortfolioProjectCaseStudyConsts.MaxHighlightCardTitleLength;
+    public const int MaxSummaryLength = PortfolioProjectCaseStudyConsts.MaxHighlightCardSummaryLength;
 
     public PortfolioProjectCaseStudyHighlightType Type { get; }
 

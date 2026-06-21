@@ -6,9 +6,6 @@ namespace kareem_fullstack_portfolio.Projects;
 
 public class PortfolioProjectCaseStudyDefinition
 {
-    private const int SectionTextMaxLength = 1600;
-    private const int ListItemMaxLength = 180;
-
     public string Slug { get; }
 
     public string Overview { get; }
@@ -65,10 +62,10 @@ public class PortfolioProjectCaseStudyDefinition
         EnsureRequiredText(Solution, nameof(Solution));
         EnsureRequiredText(RoleSummary, nameof(RoleSummary));
 
-        EnsureTextMaxLength(Overview, nameof(Overview), SectionTextMaxLength);
-        EnsureTextMaxLength(BusinessProblem, nameof(BusinessProblem), SectionTextMaxLength);
-        EnsureTextMaxLength(Solution, nameof(Solution), SectionTextMaxLength);
-        EnsureTextMaxLength(RoleSummary, nameof(RoleSummary), SectionTextMaxLength);
+        EnsureTextMaxLength(Overview, nameof(Overview), PortfolioProjectCaseStudyConsts.SectionTextMaxLength);
+        EnsureTextMaxLength(BusinessProblem, nameof(BusinessProblem), PortfolioProjectCaseStudyConsts.SectionTextMaxLength);
+        EnsureTextMaxLength(Solution, nameof(Solution), PortfolioProjectCaseStudyConsts.SectionTextMaxLength);
+        EnsureTextMaxLength(RoleSummary, nameof(RoleSummary), PortfolioProjectCaseStudyConsts.SectionTextMaxLength);
 
         EnsureList(RoleResponsibilities, "KareemRole", requireAtLeastOneItem: true);
         EnsureList(KeyFeatures, "KeyFeatures", requireAtLeastOneItem: false);
@@ -135,13 +132,13 @@ public class PortfolioProjectCaseStudyDefinition
                 .WithData("SectionName", sectionName);
         }
 
-        foreach (var item in items.Where(item => item.Length > ListItemMaxLength))
+        foreach (var item in items.Where(item => item.Length > PortfolioProjectCaseStudyConsts.ListItemMaxLength))
         {
             _ = item;
             throw new BusinessException(kareem_fullstack_portfolioDomainErrorCodes.PortfolioProjectCaseStudyTextTooLong)
                 .WithData("SectionName", sectionName)
                 .WithData("FieldName", "Item")
-                .WithData("MaxLength", ListItemMaxLength);
+                .WithData("MaxLength", PortfolioProjectCaseStudyConsts.ListItemMaxLength);
         }
     }
 }

@@ -4,9 +4,9 @@ namespace kareem_fullstack_portfolio.Projects;
 
 public class PortfolioProjectCaseStudyGalleryItemDefinition
 {
-    internal const int MaxTitleLength = 120;
-    internal const int MaxSummaryLength = 320;
-    internal const int MaxImageUrlLength = PortfolioProjectConsts.MaxUrlLength;
+    internal const int MaxTitleLength = PortfolioProjectCaseStudyConsts.MaxGalleryTitleLength;
+    internal const int MaxSummaryLength = PortfolioProjectCaseStudyConsts.MaxGallerySummaryLength;
+    internal const int MaxImageUrlLength = PortfolioProjectCaseStudyConsts.MaxGalleryImageUrlLength;
 
     public PortfolioProjectCaseStudyGalleryItemType Type { get; }
 
