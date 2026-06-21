@@ -5,5 +5,5 @@ namespace kareem_fullstack_portfolio.ContactMessages;
 
 public interface IPublicPortfolioContactAppService : IApplicationService
 {
-    Task SubmitAsync(CreatePortfolioContactMessageDto input);
+    Task<PortfolioContactSubmissionResultDto> SubmitAsync(CreatePortfolioContactMessageDto input);
 }

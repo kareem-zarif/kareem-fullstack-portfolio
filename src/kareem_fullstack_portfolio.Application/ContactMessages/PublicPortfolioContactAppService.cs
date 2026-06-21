@@ -19,9 +19,11 @@ public class PublicPortfolioContactAppService : kareem_fullstack_portfolioAppSer
     }
 
     [HttpPost]
-    public async Task SubmitAsync(CreatePortfolioContactMessageDto input)
+    public async Task<PortfolioContactSubmissionResultDto> SubmitAsync(CreatePortfolioContactMessageDto input)
     {
         ArgumentNullException.ThrowIfNull(input);
+        var submissionId = GuidGenerator.Create();
+        var submittedAtUtc = DateTime.UtcNow;
 
         if (!input.Honeypot.IsNullOrWhiteSpace())
         {
@@ -29,7 +31,7 @@ public class PublicPortfolioContactAppService : kareem_fullstack_portfolioAppSer
         }
 
         var message = new PortfolioContactMessage(
-            GuidGenerator.Create(),
+            submissionId,
             input.Name,
             input.Email,
             input.Company,
@@ -37,5 +39,11 @@ public class PublicPortfolioContactAppService : kareem_fullstack_portfolioAppSer
             input.Message);
 
         await _portfolioContactMessageRepository.InsertAsync(message, autoSave: true);
+
+        return new PortfolioContactSubmissionResultDto
+        {
+            SubmissionId = submissionId,
+            SubmittedAtUtc = submittedAtUtc
+        };
     }
 }

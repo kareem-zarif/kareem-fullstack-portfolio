@@ -7,4 +7,5 @@ public static class PortfolioContactMessageConsts
     public const int MaxCompanyLength = 160;
     public const int MaxSubjectLength = 200;
     public const int MaxMessageLength = 4000;
+    public const int MaxHoneypotLength = 256;
 }
