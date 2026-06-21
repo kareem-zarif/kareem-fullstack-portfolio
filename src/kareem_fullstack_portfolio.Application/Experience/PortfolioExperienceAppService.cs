@@ -1,55 +1,46 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Domain.Repositories;
 
 namespace kareem_fullstack_portfolio.Experience;
 
 [AllowAnonymous]
 [Route("api/experience")]
-public class PortfolioExperienceAppService : kareem_fullstack_portfolioAppService, IPortfolioExperienceAppService
+public class PortfolioExperienceAppService : PortfolioExperienceAppServiceBase, IPortfolioExperienceAppService
 {
     private readonly IPortfolioExperienceSectionDefinitionProvider _experienceSectionDefinitionProvider;
 
-    public PortfolioExperienceAppService(IPortfolioExperienceSectionDefinitionProvider experienceSectionDefinitionProvider)
+    public PortfolioExperienceAppService(
+        IRepository<PortfolioExperience, Guid> portfolioExperienceRepository,
+        IPortfolioExperienceSectionDefinitionProvider experienceSectionDefinitionProvider)
+        : base(portfolioExperienceRepository)
     {
         _experienceSectionDefinitionProvider = experienceSectionDefinitionProvider;
     }
 
     [HttpGet]
-    public Task<PortfolioExperienceSectionDto> GetAsync()
+    public async Task<PortfolioExperienceSectionDto> GetAsync()
     {
         var definition = _experienceSectionDefinitionProvider.Get();
+        var experiences = await GetExperiencesWithDetailsAsync();
 
-        return Task.FromResult(new PortfolioExperienceSectionDto
+        return new PortfolioExperienceSectionDto
         {
             Headline = definition.Headline,
             Summary = definition.Summary,
-            TimelineItems = definition.TimelineItems
-                .OrderBy(item => item.DisplayOrder)
-                .Select(CreateTimelineItemDto)
+            TimelineItems = experiences
+                .Where(experience => experience.IsActive)
+                .OrderBy(experience => experience.DisplayOrder)
+                .ThenBy(experience => experience.Type)
+                .Select(MapPublicTimelineItemDto)
                 .ToList(),
             HighlightBadges = definition.HighlightBadges
                 .OrderBy(item => item.DisplayOrder)
                 .Select(CreateHighlightDto)
                 .ToList()
-        });
-    }
-
-    private PortfolioExperienceTimelineItemDto CreateTimelineItemDto(PortfolioExperienceTimelineItemDefinition item)
-    {
-        return new PortfolioExperienceTimelineItemDto
-        {
-            Type = item.Type,
-            TypeLabel = L[$"Enum:PortfolioExperienceTimelineItemType.{item.Type}"],
-            StageLabel = item.StageLabel,
-            Title = item.Title,
-            Organization = item.Organization,
-            Summary = item.Summary,
-            BusinessValue = item.BusinessValue,
-            Highlights = item.Highlights.ToList(),
-            IsPrimaryProfessionalExperience = item.IsPrimaryProfessionalExperience,
-            DisplayOrder = item.DisplayOrder
         };
     }
 

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using kareem_fullstack_portfolio.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Domain.Repositories;
 
 namespace kareem_fullstack_portfolio.Skills;
 
 [Authorize(kareem_fullstack_portfolioPermissions.Admin.Access)]
+[Route("api/admin/skills")]
 public class AdminPortfolioSkillAppService : PortfolioSkillAppServiceBase, IAdminPortfolioSkillAppService
 {
     public AdminPortfolioSkillAppService(IRepository<PortfolioSkill, Guid> portfolioSkillRepository)
@@ -17,6 +19,7 @@ public class AdminPortfolioSkillAppService : PortfolioSkillAppServiceBase, IAdmi
     }
 
     [Authorize(kareem_fullstack_portfolioPermissions.Skills.Default)]
+    [HttpGet]
     public async Task<IReadOnlyList<PortfolioSkillAdminDto>> GetListAsync()
     {
         var queryable = await PortfolioSkillRepository.GetQueryableAsync();
@@ -32,6 +35,7 @@ public class AdminPortfolioSkillAppService : PortfolioSkillAppServiceBase, IAdmi
     }
 
     [Authorize(kareem_fullstack_portfolioPermissions.Skills.Default)]
+    [HttpGet("{id:guid}")]
     public async Task<PortfolioSkillAdminDto> GetAsync(Guid id)
     {
         var skill = await GetSkillAsync(id);
@@ -40,6 +44,7 @@ public class AdminPortfolioSkillAppService : PortfolioSkillAppServiceBase, IAdmi
     }
 
     [Authorize(kareem_fullstack_portfolioPermissions.Skills.Manage)]
+    [HttpPost]
     public async Task<PortfolioSkillAdminDto> CreateAsync(CreateUpdatePortfolioSkillDto input)
     {
         await EnsureUniqueNameAsync(input.Name, input.Category);
@@ -58,6 +63,7 @@ public class AdminPortfolioSkillAppService : PortfolioSkillAppServiceBase, IAdmi
     }
 
     [Authorize(kareem_fullstack_portfolioPermissions.Skills.Manage)]
+    [HttpPut("{id:guid}")]
     public async Task<PortfolioSkillAdminDto> UpdateAsync(Guid id, CreateUpdatePortfolioSkillDto input)
     {
         var skill = await GetSkillAsync(id);
@@ -77,6 +83,7 @@ public class AdminPortfolioSkillAppService : PortfolioSkillAppServiceBase, IAdmi
     }
 
     [Authorize(kareem_fullstack_portfolioPermissions.Skills.Manage)]
+    [HttpDelete("{id:guid}")]
     public async Task DeleteAsync(Guid id)
     {
         await GetSkillAsync(id);

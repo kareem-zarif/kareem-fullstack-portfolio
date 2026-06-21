@@ -154,6 +154,22 @@
     "kareem_fullstack_portfolio:010522": "Le champ '{FieldName}' de la section '{SectionName}' de l'etude de cas du projet du portfolio ne doit pas depasser {MaxLength} caracteres.",
     "kareem_fullstack_portfolio:010523": "L'element de galerie '{Title}' de l'etude de cas du projet du portfolio est invalide pour le type '{GalleryItemType}'.",
     "kareem_fullstack_portfolio:010524": "Le slug d'etude de cas du projet du portfolio '{Slug}' est duplique.",
-    "kareem_fullstack_portfolio:010525": "La carte de mise en avant '{HighlightType}' de l'etude de cas du projet du portfolio est invalide pour le champ '{FieldName}'."
+    "kareem_fullstack_portfolio:010525": "La carte de mise en avant '{HighlightType}' de l'etude de cas du projet du portfolio est invalide pour le champ '{FieldName}'.",
+    "kareem_fullstack_portfolio:010601": "L'etiquette d'etape de l'experience du portfolio est requise.",
+    "kareem_fullstack_portfolio:010602": "L'etiquette d'etape de l'experience du portfolio ne doit pas depasser {MaxLength} caracteres.",
+    "kareem_fullstack_portfolio:010603": "Le titre de l'experience du portfolio est requis.",
+    "kareem_fullstack_portfolio:010604": "Le titre de l'experience du portfolio ne doit pas depasser {MaxLength} caracteres.",
+    "kareem_fullstack_portfolio:010605": "L'organisation de l'experience du portfolio est requise.",
+    "kareem_fullstack_portfolio:010606": "L'organisation de l'experience du portfolio ne doit pas depasser {MaxLength} caracteres.",
+    "kareem_fullstack_portfolio:010607": "La valeur metier de l'experience du portfolio est requise.",
+    "kareem_fullstack_portfolio:010608": "La valeur metier de l'experience du portfolio ne doit pas depasser {MaxLength} caracteres.",
+    "kareem_fullstack_portfolio:010609": "L'ordre d'affichage de l'experience du portfolio doit etre superieur ou egal a zero.",
+    "kareem_fullstack_portfolio:010610": "L'experience du portfolio doit contenir au moins un point fort.",
+    "kareem_fullstack_portfolio:010611": "Un point fort de l'experience du portfolio ne doit pas depasser {MaxLength} caracteres.",
+    "kareem_fullstack_portfolio:010612": "Le point fort '{Highlight}' est duplique dans la meme experience du portfolio.",
+    "kareem_fullstack_portfolio:010613": "L'experience du portfolio est introuvable : {ExperienceId}.",
+    "kareem_fullstack_portfolio:010614": "Le type d'experience du portfolio '{ExperienceType}' existe deja.",
+    "kareem_fullstack_portfolio:010615": "Seule l'experience de livraison ERP d'entreprise peut etre marquee comme experience professionnelle logicielle principale. Valeur recue : {ExperienceType}.",
+    "kareem_fullstack_portfolio:010616": "Une seule experience du portfolio peut etre marquee comme experience professionnelle logicielle principale."
   }
 }

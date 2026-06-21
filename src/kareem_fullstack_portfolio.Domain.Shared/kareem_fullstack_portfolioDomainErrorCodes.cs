@@ -75,6 +75,10 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string PortfolioExperienceHighlightRequired = "kareem_fullstack_portfolio:010610";
     public const string PortfolioExperienceHighlightTooLong = "kareem_fullstack_portfolio:010611";
     public const string PortfolioExperienceDuplicateHighlight = "kareem_fullstack_portfolio:010612";
+    public const string PortfolioExperienceNotFound = "kareem_fullstack_portfolio:010613";
+    public const string PortfolioExperienceDuplicateType = "kareem_fullstack_portfolio:010614";
+    public const string PortfolioExperiencePrimaryProfessionalExperienceMustBeErp = "kareem_fullstack_portfolio:010615";
+    public const string PortfolioExperiencePrimaryProfessionalExperienceAlreadyExists = "kareem_fullstack_portfolio:010616";
     public const string PortfolioContactMessageNameRequired = "kareem_fullstack_portfolio:010701";
     public const string PortfolioContactMessageNameTooLong = "kareem_fullstack_portfolio:010702";
     public const string PortfolioContactMessageEmailRequired = "kareem_fullstack_portfolio:010703";

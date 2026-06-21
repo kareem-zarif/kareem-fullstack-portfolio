@@ -154,6 +154,22 @@
     "kareem_fullstack_portfolio:010522": "Das Feld '{FieldName}' im Abschnitt '{SectionName}' der Portfolio-Projekt-Case-Study darf {MaxLength} Zeichen nicht ueberschreiten.",
     "kareem_fullstack_portfolio:010523": "Das Galerieelement '{Title}' der Portfolio-Projekt-Case-Study ist fuer den Typ '{GalleryItemType}' ungueltig.",
     "kareem_fullstack_portfolio:010524": "Der Case-Study-Slug des Portfolio-Projekts '{Slug}' ist doppelt vorhanden.",
-    "kareem_fullstack_portfolio:010525": "Die Highlight-Karte '{HighlightType}' der Portfolio-Projekt-Case-Study ist fuer das Feld '{FieldName}' ungueltig."
+    "kareem_fullstack_portfolio:010525": "Die Highlight-Karte '{HighlightType}' der Portfolio-Projekt-Case-Study ist fuer das Feld '{FieldName}' ungueltig.",
+    "kareem_fullstack_portfolio:010601": "Die Stufenbezeichnung der Portfolio-Erfahrung ist erforderlich.",
+    "kareem_fullstack_portfolio:010602": "Die Stufenbezeichnung der Portfolio-Erfahrung darf {MaxLength} Zeichen nicht ueberschreiten.",
+    "kareem_fullstack_portfolio:010603": "Der Titel der Portfolio-Erfahrung ist erforderlich.",
+    "kareem_fullstack_portfolio:010604": "Der Titel der Portfolio-Erfahrung darf {MaxLength} Zeichen nicht ueberschreiten.",
+    "kareem_fullstack_portfolio:010605": "Die Organisation der Portfolio-Erfahrung ist erforderlich.",
+    "kareem_fullstack_portfolio:010606": "Die Organisation der Portfolio-Erfahrung darf {MaxLength} Zeichen nicht ueberschreiten.",
+    "kareem_fullstack_portfolio:010607": "Der Business-Value der Portfolio-Erfahrung ist erforderlich.",
+    "kareem_fullstack_portfolio:010608": "Der Business-Value der Portfolio-Erfahrung darf {MaxLength} Zeichen nicht ueberschreiten.",
+    "kareem_fullstack_portfolio:010609": "Die Anzeigereihenfolge der Portfolio-Erfahrung muss null oder groesser sein.",
+    "kareem_fullstack_portfolio:010610": "Die Portfolio-Erfahrung muss mindestens einen Highlight-Punkt enthalten.",
+    "kareem_fullstack_portfolio:010611": "Ein Highlight-Punkt der Portfolio-Erfahrung darf {MaxLength} Zeichen nicht ueberschreiten.",
+    "kareem_fullstack_portfolio:010612": "Der Highlight-Punkt '{Highlight}' ist im selben Portfolio-Erfahrungseintrag doppelt vorhanden.",
+    "kareem_fullstack_portfolio:010613": "Die Portfolio-Erfahrung wurde nicht gefunden: {ExperienceId}.",
+    "kareem_fullstack_portfolio:010614": "Der Portfolio-Erfahrungstyp '{ExperienceType}' ist bereits vorhanden.",
+    "kareem_fullstack_portfolio:010615": "Nur Enterprise-ERP-Delivery darf als primaere berufliche Software-Erfahrung markiert werden. Erhalten: {ExperienceType}.",
+    "kareem_fullstack_portfolio:010616": "Nur eine Portfolio-Erfahrung darf als primaere berufliche Software-Erfahrung markiert werden."
   }
 }
