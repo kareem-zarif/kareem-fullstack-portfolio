@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 
 namespace kareem_fullstack_portfolio.Projects;
 
 [AllowAnonymous]
+[Route("api/projects")]
 public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, IPortfolioProjectAppService
 {
     private readonly IRepository<PortfolioProject, Guid> _portfolioProjectRepository;
@@ -22,6 +24,7 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
         _portfolioProjectCaseStudyDefinitionProvider = portfolioProjectCaseStudyDefinitionProvider;
     }
 
+    [HttpGet]
     public async Task<PortfolioProjectListDto> GetListAsync(GetPortfolioProjectListInput input)
     {
         input ??= new GetPortfolioProjectListInput();
@@ -63,6 +66,7 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
         };
     }
 
+    [HttpGet("{slug}")]
     public async Task<PortfolioProjectCaseStudyDto> GetBySlugAsync(string slug)
     {
         var normalizedSlug = NormalizeSlug(slug);

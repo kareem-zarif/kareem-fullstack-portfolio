@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Domain.Repositories;
 
 namespace kareem_fullstack_portfolio.Skills;
 
 [AllowAnonymous]
+[Route("api/skills")]
 public class PublicPortfolioSkillAppService : PortfolioSkillAppServiceBase, IPublicPortfolioSkillAppService
 {
     public PublicPortfolioSkillAppService(IRepository<PortfolioSkill, Guid> portfolioSkillRepository)
@@ -15,6 +17,7 @@ public class PublicPortfolioSkillAppService : PortfolioSkillAppServiceBase, IPub
     {
     }
 
+    [HttpGet]
     public async Task<IReadOnlyList<PortfolioSkillCategoryDto>> GetListAsync()
     {
         var queryable = await PortfolioSkillRepository.GetQueryableAsync();

@@ -85,6 +85,7 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string PortfolioContactMessageSubjectTooLong = "kareem_fullstack_portfolio:010708";
     public const string PortfolioContactMessageBodyRequired = "kareem_fullstack_portfolio:010709";
     public const string PortfolioContactMessageBodyTooLong = "kareem_fullstack_portfolio:010710";
+    public const string PortfolioContactMessageSpamDetected = "kareem_fullstack_portfolio:010711";
     public const string PortfolioSiteSettingKeyRequired = "kareem_fullstack_portfolio:010801";
     public const string PortfolioSiteSettingKeyTooLong = "kareem_fullstack_portfolio:010802";
     public const string PortfolioSiteSettingKeyInvalid = "kareem_fullstack_portfolio:010803";

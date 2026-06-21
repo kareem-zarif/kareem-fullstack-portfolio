@@ -1,10 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace kareem_fullstack_portfolio.Experience;
 
 [AllowAnonymous]
+[Route("api/experience")]
 public class PortfolioExperienceAppService : kareem_fullstack_portfolioAppService, IPortfolioExperienceAppService
 {
     private readonly IPortfolioExperienceSectionDefinitionProvider _experienceSectionDefinitionProvider;
@@ -14,6 +16,7 @@ public class PortfolioExperienceAppService : kareem_fullstack_portfolioAppServic
         _experienceSectionDefinitionProvider = experienceSectionDefinitionProvider;
     }
 
+    [HttpGet]
     public Task<PortfolioExperienceSectionDto> GetAsync()
     {
         var definition = _experienceSectionDefinitionProvider.Get();

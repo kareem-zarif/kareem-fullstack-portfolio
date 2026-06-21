@@ -181,6 +181,7 @@
     "kareem_fullstack_portfolio:010708": "Contact message subject must not exceed {MaxLength} characters.",
     "kareem_fullstack_portfolio:010709": "Contact message body is required.",
     "kareem_fullstack_portfolio:010710": "Contact message body must not exceed {MaxLength} characters.",
+    "kareem_fullstack_portfolio:010711": "Contact submission was rejected by spam protection.",
     "Enum:PortfolioSiteSettingValueType.Text": "Text",
     "Enum:PortfolioSiteSettingValueType.Url": "URL",
     "Enum:PortfolioSiteSettingValueType.Email": "Email",
