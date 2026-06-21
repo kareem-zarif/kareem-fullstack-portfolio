@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using kareem_fullstack_portfolio.Projects;
 using kareem_fullstack_portfolio.PortfolioIdentity;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
 
 namespace kareem_fullstack_portfolio.HomePage;
 
@@ -9,17 +14,29 @@ namespace kareem_fullstack_portfolio.HomePage;
 public class PortfolioHomePageAppService : kareem_fullstack_portfolioAppService, IPortfolioHomePageAppService
 {
     private readonly IPortfolioHomePageDefinitionProvider _homePageDefinitionProvider;
+    private readonly IRepository<PortfolioProject, Guid> _portfolioProjectRepository;
+    private readonly IPortfolioProjectCaseStudyDefinitionProvider _portfolioProjectCaseStudyDefinitionProvider;
 
-    public PortfolioHomePageAppService(IPortfolioHomePageDefinitionProvider homePageDefinitionProvider)
+    public PortfolioHomePageAppService(
+        IPortfolioHomePageDefinitionProvider homePageDefinitionProvider,
+        IRepository<PortfolioProject, Guid> portfolioProjectRepository,
+        IPortfolioProjectCaseStudyDefinitionProvider portfolioProjectCaseStudyDefinitionProvider)
     {
         _homePageDefinitionProvider = homePageDefinitionProvider;
+        _portfolioProjectRepository = portfolioProjectRepository;
+        _portfolioProjectCaseStudyDefinitionProvider = portfolioProjectCaseStudyDefinitionProvider;
     }
 
-    public Task<PortfolioHomePageDto> GetAsync()
+    public async Task<PortfolioHomePageDto> GetAsync()
     {
         var definition = _homePageDefinitionProvider.Get();
+        var featuredProjects = await GetFeaturedProjectsAsync(definition);
+        var erpProject = GetRequiredFeaturedProject(featuredProjects, PortfolioHomeFeaturedProjectType.EnterpriseErpSystem);
+        var erpCaseStudy = _portfolioProjectCaseStudyDefinitionProvider.FindBySlug(erpProject.Slug)
+            ?? throw new BusinessException(kareem_fullstack_portfolioDomainErrorCodes.PortfolioProjectNotFoundBySlug)
+                .WithData("Slug", erpProject.Slug);
 
-        return Task.FromResult(new PortfolioHomePageDto
+        return new PortfolioHomePageDto
         {
             Identity = CreateIdentityDto(definition.Identity),
             ProfessionalLinks = definition.ProfessionalLinks
@@ -30,17 +47,17 @@ public class PortfolioHomePageAppService : kareem_fullstack_portfolioAppService,
                 .OrderBy(card => card.DisplayOrder)
                 .Select(CreateTechStackCardDto)
                 .ToList(),
-            FeaturedProjects = definition.FeaturedProjects
-                .OrderBy(project => project.DisplayOrder)
-                .Select(CreateFeaturedProjectDto)
+            FeaturedProjects = featuredProjects
+                .OrderBy(project => project.Definition.DisplayOrder)
+                .Select(item => CreateFeaturedProjectDto(item.Definition, item.Project))
                 .ToList(),
-            ErpExperienceHighlight = CreateErpExperienceHighlightDto(definition.ErpExperienceHighlight),
+            ErpExperienceHighlight = CreateErpExperienceHighlightDto(definition.ErpExperienceHighlight, erpProject, erpCaseStudy),
             BusinessValueItems = definition.BusinessValueItems
                 .OrderBy(item => item.DisplayOrder)
                 .Select(CreateBusinessValueDto)
                 .ToList(),
             ContactCallToAction = CreateContactCallToActionDto(definition.ContactCallToAction)
-        });
+        };
     }
 
     private PortfolioIdentityDto CreateIdentityDto(PortfolioIdentityDefinition identity)
@@ -104,28 +121,36 @@ public class PortfolioHomePageAppService : kareem_fullstack_portfolioAppService,
         };
     }
 
-    private PortfolioHomeFeaturedProjectDto CreateFeaturedProjectDto(PortfolioHomeFeaturedProjectDefinition project)
+    private PortfolioHomeFeaturedProjectDto CreateFeaturedProjectDto(PortfolioHomeFeaturedProjectDefinition definition, PortfolioProject project)
     {
         return new PortfolioHomeFeaturedProjectDto
         {
-            Type = project.Type,
-            TypeLabel = L[$"Enum:PortfolioHomeFeaturedProjectType.{project.Type}"],
+            Type = definition.Type,
+            TypeLabel = L[$"Enum:PortfolioHomeFeaturedProjectType.{definition.Type}"],
             Title = project.Title,
             Slug = project.Slug,
             ShortSummary = project.ShortSummary,
             BusinessValue = project.BusinessValue,
-            TechStack = project.TechStack.ToList(),
+            TechStack = project.TechStack
+                .OrderBy(technology => technology.DisplayOrder)
+                .Select(technology => technology.Name)
+                .ToList(),
             GitHubUrl = project.GitHubUrl,
             HasGitHubLink = !string.IsNullOrWhiteSpace(project.GitHubUrl),
             LiveDemoUrl = project.LiveDemoUrl,
             HasLiveDemoLink = !string.IsNullOrWhiteSpace(project.LiveDemoUrl),
-            CaseStudyRoute = project.CaseStudyRoute,
+            CaseStudyRoute = _portfolioProjectCaseStudyDefinitionProvider.HasDefinition(project.Slug)
+                ? project.GetCaseStudyRoute()
+                : string.Empty,
             IsFeatured = project.IsFeatured,
-            DisplayOrder = project.DisplayOrder
+            DisplayOrder = definition.DisplayOrder
         };
     }
 
-    private PortfolioHomeErpExperienceHighlightDto CreateErpExperienceHighlightDto(PortfolioHomeErpExperienceHighlightDefinition highlight)
+    private PortfolioHomeErpExperienceHighlightDto CreateErpExperienceHighlightDto(
+        PortfolioHomeErpExperienceHighlightDefinition highlight,
+        PortfolioProject erpProject,
+        PortfolioProjectCaseStudyDefinition caseStudy)
     {
         return new PortfolioHomeErpExperienceHighlightDto
         {
@@ -139,9 +164,59 @@ public class PortfolioHomePageAppService : kareem_fullstack_portfolioAppService,
                 })
                 .ToList(),
             ArchitectureNote = highlight.ArchitectureNote,
-            ProjectRoute = highlight.ProjectRoute
+            HighlightCards = caseStudy.HighlightCards
+                .OrderBy(card => card.DisplayOrder)
+                .Select(card => new PortfolioProjectCaseStudyHighlightCardDto
+                {
+                    Type = card.Type,
+                    Label = L[$"Enum:PortfolioProjectCaseStudyHighlightType.{card.Type}"],
+                    Title = card.Title,
+                    Summary = card.Summary,
+                    DisplayOrder = card.DisplayOrder
+                })
+                .ToList(),
+            ProjectRoute = erpProject.GetCaseStudyRoute()
         };
     }
+
+    private async Task<IReadOnlyList<FeaturedProjectItem>> GetFeaturedProjectsAsync(PortfolioHomePageDefinition definition)
+    {
+        var featuredDefinitions = definition.FeaturedProjects
+            .OrderBy(project => project.DisplayOrder)
+            .ToList();
+
+        var slugs = featuredDefinitions
+            .Select(project => project.Slug)
+            .Where(slug => !slug.IsNullOrWhiteSpace())
+            .Distinct()
+            .ToList();
+
+        var queryable = await _portfolioProjectRepository.WithDetailsAsync(project => project.TechStack);
+        var projects = await AsyncExecuter.ToListAsync(
+            queryable.Where(project => project.IsActive && project.IsFeatured && slugs.Contains(project.Slug)));
+
+        return featuredDefinitions
+            .Select(definitionItem => new FeaturedProjectItem(
+                definitionItem,
+                projects.FirstOrDefault(project => project.Slug == definitionItem.Slug)
+                    ?? throw new BusinessException(kareem_fullstack_portfolioDomainErrorCodes.HomePageMissingFeaturedProject)
+                        .WithData("FeaturedProjectType", definitionItem.Type.ToString())))
+            .ToList();
+    }
+
+    private static PortfolioProject GetRequiredFeaturedProject(
+        IReadOnlyList<FeaturedProjectItem> featuredProjects,
+        PortfolioHomeFeaturedProjectType type)
+    {
+        return featuredProjects
+            .FirstOrDefault(project => project.Definition.Type == type)?.Project
+            ?? throw new BusinessException(kareem_fullstack_portfolioDomainErrorCodes.HomePageMissingFeaturedProject)
+                .WithData("FeaturedProjectType", type.ToString());
+    }
+
+    private sealed record FeaturedProjectItem(
+        PortfolioHomeFeaturedProjectDefinition Definition,
+        PortfolioProject Project);
 
     private PortfolioHomeBusinessValueDto CreateBusinessValueDto(PortfolioHomeBusinessValueDefinition item)
     {

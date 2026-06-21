@@ -91,6 +91,11 @@
     "Enum:PortfolioProjectCaseStudyLinkType.LiveDemo": "Demo en ligne",
     "Enum:PortfolioProjectCaseStudyGalleryItemType.Screenshot": "Capture d'ecran",
     "Enum:PortfolioProjectCaseStudyGalleryItemType.Placeholder": "Espace reserve",
+    "Enum:PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration": "Integration frontend-backend",
+    "Enum:PortfolioProjectCaseStudyHighlightType.RoleBasedSecurity": "Securite basee sur les roles",
+    "Enum:PortfolioProjectCaseStudyHighlightType.ReportingAndData": "Reporting et donnees",
+    "Enum:PortfolioProjectCaseStudyHighlightType.BusinessWorkflowAutomation": "Automatisation des workflows metier",
+    "Enum:PortfolioProjectCaseStudyHighlightType.AbpLayeredArchitecture": "Architecture ABP en couches",
     "kareem_fullstack_portfolio:010201": "La page d'accueil du portfolio n'a pas l'audience cible requise : {TargetAudience}.",
     "kareem_fullstack_portfolio:010202": "La page d'accueil du portfolio doit rendre evidente la specialisation .NET et Angular.",
     "kareem_fullstack_portfolio:010203": "La page d'accueil du portfolio n'a pas la carte de stack requise : {TechStackCardType}.",
@@ -137,6 +142,7 @@
     "kareem_fullstack_portfolio:010521": "La section '{SectionName}' de l'etude de cas du projet du portfolio doit contenir au moins un element non vide.",
     "kareem_fullstack_portfolio:010522": "Le champ '{FieldName}' de la section '{SectionName}' de l'etude de cas du projet du portfolio ne doit pas depasser {MaxLength} caracteres.",
     "kareem_fullstack_portfolio:010523": "L'element de galerie '{Title}' de l'etude de cas du projet du portfolio est invalide pour le type '{GalleryItemType}'.",
-    "kareem_fullstack_portfolio:010524": "Le slug d'etude de cas du projet du portfolio '{Slug}' est duplique."
+    "kareem_fullstack_portfolio:010524": "Le slug d'etude de cas du projet du portfolio '{Slug}' est duplique.",
+    "kareem_fullstack_portfolio:010525": "La carte de mise en avant '{HighlightType}' de l'etude de cas du projet du portfolio est invalide pour le champ '{FieldName}'."
   }
 }

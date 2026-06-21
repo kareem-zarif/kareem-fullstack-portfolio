@@ -119,6 +119,11 @@
     "Enum:PortfolioProjectCaseStudyLinkType.LiveDemo": "عرض مباشر",
     "Enum:PortfolioProjectCaseStudyGalleryItemType.Screenshot": "لقطة شاشة",
     "Enum:PortfolioProjectCaseStudyGalleryItemType.Placeholder": "عنصر نائب",
+    "Enum:PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration": "تكامل الواجهة الأمامية والخلفية",
+    "Enum:PortfolioProjectCaseStudyHighlightType.RoleBasedSecurity": "الأمان حسب الدور",
+    "Enum:PortfolioProjectCaseStudyHighlightType.ReportingAndData": "التقارير والبيانات",
+    "Enum:PortfolioProjectCaseStudyHighlightType.BusinessWorkflowAutomation": "أتمتة سير عمل الأعمال",
+    "Enum:PortfolioProjectCaseStudyHighlightType.AbpLayeredArchitecture": "معمارية ABP الطبقية",
     "kareem_fullstack_portfolio:010001": "يجب أن تحتوي هوية البورتفوليو على الاسم الكامل لكريم.",
     "kareem_fullstack_portfolio:010002": "يجب أن يوضح العنوان المهني تموضع .NET Full Stack بوضوح.",
     "kareem_fullstack_portfolio:010003": "يجب أن تركز الرسالة الرئيسية على أنظمة الأعمال.",
@@ -178,6 +183,7 @@
     "kareem_fullstack_portfolio:010521": "يجب أن يحتوي قسم دراسة حالة مشروع البورتفوليو '{SectionName}' على عنصر واحد غير فارغ على الأقل.",
     "kareem_fullstack_portfolio:010522": "يجب ألا يتجاوز الحقل '{FieldName}' في قسم دراسة حالة مشروع البورتفوليو '{SectionName}' عدد {MaxLength} من الأحرف.",
     "kareem_fullstack_portfolio:010523": "عنصر المعرض '{Title}' في دراسة حالة مشروع البورتفوليو غير صالح لنوع العنصر '{GalleryItemType}'.",
-    "kareem_fullstack_portfolio:010524": "المعرف النصي لدراسة حالة مشروع البورتفوليو '{Slug}' مكرر."
+    "kareem_fullstack_portfolio:010524": "المعرف النصي لدراسة حالة مشروع البورتفوليو '{Slug}' مكرر.",
+    "kareem_fullstack_portfolio:010525": "بطاقة إبراز دراسة حالة مشروع البورتفوليو '{HighlightType}' غير صالحة للحقل '{FieldName}'."
   }
 }

@@ -62,4 +62,5 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string PortfolioProjectCaseStudyTextTooLong = "kareem_fullstack_portfolio:010522";
     public const string PortfolioProjectCaseStudyGalleryItemInvalid = "kareem_fullstack_portfolio:010523";
     public const string PortfolioProjectCaseStudyDuplicateSlug = "kareem_fullstack_portfolio:010524";
+    public const string PortfolioProjectCaseStudyHighlightCardInvalid = "kareem_fullstack_portfolio:010525";
 }

@@ -86,6 +86,11 @@
     "Enum:PortfolioProjectCaseStudyLinkType.LiveDemo": "Live demo",
     "Enum:PortfolioProjectCaseStudyGalleryItemType.Screenshot": "Screenshot",
     "Enum:PortfolioProjectCaseStudyGalleryItemType.Placeholder": "Placeholder",
+    "Enum:PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration": "Frontend and backend integration",
+    "Enum:PortfolioProjectCaseStudyHighlightType.RoleBasedSecurity": "Role-based security",
+    "Enum:PortfolioProjectCaseStudyHighlightType.ReportingAndData": "Reporting and data",
+    "Enum:PortfolioProjectCaseStudyHighlightType.BusinessWorkflowAutomation": "Business workflow automation",
+    "Enum:PortfolioProjectCaseStudyHighlightType.AbpLayeredArchitecture": "ABP layered architecture",
     "kareem_fullstack_portfolio:010001": "Portfolio identity must include Kareem's full name.",
     "kareem_fullstack_portfolio:010002": "Portfolio identity title must clearly show .NET full-stack positioning.",
     "kareem_fullstack_portfolio:010003": "Portfolio identity main message must focus on business systems.",
@@ -145,6 +150,7 @@
     "kareem_fullstack_portfolio:010521": "Portfolio project case study section '{SectionName}' must include at least one non-empty item.",
     "kareem_fullstack_portfolio:010522": "Portfolio project case study section '{SectionName}' field '{FieldName}' must not exceed {MaxLength} characters.",
     "kareem_fullstack_portfolio:010523": "Portfolio project case study gallery item '{Title}' is invalid for item type '{GalleryItemType}'.",
-    "kareem_fullstack_portfolio:010524": "Portfolio project case study slug '{Slug}' is duplicated."
+    "kareem_fullstack_portfolio:010524": "Portfolio project case study slug '{Slug}' is duplicated.",
+    "kareem_fullstack_portfolio:010525": "Portfolio project case study highlight card '{HighlightType}' is invalid for field '{FieldName}'."
   }
 }

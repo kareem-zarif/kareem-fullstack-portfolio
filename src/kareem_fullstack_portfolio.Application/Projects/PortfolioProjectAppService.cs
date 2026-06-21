@@ -105,6 +105,10 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
                 .ToList(),
             KeyFeatures = definition.KeyFeatures.ToList(),
             ArchitectureNotes = definition.ArchitectureNotes.ToList(),
+            HighlightCards = definition.HighlightCards
+                .OrderBy(card => card.DisplayOrder)
+                .Select(MapHighlightCardDto)
+                .ToList(),
             GalleryItems = definition.GalleryItems
                 .OrderBy(item => item.DisplayOrder)
                 .Select(MapGalleryItemDto)
@@ -180,6 +184,18 @@ public class PortfolioProjectAppService : kareem_fullstack_portfolioAppService, 
             Summary = item.Summary,
             ImageUrl = item.ImageUrl,
             DisplayOrder = item.DisplayOrder
+        };
+    }
+
+    private PortfolioProjectCaseStudyHighlightCardDto MapHighlightCardDto(PortfolioProjectCaseStudyHighlightCardDefinition card)
+    {
+        return new PortfolioProjectCaseStudyHighlightCardDto
+        {
+            Type = card.Type,
+            Label = L[$"Enum:PortfolioProjectCaseStudyHighlightType.{card.Type}"],
+            Title = card.Title,
+            Summary = card.Summary,
+            DisplayOrder = card.DisplayOrder
         };
     }
 

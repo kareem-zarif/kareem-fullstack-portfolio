@@ -37,6 +37,8 @@ public class PortfolioProjectCaseStudyDto
 
     public List<string> ArchitectureNotes { get; set; } = [];
 
+    public List<PortfolioProjectCaseStudyHighlightCardDto> HighlightCards { get; set; } = [];
+
     public List<PortfolioProjectCaseStudyGalleryItemDto> GalleryItems { get; set; } = [];
 
     public List<string> Results { get; set; } = [];

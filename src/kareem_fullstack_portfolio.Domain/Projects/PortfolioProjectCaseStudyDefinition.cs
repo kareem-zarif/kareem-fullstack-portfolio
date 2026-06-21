@@ -25,6 +25,8 @@ public class PortfolioProjectCaseStudyDefinition
 
     public IReadOnlyList<string> ArchitectureNotes { get; }
 
+    public IReadOnlyList<PortfolioProjectCaseStudyHighlightCardDefinition> HighlightCards { get; }
+
     public IReadOnlyList<PortfolioProjectCaseStudyGalleryItemDefinition> GalleryItems { get; }
 
     public IReadOnlyList<string> Results { get; }
@@ -38,6 +40,7 @@ public class PortfolioProjectCaseStudyDefinition
         IReadOnlyList<string> roleResponsibilities,
         IReadOnlyList<string> keyFeatures,
         IReadOnlyList<string> architectureNotes,
+        IReadOnlyList<PortfolioProjectCaseStudyHighlightCardDefinition> highlightCards,
         IReadOnlyList<PortfolioProjectCaseStudyGalleryItemDefinition> galleryItems,
         IReadOnlyList<string> results)
     {
@@ -49,6 +52,7 @@ public class PortfolioProjectCaseStudyDefinition
         RoleResponsibilities = roleResponsibilities ?? [];
         KeyFeatures = keyFeatures ?? [];
         ArchitectureNotes = architectureNotes ?? [];
+        HighlightCards = highlightCards ?? [];
         GalleryItems = galleryItems ?? [];
         Results = results ?? [];
     }
@@ -74,6 +78,11 @@ public class PortfolioProjectCaseStudyDefinition
         foreach (var item in GalleryItems)
         {
             item.EnsureValid();
+        }
+
+        foreach (var card in HighlightCards)
+        {
+            card.EnsureValid();
         }
     }
 

@@ -68,6 +68,34 @@ public class PortfolioProjectCaseStudyDefinitionProvider : IPortfolioProjectCase
                     "Application services expose Angular-ready DTOs so UI work remains presentation-focused.",
                     "Entity and service boundaries are organized to support future module growth instead of one-off feature code."
                 ],
+                highlightCards:
+                [
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration,
+                        "Angular screens backed by ASP.NET Core contracts",
+                        "The ERP flow is shaped around Angular-ready DTOs and application-service endpoints so the UI presents business data without owning validation or workflow rules.",
+                        1),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.RoleBasedSecurity,
+                        "Backend-enforced security and permissions",
+                        "Authentication and role-based permissions are handled in the backend, protecting sensitive actions and keeping visibility rules consistent across modules.",
+                        2),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.ReportingAndData,
+                        "Reporting-ready SQL Server and EF Core data",
+                        "Entities and queries are prepared for operational reporting, traceability, and future dashboard metrics instead of one-off page responses.",
+                        3),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.BusinessWorkflowAutomation,
+                        "Business workflows with approval-aware state handling",
+                        "The product thinking focuses on secure workflow execution for day-to-day operations, approvals, and business tasks that need dependable state transitions.",
+                        4),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.AbpLayeredArchitecture,
+                        "ABP-style layered architecture mindset",
+                        "Routing, authorization, validation, and localized errors stay in the backend layers so future Angular expansion remains clean and maintainable.",
+                        5)
+                ],
                 galleryItems:
                 [
                     PortfolioProjectCaseStudyGalleryItemDefinition.Placeholder(
@@ -108,6 +136,19 @@ public class PortfolioProjectCaseStudyDefinitionProvider : IPortfolioProjectCase
                     "Backend contracts are shaped to support both public shopping experiences and business administration flows.",
                     "The solution emphasizes maintainable boundaries between pricing logic, catalog data, and UI presentation."
                 ],
+                highlightCards:
+                [
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration,
+                        "Storefront and admin flows share backend contracts",
+                        "Catalog, pricing, and ordering behavior are prepared for both customer-facing Angular screens and internal administration tools.",
+                        1),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.ReportingAndData,
+                        "Operational data stays consistent across commerce flows",
+                        "Backend-owned catalog and order rules keep factory-side data aligned with what customers see and buy.",
+                        2)
+                ],
                 galleryItems:
                 [
                     PortfolioProjectCaseStudyGalleryItemDefinition.Placeholder(
@@ -142,6 +183,19 @@ public class PortfolioProjectCaseStudyDefinitionProvider : IPortfolioProjectCase
                 [
                     "The system is shaped like an internal tool where reliability matters more than visual novelty.",
                     "Service responses are organized so future UI work can render workflows without owning the business rules."
+                ],
+                highlightCards:
+                [
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.BusinessWorkflowAutomation,
+                        "Internal operations are treated as real workflows",
+                        "Daily demand, order handling, and staff execution are modeled as dependable backend flows rather than ad-hoc UI states.",
+                        1),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration,
+                        "Angular-ready contracts keep staff screens simple",
+                        "The backend shapes the workflow state and data so future UI work can focus on usability and execution speed.",
+                        2)
                 ],
                 galleryItems:
                 [
@@ -179,6 +233,19 @@ public class PortfolioProjectCaseStudyDefinitionProvider : IPortfolioProjectCase
                     "Static portfolio content follows definition providers so business intent stays centralized in the backend.",
                     "App services remain the only API surface; no custom controllers are needed for project content.",
                     "Contracts are prepared for Angular conditional rendering through section metadata and structured collections."
+                ],
+                highlightCards:
+                [
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.AbpLayeredArchitecture,
+                        "ABP-style app services stay the API surface",
+                        "The project shows how routing, DTO contracts, validation, and authorization can stay in application services instead of custom controllers.",
+                        1),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration,
+                        "Angular integration is prepared by backend contracts",
+                        "Public pages can evolve safely because the backend exposes structured DTOs, localized labels, and conditional section metadata.",
+                        2)
                 ],
                 galleryItems:
                 [
