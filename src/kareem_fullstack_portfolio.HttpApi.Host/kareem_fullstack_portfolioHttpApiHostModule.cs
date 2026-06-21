@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +43,8 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.Studio.Client.AspNetCore;
 using Volo.Abp.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using kareem_fullstack_portfolio.AdminAuthentication;
 
 namespace kareem_fullstack_portfolio;
 
@@ -142,11 +148,81 @@ public class kareem_fullstack_portfolioHttpApiHostModule : AbpModule
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
+
+        context.Services.Configure<PortfolioAdminAuthenticationOptions>(
+            configuration.GetSection(PortfolioAdminAuthenticationDefaults.ConfigurationSectionName));
+        Configure<PortfolioAdminAuthenticationOptions>(options =>
+        {
+            options.Issuer ??= configuration["AuthServer:Authority"]?.TrimEnd('/');
+        });
+
+        var adminAuthenticationOptions = ResolveAdminAuthenticationOptions(configuration);
+
         context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+        context.Services.AddAuthentication()
+            .AddJwtBearer(PortfolioAdminAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.RequireHttpsMetadata = configuration.GetValue("AuthServer:RequireHttpsMetadata", true);
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = adminAuthenticationOptions.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = adminAuthenticationOptions.Audience,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(adminAuthenticationOptions.GetSigningKeyBytes()),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(1),
+                    NameClaimType = AbpClaimTypes.UserName,
+                    RoleClaimType = ClaimTypes.Role
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async validationContext =>
+                    {
+                        var jti = validationContext.Principal?.FindFirst(PortfolioAdminAuthenticationClaimNames.TokenId)?.Value;
+                        if (jti.IsNullOrWhiteSpace())
+                        {
+                            validationContext.Fail("Admin token is missing a token identifier.");
+                            return;
+                        }
+
+                        var distributedCache = validationContext.HttpContext.RequestServices.GetRequiredService<IDistributedCache>();
+                        var revokedMarker = await distributedCache.GetStringAsync(AdminAuthenticationAppService.BuildRevokedTokenCacheKey(jti));
+                        if (!revokedMarker.IsNullOrWhiteSpace())
+                        {
+                            validationContext.Fail("Admin token has been revoked.");
+                        }
+                    }
+                };
+            });
+
+        context.Services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder(
+                    OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+                    PortfolioAdminAuthenticationDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+        });
+
         context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
         });
+    }
+
+    private static PortfolioAdminAuthenticationOptions ResolveAdminAuthenticationOptions(IConfiguration configuration)
+    {
+        var adminAuthenticationOptions =
+            configuration.GetSection(PortfolioAdminAuthenticationDefaults.ConfigurationSectionName)
+                .Get<PortfolioAdminAuthenticationOptions>() ?? new PortfolioAdminAuthenticationOptions();
+
+        adminAuthenticationOptions.Issuer ??= configuration["AuthServer:Authority"]?.TrimEnd('/');
+        adminAuthenticationOptions.EnsureValid();
+
+        return adminAuthenticationOptions;
     }
 
     private void ConfigureUrls(IConfiguration configuration)
