@@ -55,4 +55,11 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string PortfolioProjectTechnologyNameTooLong = "kareem_fullstack_portfolio:010515";
     public const string PortfolioProjectDuplicateTechnology = "kareem_fullstack_portfolio:010516";
     public const string PortfolioProjectExternalUrlInvalid = "kareem_fullstack_portfolio:010517";
+    public const string PortfolioProjectNotFoundBySlug = "kareem_fullstack_portfolio:010518";
+    public const string PortfolioProjectCaseStudySlugRequired = "kareem_fullstack_portfolio:010519";
+    public const string PortfolioProjectCaseStudySectionRequired = "kareem_fullstack_portfolio:010520";
+    public const string PortfolioProjectCaseStudyListItemRequired = "kareem_fullstack_portfolio:010521";
+    public const string PortfolioProjectCaseStudyTextTooLong = "kareem_fullstack_portfolio:010522";
+    public const string PortfolioProjectCaseStudyGalleryItemInvalid = "kareem_fullstack_portfolio:010523";
+    public const string PortfolioProjectCaseStudyDuplicateSlug = "kareem_fullstack_portfolio:010524";
 }

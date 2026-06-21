@@ -6,4 +6,6 @@ namespace kareem_fullstack_portfolio.Projects;
 public interface IPortfolioProjectAppService : IApplicationService
 {
     Task<PortfolioProjectListDto> GetPublicListAsync(GetPortfolioProjectListInput input);
+
+    Task<PortfolioProjectCaseStudyDto> GetPublicCaseStudyAsync(string slug);
 }
