@@ -124,22 +124,59 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
             </section>
 
             @if (project.highlightCards.length) {
-              <section class="surface spotlight" aria-labelledby="project-highlights-title">
+              <section class="surface spotlight" [class.spotlight--erp]="isErpCaseStudy()" aria-labelledby="project-highlights-title">
                 <div class="section-heading">
-                  <p class="eyebrow">{{ copy().highlightsEyebrow }}</p>
-                  <h2 id="project-highlights-title">{{ copy().highlightsTitle }}</h2>
-                  <p>{{ copy().highlightsDescription }}</p>
+                  <p class="eyebrow">{{ isErpCaseStudy() ? copy().erpSpotlightEyebrow : copy().highlightsEyebrow }}</p>
+                  <h2 id="project-highlights-title">
+                    {{ isErpCaseStudy() ? copy().erpSpotlightTitle : copy().highlightsTitle }}
+                  </h2>
+                  <p>{{ isErpCaseStudy() ? copy().erpSpotlightDescription : copy().highlightsDescription }}</p>
                 </div>
 
-                <div class="highlight-grid">
-                  @for (card of project.highlightCards; track card.displayOrder) {
-                    <article class="highlight-card">
-                      <span>{{ card.label }}</span>
-                      <h3>{{ card.title }}</h3>
-                      <p>{{ card.summary }}</p>
+                @if (isErpCaseStudy()) {
+                  <div class="erp-spotlight">
+                    <article class="erp-spotlight__summary">
+                      <p class="eyebrow">{{ copy().businessValueLabel }}</p>
+                      <h3>{{ project.businessValue }}</h3>
+                      <p>{{ project.shortSummary }}</p>
+
+                      <dl class="metrics-grid metrics-grid--erp">
+                        @for (metric of erpSpotlightMetrics(); track metric.label) {
+                          <div class="metric-card">
+                            <dt>{{ metric.value }}</dt>
+                            <dd>{{ metric.label }}</dd>
+                          </div>
+                        }
+                      </dl>
+
+                      <div class="chip-grid">
+                        @for (technology of project.techStack; track technology) {
+                          <span>{{ technology }}</span>
+                        }
+                      </div>
                     </article>
-                  }
-                </div>
+
+                    <div class="highlight-grid highlight-grid--erp">
+                      @for (card of project.highlightCards; track card.displayOrder) {
+                        <article class="highlight-card">
+                          <span>{{ card.label }}</span>
+                          <h3>{{ card.title }}</h3>
+                          <p>{{ card.summary }}</p>
+                        </article>
+                      }
+                    </div>
+                  </div>
+                } @else {
+                  <div class="highlight-grid">
+                    @for (card of project.highlightCards; track card.displayOrder) {
+                      <article class="highlight-card">
+                        <span>{{ card.label }}</span>
+                        <h3>{{ card.title }}</h3>
+                        <p>{{ card.summary }}</p>
+                      </article>
+                    }
+                  </div>
+                }
               </section>
             }
 
@@ -206,30 +243,53 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                 @if (hasVisibleSection(sectionType.keyFeatures) && project.keyFeatures.length) {
                   <article class="surface section-card" [attr.id]="sectionAnchor(sectionType.keyFeatures)">
                     <div class="section-heading">
-                      <p class="eyebrow">{{ sectionLabel(sectionType.keyFeatures) }}</p>
-                      <h2>{{ sectionLabel(sectionType.keyFeatures) }}</h2>
+                      <p class="eyebrow">{{ isErpCaseStudy() ? copy().workflowEyebrow : sectionLabel(sectionType.keyFeatures) }}</p>
+                      <h2>{{ isErpCaseStudy() ? copy().workflowTitle : sectionLabel(sectionType.keyFeatures) }}</h2>
                     </div>
 
-                    <ul class="bullet-list">
-                      @for (feature of project.keyFeatures; track feature) {
-                        <li>{{ feature }}</li>
-                      }
-                    </ul>
+                    @if (isErpCaseStudy()) {
+                      <div class="workflow-card-grid">
+                        @for (feature of project.keyFeatures; track feature) {
+                          <article class="workflow-card">
+                            <span>{{ copy().workflowEyebrow }}</span>
+                            <p>{{ feature }}</p>
+                          </article>
+                        }
+                      </div>
+                    } @else {
+                      <ul class="bullet-list">
+                        @for (feature of project.keyFeatures; track feature) {
+                          <li>{{ feature }}</li>
+                        }
+                      </ul>
+                    }
                   </article>
                 }
 
                 @if (hasVisibleSection(sectionType.architectureNotes) && project.architectureNotes.length) {
                   <article class="surface section-card" [attr.id]="sectionAnchor(sectionType.architectureNotes)">
                     <div class="section-heading">
-                      <p class="eyebrow">{{ sectionLabel(sectionType.architectureNotes) }}</p>
-                      <h2>{{ sectionLabel(sectionType.architectureNotes) }}</h2>
+                      <p class="eyebrow">
+                        {{ isErpCaseStudy() ? copy().architectureEyebrow : sectionLabel(sectionType.architectureNotes) }}
+                      </p>
+                      <h2>{{ isErpCaseStudy() ? copy().architectureTitle : sectionLabel(sectionType.architectureNotes) }}</h2>
                     </div>
 
-                    <ul class="bullet-list">
-                      @for (note of project.architectureNotes; track note) {
-                        <li>{{ note }}</li>
-                      }
-                    </ul>
+                    @if (isErpCaseStudy()) {
+                      <div class="insight-grid">
+                        @for (note of project.architectureNotes; track note) {
+                          <article class="insight-card">
+                            <p>{{ note }}</p>
+                          </article>
+                        }
+                      </div>
+                    } @else {
+                      <ul class="bullet-list">
+                        @for (note of project.architectureNotes; track note) {
+                          <li>{{ note }}</li>
+                        }
+                      </ul>
+                    }
                   </article>
                 }
 
@@ -607,6 +667,10 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
+      .highlight-grid--erp {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .highlight-card {
         padding: 1.2rem;
         border: 1px solid var(--portfolio-border);
@@ -681,6 +745,64 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
 
       .chip-grid span {
         width: auto;
+      }
+
+      .spotlight--erp {
+        gap: 1.75rem;
+      }
+
+      .erp-spotlight {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .erp-spotlight__summary,
+      .workflow-card-grid,
+      .workflow-card,
+      .insight-grid,
+      .insight-card {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .erp-spotlight__summary {
+        padding: 1.25rem;
+        border: 1px solid color-mix(in srgb, var(--portfolio-primary) 22%, var(--portfolio-border));
+        border-radius: 1.6rem;
+        background:
+          linear-gradient(
+            155deg,
+            color-mix(in srgb, var(--portfolio-primary) 14%, transparent),
+            transparent 62%
+          ),
+          color-mix(in srgb, var(--portfolio-bg-soft) 82%, transparent);
+      }
+
+      .metrics-grid--erp {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-card-grid,
+      .insight-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .workflow-card,
+      .insight-card {
+        padding: 1.15rem;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 1.35rem;
+        background: color-mix(in srgb, var(--portfolio-bg-soft) 82%, transparent);
+      }
+
+      .workflow-card span {
+        color: var(--portfolio-accent);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
 
       .gallery-grid {
@@ -845,7 +967,11 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
       @media (max-width: 1180px) {
         .hero,
         .story-grid,
-        .highlight-grid {
+        .highlight-grid,
+        .highlight-grid--erp,
+        .erp-spotlight,
+        .workflow-card-grid,
+        .insight-grid {
           grid-template-columns: 1fr;
         }
 
@@ -917,6 +1043,7 @@ export class ProjectDetailsPageComponent {
     const state = this.state();
     return state.kind === 'ready' ? state.project : null;
   });
+  readonly isErpCaseStudy = computed(() => this.project()?.slug === 'enterprise-erp-system');
   readonly visibleSections = computed(() =>
     [...(this.project()?.sections ?? [])]
       .filter(section => section.isVisible)
@@ -947,6 +1074,28 @@ export class ProjectDetailsPageComponent {
       {
         value: this.formatMetric(project.results.length),
         label: this.copy().metricResults,
+      },
+    ];
+  });
+  readonly erpSpotlightMetrics = computed<ProjectDetailsMetric[]>(() => {
+    const project = this.project();
+
+    if (!project || !this.isErpCaseStudy()) {
+      return [];
+    }
+
+    return [
+      {
+        value: this.formatMetric(project.highlightCards.length),
+        label: this.copy().metricHighlights,
+      },
+      {
+        value: this.formatMetric(project.architectureNotes.length),
+        label: this.copy().metricArchitecture,
+      },
+      {
+        value: this.formatMetric(project.keyFeatures.length),
+        label: this.copy().metricFeatures,
       },
     ];
   });

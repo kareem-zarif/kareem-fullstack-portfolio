@@ -251,39 +251,77 @@ interface HomeMetric {
           </section>
 
           <section class="section surface surface--accent" aria-labelledby="erp-title">
-            <div class="erp-layout">
-              <div class="erp-layout__content">
+            <div class="section__header section__header--split">
+              <div class="section__header-copy">
                 <p class="eyebrow">{{ copy().erpEyebrow }}</p>
                 <h2 id="erp-title">{{ page.erpExperienceHighlight.headline }}</h2>
                 <p>{{ page.erpExperienceHighlight.summary }}</p>
+              </div>
 
-                <div class="erp-layout__note">
-                  <strong>{{ copy().architectureNote }}</strong>
+              <dl class="erp-showcase__metrics" [attr.aria-label]="copy().erpMetricsLabel">
+                @for (metric of erpHighlightMetrics(); track metric.label) {
+                  <div class="erp-showcase__metric">
+                    <dt>{{ metric.value }}</dt>
+                    <dd>{{ metric.label }}</dd>
+                  </div>
+                }
+              </dl>
+            </div>
+
+            <div class="erp-showcase__grid">
+              <article class="erp-summary-card">
+                <div class="erp-summary-card__intro">
+                  <span class="eyebrow">{{ copy().architectureNote }}</span>
                   <p>{{ page.erpExperienceHighlight.architectureNote }}</p>
                 </div>
 
-                <a [routerLink]="page.erpExperienceHighlight.projectRoute" class="cta cta--primary">
-                  {{ copy().spotlightCta }}
-                </a>
-              </div>
-
-              <div class="erp-layout__details">
                 <div class="erp-layout__capabilities">
                   @for (capability of page.erpExperienceHighlight.capabilities; track capability.type) {
                     <span>{{ capability.label }}</span>
                   }
                 </div>
 
-                <div class="erp-layout__highlights">
-                  @for (card of page.erpExperienceHighlight.highlightCards; track card.type) {
-                    <article class="erp-highlight-card">
-                      <span>{{ card.label }}</span>
-                      <h3>{{ card.title }}</h3>
-                      <p>{{ card.summary }}</p>
-                    </article>
-                  }
+                <div class="hero__actions">
+                  <a [routerLink]="page.erpExperienceHighlight.projectRoute" class="cta cta--primary">
+                    {{ copy().spotlightCta }}
+                  </a>
+                  <a routerLink="/projects" class="cta cta--secondary">
+                    {{ copy().viewAllProjects }}
+                  </a>
                 </div>
-              </div>
+              </article>
+
+              @if (erpFeaturedProject(); as erpProject) {
+                <article class="erp-proof-card">
+                  <div class="erp-proof-card__header">
+                    <span>{{ erpProject.typeLabel }}</span>
+                    <strong>{{ copy().businessEyebrow }}</strong>
+                  </div>
+
+                  <h3>{{ erpProject.title }}</h3>
+                  <p>{{ erpProject.businessValue }}</p>
+
+                  <div class="erp-proof-card__summary">
+                    <strong>{{ erpProject.shortSummary }}</strong>
+                  </div>
+
+                  <div class="project-card__stack">
+                    @for (technology of erpProject.techStack; track technology) {
+                      <small>{{ technology }}</small>
+                    }
+                  </div>
+                </article>
+              }
+            </div>
+
+            <div class="erp-story-ribbon" [attr.aria-label]="copy().erpHighlightsLabel">
+              @for (card of page.erpExperienceHighlight.highlightCards; track card.type) {
+                <article class="erp-story-card">
+                  <span>{{ card.label }}</span>
+                  <h3>{{ card.title }}</h3>
+                  <p>{{ card.summary }}</p>
+                </article>
+              }
             </div>
           </section>
 
@@ -686,10 +724,23 @@ interface HomeMetric {
         max-width: 62rem;
       }
 
+      .section__header--split {
+        max-width: none;
+        grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+        align-items: end;
+        gap: 1rem;
+      }
+
+      .section__header-copy {
+        display: grid;
+        gap: 0.8rem;
+      }
+
       .stack-grid,
       .projects-grid,
       .value-grid,
-      .erp-layout__highlights {
+      .erp-layout__highlights,
+      .erp-story-ribbon {
         display: grid;
         gap: 1rem;
       }
@@ -746,7 +797,32 @@ interface HomeMetric {
           color-mix(in srgb, var(--portfolio-bg-elevated) 90%, transparent);
       }
 
-      .erp-layout {
+      .erp-showcase__metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.85rem;
+      }
+
+      .erp-showcase__metric {
+        padding: 1rem 1.05rem;
+        border: 1px solid color-mix(in srgb, var(--portfolio-primary) 22%, var(--portfolio-border));
+        border-radius: 1.35rem;
+        background: color-mix(in srgb, var(--portfolio-primary) 10%, transparent);
+      }
+
+      .erp-showcase__metric dt {
+        color: var(--portfolio-text);
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 800;
+      }
+
+      .erp-showcase__metric dd {
+        margin-block-start: 0.2rem;
+        font-size: 0.88rem;
+      }
+
+      .erp-layout,
+      .erp-showcase__grid {
         display: grid;
         grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
         gap: 1.35rem;
@@ -757,6 +833,52 @@ interface HomeMetric {
       .erp-layout__details {
         display: grid;
         gap: 1rem;
+      }
+
+      .erp-summary-card,
+      .erp-proof-card,
+      .erp-story-card {
+        display: grid;
+        gap: 1rem;
+        padding: 1.35rem;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 1.55rem;
+        background: color-mix(in srgb, var(--portfolio-bg-soft) 78%, transparent);
+      }
+
+      .erp-summary-card__intro,
+      .erp-proof-card__summary {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .erp-proof-card__header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: center;
+      }
+
+      .erp-proof-card__header span,
+      .erp-proof-card__header strong,
+      .erp-story-card span {
+        color: var(--portfolio-accent);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .erp-proof-card__summary {
+        padding: 0.95rem 1rem;
+        border-radius: 1.1rem;
+        background: color-mix(in srgb, var(--portfolio-primary) 8%, transparent);
+      }
+
+      .erp-proof-card__summary strong {
+        color: var(--portfolio-text);
+        line-height: 1.6;
       }
 
       .erp-layout__note {
@@ -770,6 +892,10 @@ interface HomeMetric {
         display: block;
         margin-block-end: 0.4rem;
         color: var(--portfolio-text);
+      }
+
+      .erp-story-ribbon {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .contact-banner {
@@ -855,6 +981,7 @@ interface HomeMetric {
       @media (max-width: 1180px) {
         .hero,
         .erp-layout,
+        .erp-showcase__grid,
         .stack-grid,
         .projects-grid,
         .value-grid {
@@ -864,10 +991,16 @@ interface HomeMetric {
         .hero {
           min-height: auto;
         }
+
+        .section__header--split,
+        .erp-story-ribbon {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (max-width: 820px) {
-        .hero__metrics {
+        .hero__metrics,
+        .erp-showcase__metrics {
           grid-template-columns: 1fr;
         }
 
@@ -897,6 +1030,9 @@ interface HomeMetric {
         .project-card,
         .value-card,
         .erp-highlight-card,
+        .erp-summary-card,
+        .erp-proof-card,
+        .erp-story-card,
         .hero__metric {
           border-radius: 1.25rem;
         }
@@ -957,6 +1093,18 @@ export class HomePageComponent {
     );
   });
 
+  readonly erpFeaturedProject = computed<PortfolioHomeFeaturedProject | null>(() => {
+    const page = this.homeState().data;
+
+    if (!page?.featuredProjects.length) {
+      return null;
+    }
+
+    return (
+      page.featuredProjects.find(project => project.caseStudyRoute === page.erpExperienceHighlight.projectRoute) ?? null
+    );
+  });
+
   readonly heroMetrics = computed<HomeMetric[]>(() => {
     const state = this.homeState();
     const page = state.data;
@@ -978,6 +1126,30 @@ export class HomePageComponent {
       {
         value: this.formatMetric(page?.erpExperienceHighlight.capabilities.length ?? identity.targetAudiences.length),
         label: page ? this.copy().heroMetricsCapabilities : this.copy().heroMetricsAudience,
+      },
+    ];
+  });
+
+  readonly erpHighlightMetrics = computed<HomeMetric[]>(() => {
+    const page = this.homeState().data;
+    const erpProject = this.erpFeaturedProject();
+
+    if (!page) {
+      return [];
+    }
+
+    return [
+      {
+        value: this.formatMetric(page.erpExperienceHighlight.capabilities.length),
+        label: this.copy().erpMetricsCapabilities,
+      },
+      {
+        value: this.formatMetric(page.erpExperienceHighlight.highlightCards.length),
+        label: this.copy().erpMetricsHighlights,
+      },
+      {
+        value: this.formatMetric(erpProject?.techStack.length ?? 0),
+        label: this.copy().erpMetricsStack,
       },
     ];
   });
