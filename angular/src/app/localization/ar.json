@@ -430,6 +430,202 @@
     "messagesEmptyTitle": "لا توجد رسائل حديثة بعد.",
     "messagesEmptyDescription": "بمجرد وصول نشاط فعلي إلى صندوق الرسائل، ستظهر أحدث الرسائل هنا."
   },
+  "adminProjectsPage": {
+    "storyBadge": "الملحمة 5 / القصة 5.3",
+    "eyebrow": "إدارة المشاريع",
+    "title": "إدارة مشاريع البورتفوليو عبر واجهات إدارة حية وتجربة هادئة ومتجاوبة.",
+    "summary": "تحول هذه الشاشة نقاط نهاية إدارة المشاريع الحالية إلى مساحة CRUD حديثة تدعم النشر والتمييز والبحث وتحرير دراسة الحالة مع عمل صحيح في الإنجليزية LTR والعربية RTL.",
+    "metricsAriaLabel": "مؤشرات إدارة المشاريع",
+    "metrics": {
+      "totalProjects": "مشاريع ظاهرة",
+      "publishedProjects": "منشورة الآن",
+      "featuredProjects": "مميزة الآن",
+      "caseStudiesReady": "دراسات حالة جاهزة"
+    },
+    "tableEyebrow": "جدول إدارة حي",
+    "tableTitle": "جدول مشاريع بعروض أعمدة منطقية وإجراءات CRUD حقيقية",
+    "tableDescription": "ابحث وصفِّ وانشر وميّز وافتح المحرر الكامل دون مغادرة مساحة الإدارة.",
+    "refresh": "تحديث",
+    "createProject": "إنشاء مشروع",
+    "filtersAriaLabel": "مرشحات المشاريع",
+    "filters": {
+      "searchLabel": "البحث",
+      "searchPlaceholder": "ابحث في العنوان أو الرابط أو الملخص أو القيمة أو التقنيات",
+      "projectTypeLabel": "نوع المشروع",
+      "activeLabel": "النشر",
+      "featuredLabel": "التمييز",
+      "allProjectTypes": "كل أنواع المشاريع",
+      "allPublicationStates": "كل حالات النشر",
+      "publishedOnly": "المنشور فقط",
+      "unpublishedOnly": "غير المنشور فقط",
+      "allFeaturedStates": "كل حالات التمييز",
+      "featuredOnly": "المميز فقط",
+      "nonFeaturedOnly": "العادي فقط",
+      "clear": "مسح المرشحات"
+    },
+    "results": {
+      "single": "مشروع ظاهر",
+      "plural": "مشاريع ظاهرة"
+    },
+    "warningTitle": "تعذر إكمال آخر تحديث.",
+    "errorTitle": "تعذر تحميل المشاريع.",
+    "errorDescription": "يرجى التأكد من أن نقطة نهاية مشاريع الإدارة المحمية متاحة ثم أعد المحاولة.",
+    "retry": "إعادة المحاولة",
+    "emptyTitle": "لا توجد مشاريع تطابق هذه المرشحات.",
+    "emptyDescription": "امسح المرشحات الحالية أو أنشئ مشروعًا جديدًا للمتابعة.",
+    "columns": {
+      "title": "العنوان",
+      "type": "النوع",
+      "summary": "الملخص المختصر",
+      "techStack": "المكدس التقني",
+      "status": "الحالة",
+      "order": "الترتيب",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "published": "منشور",
+      "unpublished": "غير منشور",
+      "featured": "مميز",
+      "standard": "عادي",
+      "caseStudyReady": "دراسة الحالة جاهزة",
+      "caseStudyMissing": "دراسة الحالة مسودة"
+    },
+    "actions": {
+      "edit": "تعديل",
+      "publish": "نشر",
+      "unpublish": "إلغاء النشر",
+      "feature": "تمييز",
+      "unfeature": "إلغاء التمييز",
+      "preview": "معاينة"
+    },
+    "editor": {
+      "emptyBadge": "جاهزة للقصة 5.3",
+      "emptyTitle": "اختر مشروعًا أو ابدأ مشروعًا جديدًا.",
+      "emptyDescription": "يستخدم هذا المحرر نقاط نهاية المشاريع المحمية الحقيقية، لذلك يتم تحديث نموذج المحتوى الخلفي الفعلي بدل أي بيانات محلية مؤقتة.",
+      "createEyebrow": "إنشاء مشروع",
+      "editEyebrow": "تعديل مشروع",
+      "createTitle": "أضف دراسة حالة أعمال جديدة",
+      "editTitle": "حسّن المشروع المحدد",
+      "createDescription": "ابدأ بتفاصيل المشروع الأساسية، ثم أضف أقسام دراسة الحالة وبطاقات التمييز وعناصر المعرض التي تحتاجها الواجهة العامة.",
+      "editDescription": "حدّث حالة النشر والتمييز والملخص العملي ومحتوى دراسة الحالة الكامل من مساحة واحدة متجاوبة.",
+      "close": "إغلاق المحرر",
+      "errorTitle": "تعذر تحميل تفاصيل المشروع.",
+      "errorDescription": "يرجى التأكد من أن نقطة نهاية تفاصيل المشروع الإدارية متاحة ثم أعد المحاولة.",
+      "sections": {
+        "basics": "أساسيات المشروع",
+        "basicsHint": "الهوية الأساسية والترتيب وعناصر التحكم بالنشر.",
+        "summary": "التموضع العملي",
+        "summaryHint": "حافظ على الملخص الموجه لمسؤولي التوظيف مختصرًا مع إبقاء القيمة العملية واضحة.",
+        "links": "الروابط الخارجية",
+        "linksHint": "استخدم روابط GitHub والعرض المباشر الحقيقية فقط عندما تكون موجودة بالفعل.",
+        "caseStudy": "محتوى دراسة الحالة",
+        "caseStudyHint": "هذه الأقسام تغذي صفحة تفاصيل المشروع العامة ويجب أن تبقى عملية وسهلة المسح.",
+        "highlights": "بطاقات التمييز",
+        "highlightsHint": "استخدم عددًا قليلًا من بطاقات الإثبات المختصرة لأقوى نقاط التنفيذ.",
+        "gallery": "عناصر المعرض",
+        "galleryHint": "ادعم لقطات الشاشة الآن وأماكن الصور المؤقتة للمرئيات المستقبلية.",
+        "highlightCard": "بطاقة تمييز",
+        "galleryItem": "عنصر معرض"
+      },
+      "fields": {
+        "title": "عنوان المشروع",
+        "slug": "رابط المشروع المختصر",
+        "projectType": "نوع المشروع",
+        "displayOrder": "ترتيب العرض",
+        "isActive": "منشور في الموقع العام",
+        "isFeatured": "تمييز هذا المشروع",
+        "caseStudyRoute": "معاينة مسار دراسة الحالة",
+        "shortSummary": "الملخص المختصر",
+        "businessValue": "القيمة للأعمال",
+        "techStack": "المكدس التقني",
+        "gitHubUrl": "رابط GitHub",
+        "liveDemoUrl": "رابط العرض المباشر",
+        "overview": "النظرة العامة",
+        "businessProblem": "مشكلة العمل",
+        "solution": "الحل",
+        "roleSummary": "ملخص دور كريم",
+        "roleResponsibilities": "المسؤوليات",
+        "keyFeatures": "الخصائص الرئيسية",
+        "architectureNotes": "ملاحظات معمارية",
+        "results": "النتائج والأثر",
+        "highlightType": "نوع بطاقة التمييز",
+        "highlightTitle": "عنوان بطاقة التمييز",
+        "highlightSummary": "ملخص بطاقة التمييز",
+        "galleryType": "نوع المعرض",
+        "galleryTitle": "عنوان عنصر المعرض",
+        "gallerySummary": "ملخص عنصر المعرض",
+        "imageUrl": "رابط الصورة"
+      },
+      "placeholders": {
+        "title": "نظام ERP مؤسسي",
+        "slug": "enterprise-erp-system",
+        "url": "https://example.com",
+        "multiline": "عنصر واحد في كل سطر",
+        "caseStudyRoute": "/projects/your-project-slug"
+      },
+      "hints": {
+        "isActive": "تبقى المشاريع غير المنشورة متاحة في الإدارة لكنها مخفية من البورتفوليو العام.",
+        "isFeatured": "يمكن إبراز المشاريع المميزة في الصفحة الرئيسية وفي أقسام التمييز.",
+        "techStack": "أضف تقنية واحدة في كل سطر حتى يستقبل الـ backend قائمة نظيفة.",
+        "multiline": "أضف عنصرًا واحدًا في كل سطر.",
+        "optionalMultiline": "اختياري. أضف عنصرًا واحدًا في كل سطر عند الحاجة."
+      },
+      "actions": {
+        "addHighlight": "إضافة بطاقة تمييز",
+        "addGallery": "إضافة عنصر معرض",
+        "remove": "إزالة",
+        "delete": "حذف المشروع",
+        "creating": "جارٍ الإنشاء...",
+        "saving": "جارٍ الحفظ...",
+        "create": "إنشاء المشروع",
+        "save": "حفظ التغييرات"
+      },
+      "emptyHighlights": "لا توجد بطاقات تمييز بعد.",
+      "emptyGallery": "لا توجد عناصر معرض بعد."
+    },
+    "deleteConfirmation": {
+      "title": "هل تريد حذف هذا المشروع؟",
+      "description": "سيؤدي هذا إلى إزالة المشروع من قائمة الإدارة ومن مسار المحتوى العام. يرجى التأكيد قبل المتابعة.",
+      "cancel": "إلغاء",
+      "confirm": "تأكيد الحذف",
+      "deleting": "جارٍ الحذف..."
+    },
+    "messages": {
+      "createSuccess": "تم إنشاء المشروع بنجاح.",
+      "updateSuccess": "تم تحديث المشروع بنجاح.",
+      "deleteSuccess": "تم حذف المشروع بنجاح.",
+      "saveError": "تعذر حفظ المشروع.",
+      "deleteError": "تعذر حذف المشروع.",
+      "publicationUpdated": "تم تحديث حالة النشر.",
+      "publicationError": "تعذر تحديث حالة النشر.",
+      "featureUpdated": "تم تحديث حالة التمييز.",
+      "featureError": "تعذر تحديث حالة التمييز."
+    },
+    "validation": {
+      "required": "هذا الحقل مطلوب.",
+      "url": "أدخل رابطًا صالحًا يبدأ بـ http أو https.",
+      "invalid": "يرجى مراجعة هذا الحقل."
+    },
+    "options": {
+      "projectTypes": {
+        "erpSystem": "نظام ERP",
+        "eCommercePlatform": "منصة تجارة إلكترونية",
+        "operationsSystem": "نظام عمليات",
+        "portfolioPlatform": "منصة بورتفوليو"
+      },
+      "highlightTypes": {
+        "frontendBackendIntegration": "تكامل الواجهة والخلفية",
+        "roleBasedSecurity": "أمان قائم على الأدوار",
+        "reportingAndData": "التقارير والبيانات",
+        "businessWorkflowAutomation": "أتمتة سير العمل",
+        "abpLayeredArchitecture": "معمارية ABP الطبقية"
+      },
+      "galleryTypes": {
+        "screenshot": "لقطة شاشة",
+        "placeholder": "عنصر بديل"
+      }
+    }
+  },
   "notFoundPage": {
     "code": "404",
     "title": "الصفحة غير موجودة",

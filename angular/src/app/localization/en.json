@@ -430,6 +430,202 @@
     "messagesEmptyTitle": "No recent messages yet.",
     "messagesEmptyDescription": "As soon as the backend has inbox activity, recent contact entries will appear here."
   },
+  "adminProjectsPage": {
+    "storyBadge": "Epic 5 / Story 5.3",
+    "eyebrow": "Projects CRUD",
+    "title": "Manage portfolio projects with live admin APIs and a calm, responsive workflow.",
+    "summary": "This screen turns the existing admin projects endpoints into a modern CRUD workspace with publish, feature, search, and case-study editing support across English LTR and Arabic RTL.",
+    "metricsAriaLabel": "Project management metrics",
+    "metrics": {
+      "totalProjects": "projects in view",
+      "publishedProjects": "published now",
+      "featuredProjects": "featured now",
+      "caseStudiesReady": "case studies ready"
+    },
+    "tableEyebrow": "Live admin table",
+    "tableTitle": "Projects table with sensible widths and real CRUD actions",
+    "tableDescription": "Search, filter, publish, feature, and open a full editor without leaving the admin workspace.",
+    "refresh": "Refresh",
+    "createProject": "Create project",
+    "filtersAriaLabel": "Project filters",
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search title, slug, summary, value, or technology",
+      "projectTypeLabel": "Project type",
+      "activeLabel": "Publication",
+      "featuredLabel": "Featured",
+      "allProjectTypes": "All project types",
+      "allPublicationStates": "All publication states",
+      "publishedOnly": "Published only",
+      "unpublishedOnly": "Unpublished only",
+      "allFeaturedStates": "All featured states",
+      "featuredOnly": "Featured only",
+      "nonFeaturedOnly": "Standard only",
+      "clear": "Clear filters"
+    },
+    "results": {
+      "single": "project visible",
+      "plural": "projects visible"
+    },
+    "warningTitle": "The latest refresh could not be completed.",
+    "errorTitle": "Projects could not be loaded.",
+    "errorDescription": "Please make sure the protected admin projects endpoint is reachable and try again.",
+    "retry": "Try again",
+    "emptyTitle": "No projects match these filters.",
+    "emptyDescription": "Clear the current filters or create a new project to continue.",
+    "columns": {
+      "title": "Title",
+      "type": "Type",
+      "summary": "Short summary",
+      "techStack": "Tech stack",
+      "status": "Status",
+      "order": "Order",
+      "actions": "Actions"
+    },
+    "status": {
+      "published": "Published",
+      "unpublished": "Unpublished",
+      "featured": "Featured",
+      "standard": "Standard",
+      "caseStudyReady": "Case study ready",
+      "caseStudyMissing": "Case study draft"
+    },
+    "actions": {
+      "edit": "Edit",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "feature": "Feature",
+      "unfeature": "Unfeature",
+      "preview": "Preview"
+    },
+    "editor": {
+      "emptyBadge": "Ready for Story 5.3",
+      "emptyTitle": "Choose a project or start a new one.",
+      "emptyDescription": "The editor uses the real protected project endpoints, so changes here update the live backend content model instead of local placeholder data.",
+      "createEyebrow": "Create project",
+      "editEyebrow": "Edit project",
+      "createTitle": "Add a new business case study",
+      "editTitle": "Refine the selected project",
+      "createDescription": "Fill the core project details first, then add the case-study sections, highlights, and gallery entries the public portfolio needs.",
+      "editDescription": "Update publishing state, featured placement, business summary, and full case-study content from one responsive workspace.",
+      "close": "Close editor",
+      "errorTitle": "Project details could not be loaded.",
+      "errorDescription": "Please make sure the admin project details endpoint is reachable and try again.",
+      "sections": {
+        "basics": "Project basics",
+        "basicsHint": "Core identity, ordering, and publication controls.",
+        "summary": "Business framing",
+        "summaryHint": "Keep the recruiter-facing summary concise while preserving business value context.",
+        "links": "External links",
+        "linksHint": "Use live GitHub and demo links only when they actually exist.",
+        "caseStudy": "Case study content",
+        "caseStudyHint": "These sections drive the public project details page and should stay practical and easy to scan.",
+        "highlights": "Highlight cards",
+        "highlightsHint": "Use a few concise proof cards for the strongest delivery points.",
+        "gallery": "Gallery items",
+        "galleryHint": "Support screenshots now and placeholder slots for future visuals.",
+        "highlightCard": "Highlight",
+        "galleryItem": "Gallery item"
+      },
+      "fields": {
+        "title": "Project title",
+        "slug": "Project slug",
+        "projectType": "Project type",
+        "displayOrder": "Display order",
+        "isActive": "Published on the public site",
+        "isFeatured": "Feature this project",
+        "caseStudyRoute": "Case study route preview",
+        "shortSummary": "Short summary",
+        "businessValue": "Business value",
+        "techStack": "Tech stack",
+        "gitHubUrl": "GitHub URL",
+        "liveDemoUrl": "Live demo URL",
+        "overview": "Overview",
+        "businessProblem": "Business problem",
+        "solution": "Solution",
+        "roleSummary": "Kareem's role summary",
+        "roleResponsibilities": "Role responsibilities",
+        "keyFeatures": "Key features",
+        "architectureNotes": "Architecture notes",
+        "results": "Results and impact",
+        "highlightType": "Highlight type",
+        "highlightTitle": "Highlight title",
+        "highlightSummary": "Highlight summary",
+        "galleryType": "Gallery type",
+        "galleryTitle": "Gallery title",
+        "gallerySummary": "Gallery summary",
+        "imageUrl": "Image URL"
+      },
+      "placeholders": {
+        "title": "Enterprise ERP System",
+        "slug": "enterprise-erp-system",
+        "url": "https://example.com",
+        "multiline": "One item per line",
+        "caseStudyRoute": "/projects/your-project-slug"
+      },
+      "hints": {
+        "isActive": "Unpublished projects stay available in admin but hidden from the public portfolio.",
+        "isFeatured": "Featured projects can be promoted on the homepage and in portfolio highlights.",
+        "techStack": "Add one technology per line so the backend receives a clean list.",
+        "multiline": "Add one item per line.",
+        "optionalMultiline": "Optional. Add one item per line when needed."
+      },
+      "actions": {
+        "addHighlight": "Add highlight",
+        "addGallery": "Add gallery item",
+        "remove": "Remove",
+        "delete": "Delete project",
+        "creating": "Creating...",
+        "saving": "Saving...",
+        "create": "Create project",
+        "save": "Save changes"
+      },
+      "emptyHighlights": "No highlight cards yet.",
+      "emptyGallery": "No gallery items yet."
+    },
+    "deleteConfirmation": {
+      "title": "Delete this project?",
+      "description": "This removes the project from the admin list and public content flow. Please confirm before continuing.",
+      "cancel": "Cancel",
+      "confirm": "Confirm delete",
+      "deleting": "Deleting..."
+    },
+    "messages": {
+      "createSuccess": "Project created successfully.",
+      "updateSuccess": "Project updated successfully.",
+      "deleteSuccess": "Project deleted successfully.",
+      "saveError": "The project could not be saved.",
+      "deleteError": "The project could not be deleted.",
+      "publicationUpdated": "Publication status updated.",
+      "publicationError": "The publication status could not be updated.",
+      "featureUpdated": "Featured status updated.",
+      "featureError": "The featured status could not be updated."
+    },
+    "validation": {
+      "required": "This field is required.",
+      "url": "Enter a valid URL that starts with http or https.",
+      "invalid": "Please review this field."
+    },
+    "options": {
+      "projectTypes": {
+        "erpSystem": "ERP system",
+        "eCommercePlatform": "E-commerce platform",
+        "operationsSystem": "Operations system",
+        "portfolioPlatform": "Portfolio platform"
+      },
+      "highlightTypes": {
+        "frontendBackendIntegration": "Frontend and backend integration",
+        "roleBasedSecurity": "Role-based security",
+        "reportingAndData": "Reporting and data",
+        "businessWorkflowAutomation": "Business workflow automation",
+        "abpLayeredArchitecture": "ABP layered architecture"
+      },
+      "galleryTypes": {
+        "screenshot": "Screenshot",
+        "placeholder": "Placeholder"
+      }
+    }
+  },
   "notFoundPage": {
     "code": "404",
     "title": "Page not found",
