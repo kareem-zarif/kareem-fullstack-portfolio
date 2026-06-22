@@ -3,9 +3,10 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthSessionService } from '@core/auth/auth-session.service';
 import { AppShellService } from '@core/services/app-shell.service';
+import { PublicThemeService } from '@core/services/public-theme.service';
 import { trackByRoute } from '@core/utils/track-by.util';
-import { SiteSettingsService } from '@features/portfolio/services/site-settings.service';
-import { SiteSetting } from '@shared/models';
+import { PortfolioHomePageApiService } from '@features/portfolio/services/portfolio-home-page-api.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-public-navbar',
@@ -37,6 +38,10 @@ import { SiteSetting } from '@shared/models';
       <button type="button" class="navbar__action" (click)="login()">
         {{ session.isAuthenticated ? 'Admin Dashboard' : 'Admin Login' }}
       </button>
+
+      <button type="button" class="navbar__theme" (click)="theme.toggleTheme()" [attr.aria-label]="themeLabel()">
+        {{ theme.theme() === 'dark' ? 'Light' : 'Dark' }}
+      </button>
     </header>
   `,
   styles: [
@@ -47,8 +52,8 @@ import { SiteSetting } from '@shared/models';
         align-items: center;
         gap: 1rem;
         padding: 1.2rem clamp(1rem, 4vw, 2.5rem);
-        border-bottom: 1px solid rgba(14, 41, 64, 0.08);
-        background: rgba(248, 251, 255, 0.85);
+        border-bottom: 1px solid var(--portfolio-border);
+        background: color-mix(in srgb, var(--portfolio-bg-elevated) 88%, transparent);
         backdrop-filter: blur(12px);
         position: sticky;
         top: 0;
@@ -69,19 +74,19 @@ import { SiteSetting } from '@shared/models';
         width: 2.6rem;
         height: 2.6rem;
         border-radius: 0.9rem;
-        background: linear-gradient(135deg, #113556 0%, #2c7ba4 100%);
-        color: white;
+        background: linear-gradient(135deg, var(--portfolio-primary) 0%, var(--portfolio-accent) 100%);
+        color: var(--portfolio-primary-contrast);
         font-weight: 700;
       }
 
       strong,
       a {
-        color: #11263a;
+        color: var(--portfolio-text);
       }
 
       small {
         display: block;
-        color: #6d7d93;
+        color: var(--portfolio-muted);
       }
 
       .navbar__nav {
@@ -93,19 +98,30 @@ import { SiteSetting } from '@shared/models';
       .navbar__nav a {
         text-decoration: none;
         font-weight: 600;
-        color: #577089;
+        color: var(--portfolio-muted);
       }
 
       .navbar__nav a.is-active {
-        color: #0f4065;
+        color: var(--portfolio-primary);
+      }
+
+      .navbar__action,
+      .navbar__theme {
+        border-radius: 999px;
+        padding: 0.8rem 1.1rem;
+        font-weight: 700;
       }
 
       .navbar__action {
         border: 0;
-        border-radius: 999px;
-        padding: 0.8rem 1.1rem;
-        background: #123b5c;
-        color: #ffffff;
+        background: var(--portfolio-primary);
+        color: var(--portfolio-primary-contrast);
+      }
+
+      .navbar__theme {
+        border: 1px solid var(--portfolio-border);
+        background: transparent;
+        color: var(--portfolio-text);
         font-weight: 600;
       }
 
@@ -118,6 +134,11 @@ import { SiteSetting } from '@shared/models';
         .navbar__nav {
           width: 100%;
         }
+
+        .navbar__action,
+        .navbar__theme {
+          width: 100%;
+        }
       }
     `,
   ],
@@ -125,16 +146,16 @@ import { SiteSetting } from '@shared/models';
 export class PublicNavbarComponent {
   readonly shell = inject(AppShellService);
   readonly session = inject(AuthSessionService);
+  readonly theme = inject(PublicThemeService);
   readonly trackByRoute = trackByRoute;
-  private readonly settings = toSignal(inject(SiteSettingsService).getSiteSettings(), {
-    initialValue: [] as SiteSetting[],
+  private readonly identity = toSignal(inject(PortfolioHomePageApiService).getIdentity().pipe(catchError(() => of(null))), {
+    initialValue: null,
   });
 
-  readonly brandName = computed(
-    () => this.settings().find(setting => setting.key === 'brandName')?.value ?? 'Portfolio',
-  );
-  readonly headline = computed(
-    () => this.settings().find(setting => setting.key === 'headline')?.value ?? 'Full-Stack Engineer',
+  readonly brandName = computed(() => this.identity()?.fullName ?? 'Kareem Zarif');
+  readonly headline = computed(() => this.identity()?.professionalTitle ?? 'Business-Oriented .NET Full Stack Developer');
+  readonly themeLabel = computed(() =>
+    this.theme.theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode',
   );
 
   login(): void {

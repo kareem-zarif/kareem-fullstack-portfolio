@@ -9,7 +9,7 @@ import { registerLocaleForEsBuild } from '@abp/ng.core/locale';
 import { provideThemeLeptonX } from '@abp/ng.theme.lepton-x';
 import { provideSideMenuLayout } from '@abp/ng.theme.lepton-x/layouts';
 import { provideLogo, withEnvironmentOptions } from "@abp/ng.theme.shared";
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
@@ -32,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     ...APP_ROUTE_PROVIDER,
     ...FOOTER_PROVIDER,
     provideAnimations(),
+    provideHttpClient(withInterceptorsFromDi()),
     provideAbpCore(
       withOptions({
         environment,

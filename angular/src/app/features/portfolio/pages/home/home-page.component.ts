@@ -1,310 +1,224 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { PortfolioProjectsService } from '@features/portfolio/services/portfolio-projects.service';
-import { PortfolioSkillsService } from '@features/portfolio/services/portfolio-skills.service';
-import { PortfolioExperienceService } from '@features/portfolio/services/portfolio-experience.service';
-import { SiteSettingsService } from '@features/portfolio/services/site-settings.service';
-import { trackById, trackBySlug } from '@core/utils/track-by.util';
-import { SectionHeaderComponent } from '@shared/molecules/section-header.component';
-import { StatCardComponent } from '@shared/components/stat-card.component';
-import { ChipComponent } from '@shared/atoms/chip.component';
-import { AuthCalloutComponent } from '@shared/auth/auth-callout.component';
-import { ExperienceItem, Project, SiteSetting, Skill } from '@shared/models';
+import {
+  PortfolioCallToAction,
+  PortfolioCallToActionType,
+  PortfolioHomePage,
+  PortfolioIdentity,
+} from '@features/portfolio/models';
+import { PortfolioHomePageApiService } from '@features/portfolio/services/portfolio-home-page-api.service';
+import { catchError, combineLatest, map, of, startWith } from 'rxjs';
+
+interface HomePageState {
+  data: PortfolioHomePage | null;
+  identity: PortfolioIdentity | null;
+  loading: boolean;
+  detailsError: boolean;
+}
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    SectionHeaderComponent,
-    StatCardComponent,
-    ChipComponent,
-    AuthCalloutComponent,
-  ],
+  imports: [CommonModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="hero">
-      <div class="hero__copy">
-        <p class="hero__eyebrow">Full-stack portfolio</p>
-        <h1>{{ headline() }}</h1>
-        <p class="hero__body">
-          I build production-facing Angular and ABP experiences with the same structure, maintainability,
-          and delivery discipline expected in enterprise ERP products.
-        </p>
-        <div class="hero__actions">
-          <a routerLink="/projects">Explore projects</a>
-          <a routerLink="/contact" class="hero__ghost">Start a conversation</a>
-        </div>
-      </div>
+    @if (homeState().loading) {
+      <section class="portfolio-state portfolio-state--loading" aria-live="polite">
+        <span class="portfolio-state__pulse"></span>
+        <p>Loading portfolio identity...</p>
+      </section>
+    } @else if (!homeState().identity) {
+      <section class="portfolio-state portfolio-state--error" role="alert">
+        <strong>Portfolio identity could not be loaded.</strong>
+        <p>Please make sure the API is running and the public portfolio endpoints are available.</p>
+      </section>
+    } @else if (homeState().identity; as identity) {
+      <section class="portfolio-hero" aria-labelledby="portfolio-identity-title">
+        <div class="portfolio-hero__copy">
+          <p class="portfolio-eyebrow">{{ identity.professionalTitle }}</p>
+          <h1 id="portfolio-identity-title">
+            <span>{{ identity.fullName }}</span>
+            {{ identity.mainMessage }}
+          </h1>
+          <p class="portfolio-hero__summary">{{ identity.businessSummary }}</p>
 
-      <div class="hero__sidebar">
-        <div class="hero__stats">
-          <app-stat-card label="Featured projects" [value]="featuredProjects().length.toString()" meta="Architecture, backend, and admin-first delivery" />
-          <app-stat-card label="Core skills" [value]="featuredSkills().length.toString()" meta="Angular, ABP, .NET, and platform thinking" />
-          <app-stat-card label="Availability" value="Open" [meta]="availability()" />
-        </div>
-        <app-auth-callout />
-      </div>
-    </section>
+          <div class="portfolio-actions" aria-label="Primary portfolio actions">
+            @for (action of identity.callToActions; track action.type) {
+              @if (isRouterAction(action)) {
+                <a [routerLink]="action.url" [class]="ctaClass(action)">
+                  {{ action.label }}
+                </a>
+              } @else {
+                <a
+                  [href]="action.url"
+                  [class]="ctaClass(action)"
+                  [attr.target]="action.isExternal ? '_blank' : null"
+                  [attr.rel]="action.isExternal ? 'noopener noreferrer' : null"
+                  [attr.download]="isDownloadAction(action) ? '' : null"
+                >
+                  {{ action.label }}
+                </a>
+              }
+            }
+          </div>
 
-    <section class="content-grid">
-      <article class="surface">
-        <app-section-header
-          eyebrow="Featured work"
-          title="Projects with production-minded structure"
-          description="These placeholders are wired through typed services and lazy routes so they can shift to real API-backed data without changing the page contracts."
-        />
-        <div class="cards">
-          @for (project of featuredProjects(); track trackBySlug($index, project)) {
-            <a class="project-card" [routerLink]="['/projects', project.slug]">
-              <div class="project-card__header">
-                <h3>{{ project.title }}</h3>
-                <app-chip [label]="project.status" [tone]="project.status === 'Live' ? 'success' : project.status === 'InProgress' ? 'warning' : 'neutral'" />
-              </div>
-              <p>{{ project.summary }}</p>
-              <div class="project-card__stack">
-                @for (item of project.techStack; track item) {
-                  <span>{{ item }}</span>
-                }
-              </div>
-            </a>
-          }
+          <div class="portfolio-tags" aria-label="Target audience">
+            @for (audience of identity.targetAudiences; track audience.type) {
+              <span>{{ audience.label }}</span>
+            }
+          </div>
         </div>
-      </article>
 
-      <article class="surface">
-        <app-section-header
-          eyebrow="Capabilities"
-          title="Reusable skills inventory"
-          description="The portfolio keeps capabilities typed and presentation-ready so the admin workspace can manage them later from the same service contracts."
-        />
-        <div class="skills">
-          @for (skill of featuredSkills(); track trackById($index, skill)) {
-            <div class="skill-row">
-              <div>
-                <strong>{{ skill.name }}</strong>
-                <span>{{ skill.category }}</span>
-              </div>
-              <app-chip [label]="skill.level" tone="neutral" />
-            </div>
-          }
-        </div>
-      </article>
-    </section>
-
-    <section class="surface">
-      <app-section-header
-        eyebrow="Experience"
-        title="Delivery across product and platform work"
-        description="A concise timeline for recruiters and clients, with room to expand later into richer portfolio storytelling."
-      />
-      <div class="timeline">
-        @for (item of highlights(); track trackById($index, item)) {
-          <div class="timeline__item">
-            <div class="timeline__rail"></div>
+        <aside class="portfolio-hero__panel" aria-label="Portfolio positioning">
+          <p class="portfolio-eyebrow">Design direction</p>
+          <h2>{{ identity.visualDirection }}</h2>
+          <div class="portfolio-panel-list" aria-label="Core positioning signals">
             <div>
-              <h3>{{ item.role }}</h3>
-              <strong>{{ item.company }} · {{ item.location }}</strong>
-              <p>{{ item.summary }}</p>
+              <strong>.NET + Angular</strong>
+              <span>Full-stack delivery with backend-owned contracts and responsive frontend UX.</span>
+            </div>
+            <div>
+              <strong>ERP workflows</strong>
+              <span>Business modules, permissions, validation, reporting, and operational flow thinking.</span>
+            </div>
+            <div>
+              <strong>SaaS-ready design</strong>
+              <span>Clean, confident product-style presentation for recruiters, clients, and technical leads.</span>
             </div>
           </div>
-        }
-      </div>
-    </section>
+        </aside>
+      </section>
+
+      @if (homeState().data; as page) {
+        <section class="portfolio-section portfolio-section--flat" aria-labelledby="business-value-title">
+          <div class="portfolio-section__header">
+            <p>Business value</p>
+            <h2 id="business-value-title">Enterprise thinking behind the interface</h2>
+          </div>
+          <div class="portfolio-grid portfolio-grid--three">
+            @for (item of page.businessValueItems; track item.type) {
+              <article class="portfolio-card">
+                <span>{{ item.label }}</span>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.summary }}</p>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section class="portfolio-section" aria-labelledby="stack-title">
+          <div class="portfolio-section__header">
+            <p>Full-stack proof</p>
+            <h2 id="stack-title">Built around Angular, ASP.NET Core, SQL Server, and workflow rules</h2>
+          </div>
+          <div class="portfolio-grid portfolio-grid--two">
+            @for (card of page.techStackCards; track card.type) {
+              <article class="portfolio-card">
+                <span>{{ card.label }}</span>
+                <h3>{{ card.headline }}</h3>
+                <p>{{ card.summary }}</p>
+                <div class="portfolio-tags">
+                  @for (technology of card.technologies; track technology) {
+                    <small>{{ technology }}</small>
+                  }
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section class="portfolio-section portfolio-erp" aria-labelledby="erp-title">
+          <div>
+            <p class="portfolio-eyebrow">ERP workflow focus</p>
+            <h2 id="erp-title">{{ page.erpExperienceHighlight.headline }}</h2>
+            <p>{{ page.erpExperienceHighlight.summary }}</p>
+            <a [routerLink]="page.erpExperienceHighlight.projectRoute">View ERP case study</a>
+          </div>
+          <div class="portfolio-tags portfolio-tags--roomy">
+            @for (capability of page.erpExperienceHighlight.capabilities; track capability.type) {
+              <span>{{ capability.label }}</span>
+            }
+          </div>
+        </section>
+
+        <section class="portfolio-section portfolio-section--flat" aria-labelledby="featured-title">
+          <div class="portfolio-section__header">
+            <p>Featured projects</p>
+            <h2 id="featured-title">Case studies shaped around business outcomes</h2>
+          </div>
+          <div class="portfolio-grid portfolio-grid--two">
+            @for (project of page.featuredProjects; track project.slug) {
+              <article class="portfolio-card">
+                <span>{{ project.typeLabel }}</span>
+                <h3>{{ project.title }}</h3>
+                <p>{{ project.businessValue }}</p>
+                <div class="portfolio-tags">
+                  @for (technology of project.techStack; track technology) {
+                    <small>{{ technology }}</small>
+                  }
+                </div>
+                <a [routerLink]="project.caseStudyRoute || ['/projects', project.slug]">Read case study</a>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section class="portfolio-contact-strip" aria-labelledby="contact-title">
+          <div>
+            <p>Ready to talk?</p>
+            <h2 id="contact-title">{{ page.contactCallToAction.title }}</h2>
+            <span>{{ page.contactCallToAction.summary }}</span>
+          </div>
+          <a [routerLink]="page.contactCallToAction.primaryAction.url">
+            {{ page.contactCallToAction.primaryAction.label }}
+          </a>
+        </section>
+      } @else if (homeState().detailsError) {
+        <section class="portfolio-state portfolio-state--error" role="status">
+          <strong>Identity loaded. Extra homepage sections are temporarily unavailable.</strong>
+          <p>The hero still uses the backend identity endpoint for Story 1.1.</p>
+        </section>
+      }
+    }
   `,
-  styles: [
-    `
-      :host {
-        display: grid;
-        gap: 1.5rem;
-      }
-
-      .hero,
-      .content-grid {
-        display: grid;
-        gap: 1.5rem;
-      }
-
-      .hero {
-        grid-template-columns: 1.35fr minmax(320px, 0.85fr);
-        align-items: start;
-      }
-
-      .hero__copy,
-      .surface {
-        border: 1px solid rgba(17, 50, 80, 0.08);
-        border-radius: 1.5rem;
-        background: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 30px 60px -42px rgba(15, 46, 74, 0.35);
-      }
-
-      .hero__copy {
-        padding: clamp(1.5rem, 3vw, 2.4rem);
-      }
-
-      .hero__eyebrow {
-        margin: 0 0 0.8rem;
-        color: #6a7b90;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-      }
-
-      h1 {
-        margin: 0;
-        color: #102538;
-        font-size: clamp(2.4rem, 5vw, 4.2rem);
-        line-height: 1.05;
-      }
-
-      .hero__body {
-        margin: 1rem 0 0;
-        max-width: 42rem;
-        color: #5a6c84;
-        line-height: 1.7;
-        font-size: 1.05rem;
-      }
-
-      .hero__actions {
-        display: flex;
-        gap: 0.85rem;
-        flex-wrap: wrap;
-        margin-top: 1.5rem;
-      }
-
-      .hero__actions a {
-        text-decoration: none;
-        border-radius: 999px;
-        padding: 0.95rem 1.2rem;
-        background: #123b5c;
-        color: #ffffff;
-        font-weight: 600;
-      }
-
-      .hero__ghost {
-        background: transparent !important;
-        color: #123b5c !important;
-        border: 1px solid #cbd7e4;
-      }
-
-      .hero__sidebar,
-      .hero__stats,
-      .cards,
-      .skills,
-      .timeline {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .content-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .surface {
-        padding: 1.4rem;
-      }
-
-      .project-card {
-        display: grid;
-        gap: 0.8rem;
-        padding: 1.2rem;
-        border-radius: 1.15rem;
-        background: #f6f9fc;
-        text-decoration: none;
-      }
-
-      .project-card__header {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        align-items: center;
-      }
-
-      .project-card h3,
-      .timeline h3 {
-        margin: 0;
-        color: #132238;
-      }
-
-      .project-card p,
-      .timeline p {
-        margin: 0;
-        color: #5f7088;
-        line-height: 1.65;
-      }
-
-      .project-card__stack {
-        display: flex;
-        gap: 0.55rem;
-        flex-wrap: wrap;
-      }
-
-      .project-card__stack span {
-        border-radius: 999px;
-        padding: 0.35rem 0.7rem;
-        background: #e7edf5;
-        color: #31506d;
-        font-size: 0.8rem;
-      }
-
-      .skill-row,
-      .timeline__item {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        align-items: start;
-      }
-
-      .skill-row strong {
-        display: block;
-        color: #15283b;
-      }
-
-      .skill-row span,
-      .timeline strong {
-        color: #66778f;
-      }
-
-      .timeline__rail {
-        width: 0.8rem;
-        min-width: 0.8rem;
-        min-height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(180deg, #123b5c 0%, #77abc9 100%);
-      }
-
-      @media (max-width: 1100px) {
-        .hero,
-        .content-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    `,
-  ],
+  styles: [],
 })
 export class HomePageComponent {
-  readonly trackById = trackById;
-  readonly trackBySlug = trackBySlug;
-  private readonly settings = toSignal(inject(SiteSettingsService).getSiteSettings(), {
-    initialValue: [] as SiteSetting[],
-  });
-  readonly featuredProjects = toSignal(inject(PortfolioProjectsService).getFeaturedProjects(), {
-    initialValue: [] as Project[],
-  });
-  readonly featuredSkills = toSignal(inject(PortfolioSkillsService).getFeaturedSkills(), {
-    initialValue: [] as Skill[],
-  });
-  readonly highlights = toSignal(inject(PortfolioExperienceService).getExperienceHighlights(), {
-    initialValue: [] as ExperienceItem[],
-  });
+  private readonly homePageApi = inject(PortfolioHomePageApiService);
 
-  readonly headline = computed(
-    () => this.settings().find(setting => setting.key === 'headline')?.value ?? 'Full-Stack Engineer',
+  readonly homeState = toSignal(
+    combineLatest({
+      identity: this.homePageApi.getIdentity().pipe(catchError(() => of(null))),
+      details: this.homePageApi.getHomePage().pipe(
+        map(data => ({ data, error: false })),
+        catchError(() => of({ data: null, error: true })),
+      ),
+    }).pipe(
+      map(({ identity, details }) => ({
+        data: details.data,
+        identity,
+        loading: false,
+        detailsError: details.error,
+      })),
+      startWith({ data: null, identity: null, loading: true, detailsError: false }),
+    ),
+    {
+      initialValue: { data: null, identity: null, loading: true, detailsError: false } satisfies HomePageState,
+    },
   );
-  readonly availability = computed(
-    () => this.settings().find(setting => setting.key === 'availability')?.value ?? '',
-  );
+
+  isRouterAction(action: PortfolioCallToAction): boolean {
+    return !action.isExternal && action.url.startsWith('/') && !action.url.startsWith('/assets/');
+  }
+
+  isDownloadAction(action: PortfolioCallToAction): boolean {
+    return action.type === PortfolioCallToActionType.DownloadCv;
+  }
+
+  ctaClass(action: PortfolioCallToAction): string {
+    const style = action.style === 'primary' || action.style === 'secondary' ? action.style : 'link';
+    return `portfolio-cta portfolio-cta--${style}`;
+  }
 }

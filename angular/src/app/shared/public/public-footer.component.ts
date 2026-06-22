@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { SiteSettingsService } from '@features/portfolio/services/site-settings.service';
-import { SiteSetting } from '@shared/models';
+import { PortfolioHomePageApiService } from '@features/portfolio/services/portfolio-home-page-api.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-public-footer',
@@ -13,7 +13,7 @@ import { SiteSetting } from '@shared/models';
     <footer class="footer">
       <div>
         <strong>{{ brandName() }}</strong>
-        <p>{{ availability() }}</p>
+        <p>{{ summary() }}</p>
       </div>
       <div class="footer__links">
         <a routerLink="/projects">Projects</a>
@@ -21,7 +21,7 @@ import { SiteSetting } from '@shared/models';
         <a routerLink="/contact">Contact</a>
       </div>
       <div class="footer__meta">
-        <span>{{ email() }}</span>
+        <span>{{ title() }}</span>
         <span>{{ currentYear }} © Portfolio workspace</span>
       </div>
     </footer>
@@ -33,12 +33,12 @@ import { SiteSetting } from '@shared/models';
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1rem;
         padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 2rem;
-        border-top: 1px solid rgba(17, 38, 58, 0.08);
-        color: #5b6d84;
+        border-top: 1px solid var(--portfolio-border);
+        color: var(--portfolio-muted);
       }
 
       strong {
-        color: #132238;
+        color: var(--portfolio-text);
       }
 
       p {
@@ -54,7 +54,7 @@ import { SiteSetting } from '@shared/models';
       }
 
       a {
-        color: #163f62;
+        color: var(--portfolio-primary);
         text-decoration: none;
         font-weight: 600;
       }
@@ -74,17 +74,11 @@ import { SiteSetting } from '@shared/models';
 })
 export class PublicFooterComponent {
   currentYear = new Date().getFullYear();
-  private readonly settings = toSignal(inject(SiteSettingsService).getSiteSettings(), {
-    initialValue: [] as SiteSetting[],
+  private readonly identity = toSignal(inject(PortfolioHomePageApiService).getIdentity().pipe(catchError(() => of(null))), {
+    initialValue: null,
   });
 
-  readonly brandName = computed(
-    () => this.settings().find(setting => setting.key === 'brandName')?.value ?? 'Portfolio',
-  );
-  readonly email = computed(
-    () => this.settings().find(setting => setting.key === 'email')?.value ?? 'hello@example.com',
-  );
-  readonly availability = computed(
-    () => this.settings().find(setting => setting.key === 'availability')?.value ?? '',
-  );
+  readonly brandName = computed(() => this.identity()?.fullName ?? 'Kareem Zarif');
+  readonly title = computed(() => this.identity()?.professionalTitle ?? 'Business-Oriented .NET Full Stack Developer');
+  readonly summary = computed(() => this.identity()?.mainMessage ?? 'I build business systems, not just screens.');
 }
