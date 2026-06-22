@@ -1,5 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: #07131f;
+}
+
+body {
+  margin: 0;
+  font-family: 'Aptos', 'Segoe UI Variable Display', 'Trebuchet MS', sans-serif;
+  background: transparent;
+  color: #102033;
+}
+
+html[dir='rtl'] body {
+  font-family: 'Tahoma', 'Segoe UI', 'Aptos', sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
 
 :root {
   --lpx-theme-light-bg: url('assets/images/login/login-bg-img-light.svg');

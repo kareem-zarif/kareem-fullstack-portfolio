@@ -2,8 +2,25 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { filter, map, startWith } from 'rxjs';
+import { AppShellService } from '@core/services/app-shell.service';
 import { AuthSessionService } from '@core/auth/auth-session.service';
+import { PublicThemeService } from '@core/services/public-theme.service';
+import { catchError, combineLatest, filter, map, of, startWith } from 'rxjs';
+
+const TOPBAR_COPY = {
+  en: {
+    eyebrow: 'Secure control room',
+    preview: 'Preview site',
+    account: 'Account',
+    switchLanguage: 'العربية',
+  },
+  ar: {
+    eyebrow: 'مساحة تحكم آمنة',
+    preview: 'معاينة الموقع',
+    account: 'الحساب',
+    switchLanguage: 'English',
+  },
+} as const;
 
 @Component({
   selector: 'app-admin-topbar',
@@ -13,12 +30,14 @@ import { AuthSessionService } from '@core/auth/auth-session.service';
   template: `
     <header class="topbar">
       <div>
-        <p>Operations overview</p>
+        <p>{{ copy().eyebrow }}</p>
         <h1>{{ currentSection() }}</h1>
       </div>
       <div class="topbar__actions">
-        <a routerLink="/contact">Preview contact page</a>
-        <button type="button" (click)="session.navigateToAccount()">Manage account</button>
+        <a routerLink="/">{{ copy().preview }}</a>
+        <button type="button" (click)="theme.toggleLanguage()">{{ copy().switchLanguage }}</button>
+        <button type="button" (click)="theme.toggleTheme()">{{ theme.isDark() ? 'Light' : 'Dark' }}</button>
+        <button type="button" (click)="session.navigateToAccount()">{{ copy().account }}</button>
       </div>
     </header>
   `,
@@ -29,13 +48,15 @@ import { AuthSessionService } from '@core/auth/auth-session.service';
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid #dce5ef;
-        background: rgba(255, 255, 255, 0.82);
-        backdrop-filter: blur(10px);
+        padding: 1.2rem 1.4rem;
+        border: 1px solid var(--admin-border);
+        border-radius: 1.55rem;
+        background: color-mix(in srgb, var(--admin-panel) 92%, transparent);
+        box-shadow: var(--admin-shadow);
+        backdrop-filter: blur(16px);
         position: sticky;
         top: 0;
-        z-index: 4;
+        z-index: 10;
       }
 
       p,
@@ -44,14 +65,14 @@ import { AuthSessionService } from '@core/auth/auth-session.service';
       }
 
       p {
-        color: #6f8098;
+        color: var(--admin-muted);
         text-transform: uppercase;
         font-size: 0.8rem;
         letter-spacing: 0.12em;
       }
 
       h1 {
-        color: #132238;
+        color: var(--admin-text);
         font-size: 1.5rem;
       }
 
@@ -65,10 +86,10 @@ import { AuthSessionService } from '@core/auth/auth-session.service';
       button {
         border-radius: 999px;
         padding: 0.75rem 1rem;
-        border: 1px solid #d7e1ec;
-        background: #fff;
+        border: 1px solid var(--admin-border);
+        background: color-mix(in srgb, var(--admin-panel-soft) 76%, transparent);
         text-decoration: none;
-        color: #163f62;
+        color: var(--admin-text);
         font-weight: 600;
       }
 
@@ -83,19 +104,37 @@ import { AuthSessionService } from '@core/auth/auth-session.service';
 })
 export class AdminTopbarComponent {
   readonly session = inject(AuthSessionService);
+  readonly shell = inject(AppShellService);
+  readonly theme = inject(PublicThemeService);
   private readonly router = inject(Router);
+  readonly copy = computed(() => TOPBAR_COPY[this.theme.language()]);
   private readonly routeLabel = toSignal(
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => this.formatSection(this.router.url)),
-      startWith(this.formatSection(this.router.url)),
-    ),
-    { initialValue: this.formatSection(this.router.url) },
+    combineLatest([
+      this.shell.adminShell$.pipe(catchError(() => of(null))),
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(() => this.router.url),
+        startWith(this.router.url),
+      ),
+    ]).pipe(map(([shell, url]) => this.resolveSectionLabel(url, shell?.routes ?? []))),
+    { initialValue: this.formatFallbackSection(this.router.url) },
   );
 
   readonly currentSection = computed(() => this.routeLabel());
 
-  private formatSection(url: string): string {
+  private resolveSectionLabel(
+    url: string,
+    routes: ReadonlyArray<{ path: string; label: string }>,
+  ): string {
+    const cleanUrl = url.split('?')[0];
+    const matchedRoute =
+      routes.find(route => route.path === cleanUrl) ??
+      routes.find(route => route.path.endsWith('/:slug') && cleanUrl.startsWith(route.path.replace('/:slug', '')));
+
+    return matchedRoute?.label ?? this.formatFallbackSection(cleanUrl);
+  }
+
+  private formatFallbackSection(url: string): string {
     const segment = url.split('/').filter(Boolean).at(-1) ?? 'dashboard';
     return segment
       .split('-')

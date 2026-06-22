@@ -1,5 +1,5 @@
-export function trackByRoute(index: number, item: { route: string }): string {
-  return item.route;
+export function trackByRoute(index: number, item: { path?: string; route?: string }): string {
+  return item.path ?? item.route ?? `${index}`;
 }
 
 export function trackById(index: number, item: { id: string }): string {

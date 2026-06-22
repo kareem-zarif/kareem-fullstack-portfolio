@@ -4,6 +4,11 @@ import { adminAuthMatchGuard } from '@core/guards/admin-auth.guard';
 
 export const APP_ROUTES: Routes = [
   {
+    path: 'admin/login',
+    loadComponent: () =>
+      import('@features/admin/pages/login/admin-login-page.component').then(c => c.AdminLoginPageComponent),
+  },
+  {
     path: 'admin',
     canMatch: [adminAuthMatchGuard],
     loadChildren: () => import('@features/admin/admin.routes').then(c => c.ADMIN_ROUTES),

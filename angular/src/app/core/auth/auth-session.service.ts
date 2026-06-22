@@ -19,6 +19,12 @@ export class AuthSessionService {
     void this.router.navigateByUrl('/admin/dashboard');
   }
 
+  openAdminLogin(returnUrl = '/admin/dashboard'): void {
+    void this.router.navigate(['/admin/login'], {
+      queryParams: { returnUrl },
+    });
+  }
+
   navigateToAccount(): void {
     void this.router.navigateByUrl('/account/manage');
   }
