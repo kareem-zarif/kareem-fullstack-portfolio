@@ -1,18 +1,46 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { environment } from '@env/environment';
 import { SiteSetting } from '@shared/models';
+import { map, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SiteSettingsService {
-  private readonly settings: SiteSetting[] = [
-    { id: 'setting-brand', key: 'brandName', label: 'Brand Name', value: 'Kareem Zarif', group: 'branding' },
-    { id: 'setting-role', key: 'headline', label: 'Headline', value: 'Full-Stack Engineer building ERP-grade product experiences.', group: 'branding' },
-    { id: 'setting-email', key: 'email', label: 'Email', value: 'hello@kareem.dev', group: 'contact' },
-    { id: 'setting-location', key: 'location', label: 'Location', value: 'Cairo, Egypt', group: 'contact' },
-    { id: 'setting-status', key: 'availability', label: 'Availability', value: 'Available for selective product and platform work.', group: 'status' },
-  ];
+  private readonly http = inject(HttpClient);
+  private readonly apiBaseUrl = environment.apis.default.url.replace(/\/$/, '');
 
   getSiteSettings(): Observable<SiteSetting[]> {
-    return of(this.settings);
+    return this.http.get<PublicPortfolioSiteSettingDto[]>(`${this.apiBaseUrl}/api/site-settings`).pipe(
+      map(settings =>
+        settings.map(setting => ({
+          key: setting.key,
+          label: formatSettingLabel(setting.key),
+          value: setting.value,
+          valueType: setting.valueType,
+          valueTypeLabel: setting.valueTypeLabel,
+          displayOrder: setting.displayOrder,
+        })),
+      ),
+    );
   }
+}
+
+interface PublicPortfolioSiteSettingDto {
+  key: string;
+  value: string;
+  valueType: number;
+  valueTypeLabel: string;
+  displayOrder: number;
+}
+
+function formatSettingLabel(key: string): string {
+  return key
+    .split('.')
+    .map(segment =>
+      segment
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' '),
+    )
+    .join(' / ');
 }

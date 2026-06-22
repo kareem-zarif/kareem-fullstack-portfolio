@@ -12,13 +12,44 @@ import {
   PortfolioProjectCaseStudyLink,
   PortfolioProjectCaseStudySection,
 } from '@features/portfolio/models';
+import { PortfolioExperienceApiService } from '@features/portfolio/services/portfolio-experience-api.service';
 import { PortfolioProjectsApiService } from '@features/portfolio/services/portfolio-projects-api.service';
-import { catchError, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { PortfolioSkillsService } from '@features/portfolio/services/portfolio-skills.service';
+import { SiteSettingsService } from '@features/portfolio/services/site-settings.service';
+import { catchError, forkJoin, map, Observable, of, startWith, switchMap } from 'rxjs';
 
 interface ProjectDetailsMetric {
   value: string;
   label: string;
 }
+
+interface ApiEndpointCard {
+  method: string;
+  path: string;
+  title: string;
+  summary: string;
+  stat: string;
+  caption: string;
+}
+
+interface ApiStorySnapshot {
+  projectCount: number;
+  projectTypeCount: number;
+  currentSectionCount: number;
+  currentHighlightCount: number;
+  skillCategoryCount: number;
+  totalSkillCount: number;
+  experienceTimelineCount: number;
+  experienceHighlightCount: number;
+  siteSettingCount: number;
+  sampleSettingKeys: string[];
+}
+
+type ApiStoryState =
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | { kind: 'ready'; data: ApiStorySnapshot }
+  | { kind: 'error' };
 
 type ProjectDetailsPageState =
   | { kind: 'loading' }
@@ -84,6 +115,8 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
 
                   @if (isDatabaseEntitiesStory()) {
                     <span class="hero__badge hero__badge--story">{{ copy().databaseStoryBadge }}</span>
+                  } @else if (isPublicApiStory()) {
+                    <span class="hero__badge hero__badge--story">{{ copy().apiStoryBadge }}</span>
                   }
                 </div>
 
@@ -136,6 +169,8 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                         ? copy().erpSpotlightEyebrow
                         : isDatabaseEntitiesStory()
                           ? copy().databaseSpotlightEyebrow
+                          : isPublicApiStory()
+                            ? copy().apiSpotlightEyebrow
                           : copy().highlightsEyebrow
                     }}
                   </p>
@@ -145,6 +180,8 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                         ? copy().erpSpotlightTitle
                         : isDatabaseEntitiesStory()
                           ? copy().databaseSpotlightTitle
+                          : isPublicApiStory()
+                            ? copy().apiSpotlightTitle
                           : copy().highlightsTitle
                     }}
                   </h2>
@@ -154,6 +191,8 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                         ? copy().erpSpotlightDescription
                         : isDatabaseEntitiesStory()
                           ? copy().databaseSpotlightDescription
+                          : isPublicApiStory()
+                            ? copy().apiSpotlightDescription
                           : copy().highlightsDescription
                     }}
                   </p>
@@ -202,6 +241,55 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                       </article>
                     }
                   </div>
+                }
+              </section>
+            }
+
+            @if (isPublicApiStory()) {
+              <section class="surface api-lab" aria-labelledby="api-lab-title">
+                <div class="section-heading">
+                  <p class="eyebrow">{{ copy().apiLiveEyebrow }}</p>
+                  <h2 id="api-lab-title">{{ copy().apiLiveTitle }}</h2>
+                  <p>{{ copy().apiLiveDescription }}</p>
+                </div>
+
+                @switch (apiStoryState().kind) {
+                  @case ('loading') {
+                    <div class="api-lab__state" aria-live="polite">
+                      <span class="state-card__pulse" aria-hidden="true"></span>
+                      <strong>{{ copy().apiLiveLoading }}</strong>
+                    </div>
+                  }
+
+                  @case ('error') {
+                    <div class="api-lab__state api-lab__state--error" role="status">
+                      <strong>{{ copy().apiLiveErrorTitle }}</strong>
+                      <p>{{ copy().apiLiveErrorDescription }}</p>
+                    </div>
+                  }
+
+                  @case ('ready') {
+                    <div class="api-lab__grid">
+                      @for (card of apiEndpointCards(); track card.path) {
+                        <article class="api-card">
+                          <div class="api-card__header">
+                            <span class="api-card__method" [class.api-card__method--post]="card.method === 'POST'">
+                              {{ card.method }}
+                            </span>
+                            <strong>{{ card.path }}</strong>
+                          </div>
+
+                          <h3>{{ card.title }}</h3>
+                          <p>{{ card.summary }}</p>
+
+                          <div class="api-card__footer">
+                            <span class="api-card__stat">{{ card.stat }}</span>
+                            <small>{{ card.caption }}</small>
+                          </div>
+                        </article>
+                      }
+                    </div>
+                  }
                 }
               </section>
             }
@@ -275,6 +363,8 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                             ? copy().workflowEyebrow
                             : isDatabaseEntitiesStory()
                               ? copy().databaseEntitiesEyebrow
+                              : isPublicApiStory()
+                                ? copy().apiEndpointsEyebrow
                               : sectionLabel(sectionType.keyFeatures)
                         }}
                       </p>
@@ -284,12 +374,14 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                             ? copy().workflowTitle
                             : isDatabaseEntitiesStory()
                               ? copy().databaseEntitiesTitle
+                              : isPublicApiStory()
+                                ? copy().apiEndpointsTitle
                               : sectionLabel(sectionType.keyFeatures)
                         }}
                       </h2>
                     </div>
 
-                    @if (isDatabaseEntitiesStory()) {
+                    @if (isStructuredStory()) {
                       <div class="entity-card-grid">
                         @for (feature of project.keyFeatures; track feature; let index = $index) {
                           <article class="entity-card">
@@ -327,6 +419,8 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                             ? copy().architectureEyebrow
                             : isDatabaseEntitiesStory()
                               ? copy().databaseStandardsEyebrow
+                              : isPublicApiStory()
+                                ? copy().apiRulesEyebrow
                               : sectionLabel(sectionType.architectureNotes)
                         }}
                       </p>
@@ -336,12 +430,14 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                             ? copy().architectureTitle
                             : isDatabaseEntitiesStory()
                               ? copy().databaseStandardsTitle
+                              : isPublicApiStory()
+                                ? copy().apiRulesTitle
                               : sectionLabel(sectionType.architectureNotes)
                         }}
                       </h2>
                     </div>
 
-                    @if (isDatabaseEntitiesStory()) {
+                    @if (isStructuredStory()) {
                       <div class="requirement-grid">
                         @for (note of project.architectureNotes; track note; let index = $index) {
                           <article class="requirement-card">
@@ -405,6 +501,8 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                         {{
                           isDatabaseEntitiesStory()
                             ? copy().databaseAcceptanceEyebrow
+                            : isPublicApiStory()
+                              ? copy().apiAcceptanceEyebrow
                             : sectionLabel(sectionType.resultsImpact)
                         }}
                       </p>
@@ -412,12 +510,14 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                         {{
                           isDatabaseEntitiesStory()
                             ? copy().databaseAcceptanceTitle
+                            : isPublicApiStory()
+                              ? copy().apiAcceptanceTitle
                             : sectionLabel(sectionType.resultsImpact)
                         }}
                       </h2>
                     </div>
 
-                    @if (isDatabaseEntitiesStory()) {
+                    @if (isStructuredStory()) {
                       <div class="acceptance-grid">
                         @for (result of project.results; track result; let index = $index) {
                           <article class="acceptance-card">
@@ -682,6 +782,89 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
       .metric-card dd {
         margin-block-start: 0.2rem;
         font-size: 0.84rem;
+      }
+
+      .api-lab {
+        display: grid;
+        gap: 1.3rem;
+      }
+
+      .api-lab__grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .api-lab__state {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        min-height: 5rem;
+        padding: 1.1rem 1.2rem;
+        border-radius: 1.3rem;
+        border: 1px solid var(--portfolio-border);
+        background: color-mix(in srgb, var(--portfolio-bg-soft) 82%, transparent);
+        color: var(--portfolio-text);
+      }
+
+      .api-lab__state--error {
+        border-color: color-mix(in srgb, #c94d4d 34%, var(--portfolio-border));
+      }
+
+      .api-card {
+        display: grid;
+        gap: 0.85rem;
+        padding: 1.1rem;
+        border-radius: 1.35rem;
+        border: 1px solid var(--portfolio-border);
+        background:
+          linear-gradient(180deg, color-mix(in srgb, var(--portfolio-bg-soft) 72%, transparent), transparent),
+          color-mix(in srgb, var(--portfolio-bg-elevated) 96%, transparent);
+      }
+
+      .api-card__header,
+      .api-card__footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: center;
+      }
+
+      .api-card__method {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 3.7rem;
+        padding: 0.45rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid color-mix(in srgb, var(--portfolio-primary) 30%, var(--portfolio-border));
+        background: color-mix(in srgb, var(--portfolio-primary) 10%, transparent);
+        color: var(--portfolio-primary);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+      }
+
+      .api-card__method--post {
+        border-color: color-mix(in srgb, var(--portfolio-accent) 30%, var(--portfolio-border));
+        background: color-mix(in srgb, var(--portfolio-accent) 12%, transparent);
+        color: var(--portfolio-accent);
+      }
+
+      .api-card__footer {
+        padding-block-start: 0.25rem;
+        border-top: 1px solid var(--portfolio-border);
+      }
+
+      .api-card__stat {
+        color: var(--portfolio-text);
+        font-size: 1.25rem;
+        font-weight: 800;
+      }
+
+      .api-card__footer small {
+        color: var(--portfolio-muted);
       }
 
       .section-nav {
@@ -1120,6 +1303,7 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
         .highlight-grid,
         .highlight-grid--erp,
         .erp-spotlight,
+        .api-lab__grid,
         .workflow-card-grid,
         .insight-grid,
         .entity-card-grid,
@@ -1171,6 +1355,9 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
 export class ProjectDetailsPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly projectsApi = inject(PortfolioProjectsApiService);
+  private readonly skillsService = inject(PortfolioSkillsService);
+  private readonly experienceApi = inject(PortfolioExperienceApiService);
+  private readonly siteSettingsService = inject(SiteSettingsService);
   private readonly theme = inject(PublicThemeService);
   private readonly reloadVersion = signal(0);
 
@@ -1198,6 +1385,8 @@ export class ProjectDetailsPageComponent {
   });
   readonly isErpCaseStudy = computed(() => this.project()?.slug === 'enterprise-erp-system');
   readonly isDatabaseEntitiesStory = computed(() => this.project()?.slug === 'story-4-2-database-entities');
+  readonly isPublicApiStory = computed(() => this.project()?.slug === 'story-4-3-public-api-endpoints');
+  readonly isStructuredStory = computed(() => this.isDatabaseEntitiesStory() || this.isPublicApiStory());
   readonly visibleSections = computed(() =>
     [...(this.project()?.sections ?? [])]
       .filter(section => section.isVisible)
@@ -1208,6 +1397,54 @@ export class ProjectDetailsPageComponent {
   );
   readonly links = computed(() =>
     [...(this.project()?.links ?? [])].sort((left, right) => left.displayOrder - right.displayOrder),
+  );
+  private readonly apiStoryRequest = computed(() => {
+    const project = this.project();
+
+    if (!project || project.slug !== 'story-4-3-public-api-endpoints') {
+      return null;
+    }
+
+    return {
+      currentSectionCount: project.sections.length,
+      currentHighlightCount: project.highlightCards.length,
+    };
+  });
+  readonly apiStoryState = toSignal(
+    toObservable(this.apiStoryRequest).pipe(
+      switchMap(request =>
+        request
+          ? forkJoin({
+              projectList: this.projectsApi.getProjectList(),
+              skills: this.skillsService.getSkillCategories(),
+              experience: this.experienceApi.getExperienceSection(),
+              siteSettings: this.siteSettingsService.getSiteSettings(),
+            }).pipe(
+              map(
+                ({ projectList, skills, experience, siteSettings }) =>
+                  ({
+                    kind: 'ready',
+                    data: {
+                      projectCount: projectList.items.length,
+                      projectTypeCount: projectList.availableProjectTypes.length,
+                      currentSectionCount: request.currentSectionCount,
+                      currentHighlightCount: request.currentHighlightCount,
+                      skillCategoryCount: skills.length,
+                      totalSkillCount: skills.reduce((total, category) => total + category.skills.length, 0),
+                      experienceTimelineCount: experience.timelineItems.length,
+                      experienceHighlightCount: experience.highlightBadges.length,
+                      siteSettingCount: siteSettings.length,
+                      sampleSettingKeys: siteSettings.slice(0, 2).map(setting => setting.key),
+                    },
+                  }) satisfies ApiStoryState,
+              ),
+              startWith({ kind: 'loading' } satisfies ApiStoryState),
+              catchError(() => of({ kind: 'error' } satisfies ApiStoryState)),
+            )
+          : of({ kind: 'idle' } satisfies ApiStoryState),
+      ),
+    ),
+    { initialValue: { kind: 'idle' } satisfies ApiStoryState },
   );
   readonly metrics = computed<ProjectDetailsMetric[]>(() => {
     const project = this.project();
@@ -1225,6 +1462,23 @@ export class ProjectDetailsPageComponent {
         {
           value: this.formatMetric(project.architectureNotes.length),
           label: this.copy().metricRequirements,
+        },
+        {
+          value: this.formatMetric(project.results.length),
+          label: this.copy().metricAcceptance,
+        },
+      ];
+    }
+
+    if (this.isPublicApiStory()) {
+      return [
+        {
+          value: this.formatMetric(project.keyFeatures.length),
+          label: this.copy().metricEndpoints,
+        },
+        {
+          value: this.formatMetric(project.architectureNotes.length),
+          label: this.copy().metricRules,
         },
         {
           value: this.formatMetric(project.results.length),
@@ -1251,8 +1505,68 @@ export class ProjectDetailsPageComponent {
   readonly heroSignals = computed(() =>
     this.isDatabaseEntitiesStory()
       ? [this.copy().storySignalScope, this.copy().storySignalCodeFirst, this.copy().storySignalReady]
+      : this.isPublicApiStory()
+        ? [this.copy().apiSignalAnonymous, this.copy().apiSignalDtos, this.copy().apiSignalValidation]
       : [this.copy().heroSignalBusiness, this.copy().heroSignalResponsive, this.copy().heroSignalTheme],
   );
+  readonly apiEndpointCards = computed<ApiEndpointCard[]>(() => {
+    const state = this.apiStoryState();
+
+    if (state.kind !== 'ready') {
+      return [];
+    }
+
+    return [
+      {
+        method: 'GET',
+        path: '/api/projects',
+        title: this.copy().apiProjectsCardTitle,
+        summary: this.copy().apiProjectsCardSummary,
+        stat: this.formatMetric(state.data.projectCount),
+        caption: `${this.formatMetric(state.data.projectTypeCount)} ${this.copy().apiProjectTypesCaption}`,
+      },
+      {
+        method: 'GET',
+        path: '/api/projects/{slug}',
+        title: this.copy().apiProjectDetailsCardTitle,
+        summary: this.copy().apiProjectDetailsCardSummary,
+        stat: this.formatMetric(state.data.currentSectionCount),
+        caption: `${this.formatMetric(state.data.currentHighlightCount)} ${this.copy().apiHighlightsCaption}`,
+      },
+      {
+        method: 'GET',
+        path: '/api/skills',
+        title: this.copy().apiSkillsCardTitle,
+        summary: this.copy().apiSkillsCardSummary,
+        stat: this.formatMetric(state.data.totalSkillCount),
+        caption: `${this.formatMetric(state.data.skillCategoryCount)} ${this.copy().apiCategoriesCaption}`,
+      },
+      {
+        method: 'GET',
+        path: '/api/experience',
+        title: this.copy().apiExperienceCardTitle,
+        summary: this.copy().apiExperienceCardSummary,
+        stat: this.formatMetric(state.data.experienceTimelineCount),
+        caption: `${this.formatMetric(state.data.experienceHighlightCount)} ${this.copy().apiBadgesCaption}`,
+      },
+      {
+        method: 'GET',
+        path: '/api/site-settings',
+        title: this.copy().apiSettingsCardTitle,
+        summary: this.copy().apiSettingsCardSummary,
+        stat: this.formatMetric(state.data.siteSettingCount),
+        caption: state.data.sampleSettingKeys.join(' • '),
+      },
+      {
+        method: 'POST',
+        path: '/api/contact',
+        title: this.copy().apiContactCardTitle,
+        summary: this.copy().apiContactCardSummary,
+        stat: this.copy().apiContactCardStat,
+        caption: this.copy().apiContactCardCaption,
+      },
+    ];
+  });
   readonly erpSpotlightMetrics = computed<ProjectDetailsMetric[]>(() => {
     const project = this.project();
 

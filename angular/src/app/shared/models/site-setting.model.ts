@@ -1,7 +1,8 @@
 export interface SiteSetting {
-  id: string;
   key: string;
   label: string;
   value: string;
-  group: 'branding' | 'contact' | 'status';
+  valueType: number;
+  valueTypeLabel: string;
+  displayOrder: number;
 }

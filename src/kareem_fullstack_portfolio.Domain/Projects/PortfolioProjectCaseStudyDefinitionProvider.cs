@@ -329,6 +329,80 @@ public class PortfolioProjectCaseStudyDefinitionProvider : IPortfolioProjectCase
                     "Initial seed data supports a first-run experience without fake frontend placeholders.",
                     "Existing endpoints keep returning DTOs rather than exposing EF entities directly.",
                     "The database layer now supports responsive Angular pages with real backend content and clear ownership boundaries."
+                ]),
+            new(
+                slug: "story-4-3-public-api-endpoints",
+                overview: "This story turns the portfolio backend into a clean public API surface, exposing real project, skill, experience, site-setting, and contact capabilities through anonymous DTO-first endpoints that the Angular site can consume directly.",
+                businessProblem: "A polished portfolio frontend loses credibility when public pages rely on hardcoded placeholders or when contact submission stops at the browser. The public site needs dependable endpoints that stay open for recruiters and clients without weakening backend ownership of validation or persistence.",
+                solution: "The solution uses application-service endpoints for the public portfolio experience, keeping routes simple and anonymous where appropriate while the backend continues to own DTO shaping, validation, localized errors, and contact-message persistence. The Angular frontend can then stay focused on presentation, responsiveness, and bilingual UX instead of inventing fake data flows.",
+                roleSummary: "I shaped the Story 4.3 slice around practical frontend consumption: expose the right anonymous endpoints, keep contracts predictable, and make sure the public contact workflow still lands in real backend storage with validation in place.",
+                roleResponsibilities:
+                [
+                    "Mapped the portfolio pages to a concise public API surface that covers listing, details, supporting content, and contact submission.",
+                    "Kept the application-service contracts DTO-first so Angular 21 pages can render real data without leaking entities or business rules into the UI.",
+                    "Protected backend ownership of validation, message persistence, and localized endpoint behavior while keeping public reads frictionless."
+                ],
+                keyFeatures:
+                [
+                    "GET /api/projects: Returns the live public project list with filter-ready metadata and recruiter-facing summaries.",
+                    "GET /api/projects/{slug}: Returns a structured case study for a single project so the frontend can render a detail page from real backend content.",
+                    "GET /api/skills: Returns categorized skill groups that keep the public skills page backed by live backend data.",
+                    "GET /api/experience: Returns the portfolio experience section with timeline items and highlight badges for the about page.",
+                    "GET /api/site-settings: Returns public configuration values that support branded presentation without hardcoding them in Angular.",
+                    "POST /api/contact: Accepts validated contact submissions and persists them in the database through backend-owned rules."
+                ],
+                architectureNotes:
+                [
+                    "Public endpoints stay anonymous by design so recruiters and clients can browse the portfolio without login friction.",
+                    "Application services return DTOs only; Angular never depends on EF Core entities or persistence-specific details.",
+                    "Contact submission validation remains backend-owned, including required fields, email validation, and spam-protection behavior.",
+                    "Public content responses are ready for light mode, dark mode, English LTR, and Arabic RTL because the frontend consumes stable localized contracts.",
+                    "Swagger should expose the public endpoints clearly so the API surface is easy to review during development and portfolio walkthroughs."
+                ],
+                highlightCards:
+                [
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration,
+                        "Live Angular consumption from public APIs",
+                        "The public site can render projects, skills, experience, and settings directly from backend contracts instead of local placeholder data.",
+                        1),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.AbpLayeredArchitecture,
+                        "ABP-style application services as the API boundary",
+                        "Routing, DTO shaping, validation, and anonymous access rules stay in the application layer rather than spreading into custom controllers or frontend logic.",
+                        2),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.ReportingAndData,
+                        "Public reads plus durable contact persistence",
+                        "The story combines fast read endpoints with a write path that saves real contact messages in SQL-backed storage for future admin review.",
+                        3),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.RoleBasedSecurity,
+                        "Anonymous where public, protected where needed",
+                        "The story keeps public content open while preserving the backend as the place where sensitive admin workflows and validation rules remain enforced.",
+                        4)
+                ],
+                galleryItems:
+                [
+                    PortfolioProjectCaseStudyGalleryItemDefinition.Placeholder(
+                        "Swagger and endpoint walkthrough",
+                        "Placeholder for visuals that show the public portfolio endpoints grouped inside the API explorer.",
+                        1),
+                    PortfolioProjectCaseStudyGalleryItemDefinition.Placeholder(
+                        "Angular pages consuming live endpoints",
+                        "Placeholder for responsive public screens backed by projects, skills, experience, settings, and contact APIs.",
+                        2)
+                ],
+                results:
+                [
+                    "The public projects endpoint works for the portfolio list experience.",
+                    "The project-by-slug endpoint works for the case-study details experience.",
+                    "The public skills endpoint works for the live skills matrix.",
+                    "The public experience endpoint works for the about and timeline page.",
+                    "The public site-settings endpoint works for branded presentation support.",
+                    "The public contact endpoint validates required fields before accepting a submission.",
+                    "The public contact endpoint saves contact messages in the database for later review.",
+                    "Swagger exposes the public endpoints as part of the visible backend contract."
                 ])
         ];
     }

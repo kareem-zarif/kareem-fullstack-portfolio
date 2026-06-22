@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -124,7 +125,19 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 false,
                 null,
                 null,
-                5)
+                5),
+            new(
+                new Guid("7F0A4E6D-6A65-4C59-A28D-9B6F5D341006"),
+                "Public API Endpoints",
+                "story-4-3-public-api-endpoints",
+                PortfolioProjectType.PortfolioPlatform,
+                "Epic 4, Story 4.3 for the portfolio platform: a public API slice that exposes projects, skills, experience, site settings, and validated contact submission through DTO-first endpoints.",
+                "Shows how a recruiter-facing Angular experience can stay modern and lightweight while real backend endpoints own validation, visibility, persistence, and localized API behavior.",
+                new List<string> { "ASP.NET Core", "ABP", "REST APIs", "Angular 21", "DTOs" },
+                false,
+                null,
+                null,
+                6)
         ];
     }
 
