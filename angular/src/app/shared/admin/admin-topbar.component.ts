@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AppShellService } from '@core/services/app-shell.service';
 import { AuthSessionService } from '@core/auth/auth-session.service';
 import { getPortfolioCopy } from '@localization/index';
@@ -20,10 +21,18 @@ import { catchError, combineLatest, filter, map, of, startWith } from 'rxjs';
         <h1>{{ currentSection() }}</h1>
       </div>
       <div class="topbar__actions">
+        @if (session.currentUser; as user) {
+          <div class="topbar__identity">
+            <span>{{ copy().signedInAs }}</span>
+            <strong>{{ user.userName }}</strong>
+          </div>
+        }
         <a routerLink="/">{{ copy().preview }}</a>
         <button type="button" (click)="theme.toggleLanguage()">{{ copy().switchLanguage }}</button>
         <button type="button" (click)="theme.toggleTheme()">{{ theme.isDark() ? copy().themeLight : copy().themeDark }}</button>
-        <button type="button" (click)="session.navigateToAccount()">{{ copy().account }}</button>
+        <button type="button" (click)="logout()" [disabled]="isLoggingOut()">
+          {{ isLoggingOut() ? copy().loggingOut : copy().logout }}
+        </button>
       </div>
     </header>
   `,
@@ -66,6 +75,30 @@ import { catchError, combineLatest, filter, map, of, startWith } from 'rxjs';
         display: flex;
         gap: 0.75rem;
         align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .topbar__identity {
+        display: grid;
+        gap: 0.1rem;
+        padding: 0.55rem 0.9rem;
+        border: 1px solid var(--admin-border);
+        border-radius: 1rem;
+        background: color-mix(in srgb, var(--admin-panel-soft) 82%, transparent);
+        text-align: start;
+      }
+
+      .topbar__identity span {
+        color: var(--admin-muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .topbar__identity strong {
+        color: var(--admin-text);
+        font-size: 0.95rem;
       }
 
       a,
@@ -92,7 +125,9 @@ export class AdminTopbarComponent {
   readonly session = inject(AuthSessionService);
   readonly shell = inject(AppShellService);
   readonly theme = inject(PublicThemeService);
+  readonly isLoggingOut = signal(false);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'adminTopbar'));
   private readonly routeLabel = toSignal(
     combineLatest([
@@ -107,6 +142,21 @@ export class AdminTopbarComponent {
   );
 
   readonly currentSection = computed(() => this.routeLabel());
+
+  logout(): void {
+    if (this.isLoggingOut()) {
+      return;
+    }
+
+    this.isLoggingOut.set(true);
+    this.session
+      .logout()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => this.isLoggingOut.set(false),
+        error: () => this.isLoggingOut.set(false),
+      });
+  }
 
   private resolveSectionLabel(
     url: string,

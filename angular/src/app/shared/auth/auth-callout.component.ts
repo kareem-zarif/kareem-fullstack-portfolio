@@ -65,6 +65,6 @@ export class AuthCalloutComponent {
       return;
     }
 
-    this.session.login();
+    this.session.openAdminLogin();
   }
 }

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
-import { AuthService } from '@abp/ng.core';
 import { CanActivateChildFn, CanMatchFn, Router, RouterStateSnapshot, UrlSegment } from '@angular/router';
+import { AuthSessionService } from '@core/auth/auth-session.service';
 
 function buildReturnUrlFromSegments(segments: UrlSegment[]): string {
   const candidate = segments.map(segment => segment.path).join('/');
@@ -14,9 +14,9 @@ function handleUnauthorized(returnUrl: string) {
 }
 
 export const adminAuthMatchGuard: CanMatchFn = (_route, segments) => {
-  const authService = inject(AuthService);
+  const session = inject(AuthSessionService);
 
-  if (authService.isAuthenticated) {
+  if (session.isAuthenticated) {
     return true;
   }
 
@@ -24,9 +24,9 @@ export const adminAuthMatchGuard: CanMatchFn = (_route, segments) => {
 };
 
 export const adminAuthChildGuard: CanActivateChildFn = (_route, state: RouterStateSnapshot) => {
-  const authService = inject(AuthService);
+  const session = inject(AuthSessionService);
 
-  if (authService.isAuthenticated) {
+  if (session.isAuthenticated) {
     return true;
   }
 
