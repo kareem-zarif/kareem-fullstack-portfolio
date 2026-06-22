@@ -3,14 +3,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { PublicThemeService } from '@core/services/public-theme.service';
-import { getPortfolioCopy } from '@localization/index';
 import { PortfolioHomePageApiService } from '@features/portfolio/services/portfolio-home-page-api.service';
 import {
   PublicContactApiService,
   PublicContactSubmissionResult,
 } from '@features/portfolio/services/public-contact-api.service';
 import { SiteSettingsService } from '@features/portfolio/services/site-settings.service';
+import { getPortfolioCopy } from '@localization/index';
 import { SectionHeaderComponent } from '@shared/molecules/section-header.component';
 import { SiteSetting } from '@shared/models';
 import { contactFormValidators, noDisposableEmailValidator } from '@shared/validators/contact-form.validators';
@@ -21,23 +22,42 @@ interface ContactMetric {
   label: string;
 }
 
+interface ContactPromise {
+  title: string;
+  description: string;
+}
+
+interface ContactStep {
+  title: string;
+  description: string;
+}
+
+type ContactFieldName = 'name' | 'email' | 'subject' | 'message';
+
 @Component({
   selector: 'app-contact-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SectionHeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SectionHeaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="contact-page">
-      <section class="contact-page__hero surface" aria-labelledby="contact-page-title">
-        <div class="hero__copy">
+      <section class="surface contact-hero" aria-labelledby="contact-page-title">
+        <div class="contact-hero__copy">
+          <p class="story-badge">{{ copy().storyBadge }}</p>
           <p class="eyebrow">{{ copy().eyebrow }}</p>
           <h1 id="contact-page-title">{{ copy().title }}</h1>
-          <p class="hero__summary">{{ copy().summary }}</p>
+          <p class="hero-summary">{{ copy().summary }}</p>
 
-          <div class="hero__signals" [attr.aria-label]="copy().signalsLabel">
+          <div class="signal-list" [attr.aria-label]="copy().signalsLabel">
             <span>{{ copy().signalValidation }}</span>
             <span>{{ copy().signalRealData }}</span>
             <span>{{ copy().signalTheme }}</span>
+            <span>{{ copy().signalBilingual }}</span>
+          </div>
+
+          <div class="hero-actions">
+            <a class="button button--primary" href="#contact-form">{{ copy().scrollToForm }}</a>
+            <a class="button button--secondary" routerLink="/projects">{{ copy().viewProjects }}</a>
           </div>
 
           <dl class="metrics-grid">
@@ -50,20 +70,29 @@ interface ContactMetric {
           </dl>
         </div>
 
-        <article class="hero__status">
-          <p class="eyebrow">{{ copy().statusEyebrow }}</p>
-          <h2>{{ copy().statusTitle }}</h2>
-          <p>{{ copy().statusDescription }}</p>
+        <article class="surface hero-panel">
+          <p class="eyebrow">{{ copy().storyEyebrow }}</p>
+          <h2>{{ copy().storyTitle }}</h2>
+          <p class="hero-panel__summary">{{ copy().storyDescription }}</p>
+
+          <div class="promise-list">
+            @for (promise of promiseCards(); track promise.title) {
+              <article class="promise-card">
+                <h3>{{ promise.title }}</h3>
+                <p>{{ promise.description }}</p>
+              </article>
+            }
+          </div>
 
           <div class="endpoint-list">
-            <div class="endpoint-list__item">
-              <span class="endpoint-list__method">GET</span>
+            <div class="endpoint-card">
+              <span class="endpoint-method endpoint-method--get">GET</span>
               <strong>/api/site-settings</strong>
               <small>{{ copy().siteSettingsEndpointSummary }}</small>
             </div>
 
-            <div class="endpoint-list__item">
-              <span class="endpoint-list__method endpoint-list__method--post">POST</span>
+            <div class="endpoint-card">
+              <span class="endpoint-method endpoint-method--post">POST</span>
               <strong>/api/contact</strong>
               <small>{{ copy().contactEndpointSummary }}</small>
             </div>
@@ -71,42 +100,88 @@ interface ContactMetric {
         </article>
       </section>
 
-      <section class="contact-page__content">
-        <div class="contact-page__form surface">
+      <section class="contact-content">
+        <div class="surface contact-form-card" id="contact-form">
           <app-section-header
             [eyebrow]="copy().formEyebrow"
             [title]="copy().formTitle"
             [description]="copy().formDescription"
           />
 
-          <form class="contact__form" [formGroup]="form" (ngSubmit)="submit()">
-            <div class="contact__grid">
+          <div class="form-meta">
+            <span class="meta-pill">{{ copy().requiredLegend }}</span>
+            <span class="meta-pill meta-pill--muted">{{ copy().optionalLegend }}</span>
+          </div>
+
+          <form class="contact-form" [formGroup]="form" (ngSubmit)="submit()" [attr.aria-busy]="isSubmitting()">
+            <div class="contact-grid">
               <label class="field">
-                <span>{{ copy().nameLabel }}</span>
-                <input type="text" [placeholder]="copy().namePlaceholder" formControlName="name" />
+                <div class="field__header">
+                  <span>{{ copy().nameLabel }}</span>
+                  <small>{{ form.controls.name.value.length }}/80</small>
+                </div>
+                <input
+                  type="text"
+                  formControlName="name"
+                  dir="auto"
+                  autocomplete="name"
+                  maxlength="80"
+                  [placeholder]="copy().namePlaceholder"
+                />
                 @if (fieldError('name'); as error) {
                   <small class="field__error">{{ error }}</small>
                 }
               </label>
 
               <label class="field">
-                <span>{{ copy().emailLabel }}</span>
-                <input type="email" [placeholder]="copy().emailPlaceholder" formControlName="email" />
+                <div class="field__header">
+                  <span>{{ copy().emailLabel }}</span>
+                  <small>{{ copy().requiredLegend }}</small>
+                </div>
+                <input
+                  type="email"
+                  formControlName="email"
+                  dir="ltr"
+                  autocomplete="email"
+                  maxlength="120"
+                  inputmode="email"
+                  [placeholder]="copy().emailPlaceholder"
+                />
                 @if (fieldError('email'); as error) {
                   <small class="field__error">{{ error }}</small>
                 }
               </label>
             </div>
 
-            <div class="contact__grid">
+            <div class="contact-grid">
               <label class="field">
-                <span>{{ copy().companyLabel }}</span>
-                <input type="text" [placeholder]="copy().companyPlaceholder" formControlName="company" />
+                <div class="field__header">
+                  <span>{{ copy().companyLabel }}</span>
+                  <small>{{ copy().optionalLegend }}</small>
+                </div>
+                <input
+                  type="text"
+                  formControlName="company"
+                  dir="auto"
+                  autocomplete="organization"
+                  maxlength="120"
+                  [placeholder]="copy().companyPlaceholder"
+                />
               </label>
 
               <label class="field">
-                <span>{{ copy().subjectLabel }}</span>
-                <input type="text" [placeholder]="copy().subjectPlaceholder" formControlName="subject" />
+                <div class="field__header">
+                  <span>{{ copy().subjectLabel }}</span>
+                  <small>{{ form.controls.subject.value.length }}/120</small>
+                </div>
+                <input
+                  type="text"
+                  formControlName="subject"
+                  dir="auto"
+                  autocomplete="off"
+                  maxlength="120"
+                  [placeholder]="copy().subjectPlaceholder"
+                />
                 @if (fieldError('subject'); as error) {
                   <small class="field__error">{{ error }}</small>
                 }
@@ -114,8 +189,18 @@ interface ContactMetric {
             </div>
 
             <label class="field">
-              <span>{{ copy().messageLabel }}</span>
-              <textarea rows="7" [placeholder]="copy().messagePlaceholder" formControlName="message"></textarea>
+              <div class="field__header">
+                <span>{{ copy().messageLabel }}</span>
+                <small>{{ form.controls.message.value.length }}/2000</small>
+              </div>
+              <textarea
+                rows="7"
+                formControlName="message"
+                dir="auto"
+                autocomplete="off"
+                maxlength="2000"
+                [placeholder]="copy().messagePlaceholder"
+              ></textarea>
               @if (fieldError('message'); as error) {
                 <small class="field__error">{{ error }}</small>
               }
@@ -128,7 +213,7 @@ interface ContactMetric {
               </label>
             </div>
 
-            <div class="contact__actions">
+            <div class="contact-actions">
               <button type="submit" class="button button--primary" [disabled]="form.invalid || isSubmitting()">
                 @if (isSubmitting()) {
                   <span class="button__pulse" aria-hidden="true"></span>
@@ -136,33 +221,64 @@ interface ContactMetric {
                 <span>{{ isSubmitting() ? copy().submitting : copy().submit }}</span>
               </button>
 
-              <p class="contact__note">{{ copy().backendNote }}</p>
+              <p class="backend-note">{{ copy().backendNote }}</p>
             </div>
           </form>
 
           @if (submissionError(); as error) {
-            <p class="contact__error" role="alert">{{ error }}</p>
+            <div class="feedback feedback--error" role="alert">
+              <strong>{{ copy().errorTitle }}</strong>
+              <p>{{ error || copy().errorDescription }}</p>
+            </div>
           }
 
           @if (submittedResult(); as submitted) {
-            <p class="contact__success">
-              {{ copy().successPrefix }}
-              <strong>{{ submitted.submissionId }}</strong>
-              {{ copy().successSuffix }}
-              <span>{{ submitted.submittedAtUtc | date: 'medium' }}</span>
-            </p>
+            <div class="feedback feedback--success" role="status" aria-live="polite">
+              <strong>{{ copy().successTitle }}</strong>
+              <p>{{ copy().successDescription }}</p>
+              <p>
+                {{ copy().successReferenceLabel }}
+                <span>{{ submitted.submissionId }}</span>
+              </p>
+              <p>
+                {{ copy().successTimestampLabel }}
+                <span>{{ submitted.submittedAtUtc | date: 'medium' }}</span>
+              </p>
+            </div>
           }
         </div>
 
-        <aside class="contact-page__aside">
+        <aside class="contact-aside">
           <article class="surface aside-card">
-            <p class="eyebrow">{{ copy().linksEyebrow }}</p>
-            <h2>{{ copy().linksTitle }}</h2>
-            <p>{{ copy().linksDescription }}</p>
+            <app-section-header
+              [eyebrow]="copy().processEyebrow"
+              [title]="copy().processTitle"
+              [description]="copy().processDescription"
+            />
+
+            <div class="process-list">
+              @for (step of processSteps(); track step.title; let index = $index) {
+                <article class="process-item">
+                  <span class="process-item__index">{{ index + 1 }}</span>
+                  <div>
+                    <h3>{{ step.title }}</h3>
+                    <p>{{ step.description }}</p>
+                  </div>
+                </article>
+              }
+            </div>
+          </article>
+
+          <article class="surface aside-card">
+            <app-section-header
+              [eyebrow]="copy().linksEyebrow"
+              [title]="copy().linksTitle"
+              [description]="copy().linksDescription"
+            />
 
             @if (professionalLinks().length) {
               <div class="link-list">
-                @for (link of professionalLinks(); track link.displayOrder) {
+                @for (link of professionalLinks(); track link.url) {
                   <a
                     class="link-card"
                     [href]="link.url"
@@ -180,9 +296,11 @@ interface ContactMetric {
           </article>
 
           <article class="surface aside-card">
-            <p class="eyebrow">{{ copy().settingsEyebrow }}</p>
-            <h2>{{ copy().settingsTitle }}</h2>
-            <p>{{ copy().settingsDescription }}</p>
+            <app-section-header
+              [eyebrow]="copy().settingsEyebrow"
+              [title]="copy().settingsTitle"
+              [description]="copy().settingsDescription"
+            />
 
             @if (featuredSettings().length) {
               <div class="setting-list">
@@ -219,51 +337,97 @@ interface ContactMetric {
         border-radius: 2rem;
         background: color-mix(in srgb, var(--portfolio-bg-elevated) 94%, transparent);
         box-shadow: var(--portfolio-shadow);
+        backdrop-filter: blur(14px);
       }
 
-      .contact-page__hero {
+      .contact-hero {
         position: relative;
         display: grid;
-        grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
         gap: 1.2rem;
-        padding: clamp(1.3rem, 3vw, 2rem);
+        padding: clamp(1.25rem, 3vw, 2rem);
         overflow: hidden;
+        isolation: isolate;
       }
 
-      .contact-page__hero::before {
+      .contact-hero::before {
         content: '';
         position: absolute;
         inset: 0;
         background:
-          radial-gradient(circle at top right, color-mix(in srgb, var(--portfolio-accent) 14%, transparent), transparent 32%),
-          linear-gradient(180deg, color-mix(in srgb, var(--portfolio-primary) 8%, transparent), transparent 62%);
+          radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--portfolio-accent) 14%, transparent), transparent 34%),
+          linear-gradient(140deg, color-mix(in srgb, var(--portfolio-primary) 8%, transparent), transparent 62%);
         pointer-events: none;
+        z-index: 0;
       }
 
-      .hero__copy,
-      .hero__status,
-      .contact-page__form,
+      .contact-hero::after {
+        content: '';
+        position: absolute;
+        inset: 1rem;
+        border-radius: 1.6rem;
+        border: 1px solid color-mix(in srgb, var(--portfolio-border) 82%, transparent);
+        background:
+          linear-gradient(transparent 95%, color-mix(in srgb, var(--portfolio-border) 50%, transparent) 95%),
+          linear-gradient(90deg, transparent 95%, color-mix(in srgb, var(--portfolio-border) 50%, transparent) 95%);
+        background-size: 1.2rem 1.2rem;
+        opacity: 0.24;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .contact-hero__copy,
+      .hero-panel,
+      .contact-form-card,
       .aside-card {
         position: relative;
         z-index: 1;
+      }
+
+      .contact-hero__copy,
+      .hero-panel,
+      .contact-form-card,
+      .aside-card,
+      .promise-list,
+      .metrics-grid,
+      .process-list,
+      .link-list,
+      .setting-list {
         display: grid;
         gap: 1rem;
       }
 
+      .story-badge,
       .eyebrow {
         margin: 0;
-        color: var(--portfolio-accent);
-        font-size: 0.84rem;
-        font-weight: 700;
-        letter-spacing: 0.14em;
+        width: fit-content;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
+      }
+
+      .story-badge {
+        padding: 0.45rem 0.85rem;
+        background: color-mix(in srgb, var(--portfolio-accent) 14%, transparent);
+        color: var(--portfolio-accent);
+        border: 1px solid color-mix(in srgb, var(--portfolio-accent) 28%, var(--portfolio-border));
+      }
+
+      .eyebrow {
+        color: var(--portfolio-primary);
       }
 
       h1,
       h2,
       h3,
       p,
-      strong {
+      dl,
+      dd,
+      dt,
+      strong,
+      small {
         margin: 0;
       }
 
@@ -274,32 +438,99 @@ interface ContactMetric {
         color: var(--portfolio-text);
       }
 
-      .hero__summary,
-      .contact__note,
+      h1 {
+        max-width: 12ch;
+        font-size: clamp(2.2rem, 5vw, 4.4rem);
+        line-height: 0.98;
+        letter-spacing: -0.04em;
+      }
+
+      h2 {
+        font-size: clamp(1.5rem, 3vw, 2.2rem);
+      }
+
+      .hero-summary,
+      .hero-panel__summary,
+      .backend-note,
       .empty-copy,
+      .promise-card p,
+      .endpoint-card small,
+      .process-item p,
+      .link-card strong,
       .setting-card p,
       .setting-card span,
-      .endpoint-list__item small,
-      .contact__success span {
+      .field__header small {
         color: var(--portfolio-muted);
       }
 
-      .hero__signals {
+      .signal-list,
+      .hero-actions,
+      .form-meta,
+      .contact-actions {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
+        align-items: center;
       }
 
-      .hero__signals span,
-      .endpoint-list__method {
+      .signal-list span,
+      .meta-pill,
+      .endpoint-method {
         width: fit-content;
         border-radius: 999px;
-        padding: 0.55rem 0.9rem;
+        padding: 0.55rem 0.85rem;
         border: 1px solid color-mix(in srgb, var(--portfolio-primary) 24%, var(--portfolio-border));
         background: color-mix(in srgb, var(--portfolio-primary) 9%, transparent);
         color: var(--portfolio-primary);
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         font-weight: 700;
+      }
+
+      .meta-pill--muted {
+        border-color: var(--portfolio-border);
+        background: color-mix(in srgb, var(--portfolio-bg-soft) 80%, transparent);
+        color: var(--portfolio-muted);
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .metric-card,
+      .promise-card,
+      .endpoint-card,
+      .process-item,
+      .link-card,
+      .setting-card,
+      .feedback {
+        padding: 1rem;
+        border-radius: 1.35rem;
+        border: 1px solid var(--portfolio-border);
+        background: color-mix(in srgb, var(--portfolio-bg-soft) 82%, transparent);
+      }
+
+      .metric-card dt {
+        font-size: clamp(1.35rem, 4vw, 2rem);
+        font-weight: 900;
+      }
+
+      .metric-card dd {
+        margin-top: 0.35rem;
+        color: var(--portfolio-muted);
+      }
+
+      .hero-panel {
+        align-content: start;
+        padding: 1.15rem;
+      }
+
+      .promise-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .promise-card h3,
+      .process-item h3 {
+        font-size: 1rem;
       }
 
       .endpoint-list {
@@ -307,78 +538,60 @@ interface ContactMetric {
         gap: 0.85rem;
       }
 
-      .endpoint-list__item {
+      .endpoint-card {
         display: grid;
-        gap: 0.45rem;
-        padding: 1rem;
-        border-radius: 1.25rem;
-        border: 1px solid var(--portfolio-border);
-        background: color-mix(in srgb, var(--portfolio-bg-soft) 80%, transparent);
+        gap: 0.4rem;
       }
 
-      .endpoint-list__item strong {
-        font-size: 1.05rem;
-      }
-
-      .endpoint-list__method--post {
+      .endpoint-method--post {
         border-color: color-mix(in srgb, var(--portfolio-accent) 28%, var(--portfolio-border));
         background: color-mix(in srgb, var(--portfolio-accent) 12%, transparent);
         color: var(--portfolio-accent);
       }
 
-      .metrics-grid {
+      .contact-content {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0.85rem;
-      }
-
-      .metric-card {
-        padding: 1rem;
-        border-radius: 1.25rem;
-        border: 1px solid var(--portfolio-border);
-        background: color-mix(in srgb, var(--portfolio-bg-soft) 78%, transparent);
-      }
-
-      .metric-card dt {
-        color: var(--portfolio-text);
-        font-size: clamp(1.4rem, 4vw, 2rem);
-        font-weight: 800;
-      }
-
-      .metric-card dd {
-        margin: 0.35rem 0 0;
-        color: var(--portfolio-muted);
-      }
-
-      .contact-page__content {
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.85fr);
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.8fr);
         gap: 1.5rem;
         align-items: start;
       }
 
-      .contact-page__form,
+      .contact-form-card,
       .aside-card {
-        padding: clamp(1.2rem, 3vw, 1.7rem);
+        padding: clamp(1.15rem, 3vw, 1.7rem);
       }
 
-      .contact__form {
+      .contact-form-card {
+        scroll-margin-top: 7rem;
+      }
+
+      .contact-form,
+      .contact-grid,
+      .field {
         display: grid;
         gap: 1rem;
       }
 
-      .contact__grid {
-        display: grid;
+      .contact-form {
+        position: relative;
+      }
+
+      .contact-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
       }
 
       .field {
-        display: grid;
-        gap: 0.45rem;
+        gap: 0.5rem;
       }
 
-      .field span {
+      .field__header {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: baseline;
+      }
+
+      .field__header span {
         color: var(--portfolio-text);
         font-weight: 700;
       }
@@ -386,34 +599,40 @@ interface ContactMetric {
       input,
       textarea {
         width: 100%;
-        border-radius: 1rem;
+        border-radius: 1.1rem;
         border: 1px solid var(--portfolio-border);
-        padding: 0.95rem 1rem;
-        background: color-mix(in srgb, var(--portfolio-bg) 72%, transparent);
+        padding: 0.98rem 1rem;
+        background: color-mix(in srgb, var(--portfolio-bg) 74%, transparent);
         color: var(--portfolio-text);
         transition:
           border-color 180ms ease,
           box-shadow 180ms ease,
-          transform 180ms ease;
+          transform 180ms ease,
+          background 180ms ease;
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: color-mix(in srgb, var(--portfolio-muted) 82%, transparent);
       }
 
       input:focus,
       textarea:focus {
         outline: none;
-        border-color: color-mix(in srgb, var(--portfolio-primary) 45%, var(--portfolio-border));
-        box-shadow: 0 0 0 0.24rem color-mix(in srgb, var(--portfolio-primary) 14%, transparent);
         transform: translateY(-1px);
+        border-color: color-mix(in srgb, var(--portfolio-primary) 40%, var(--portfolio-border));
+        box-shadow: 0 0 0 0.24rem color-mix(in srgb, var(--portfolio-primary) 14%, transparent);
+        background: color-mix(in srgb, var(--portfolio-bg-elevated) 88%, transparent);
       }
 
       textarea {
-        min-height: 11rem;
+        min-height: 12rem;
         resize: vertical;
       }
 
-      .field__error,
-      .contact__error {
-        color: #c94d4d;
-        font-weight: 600;
+      .field__error {
+        color: #ca4d55;
+        font-weight: 700;
       }
 
       .honeypot {
@@ -426,27 +645,23 @@ interface ContactMetric {
         white-space: nowrap;
       }
 
-      .contact__actions {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 1rem;
-        align-items: center;
-      }
-
       .button {
         border: 0;
         border-radius: 999px;
         min-height: 3.2rem;
-        padding: 0.9rem 1.25rem;
+        padding: 0.9rem 1.3rem;
         font-weight: 800;
+        text-decoration: none;
         display: inline-flex;
+        justify-content: center;
         align-items: center;
         gap: 0.65rem;
+        cursor: pointer;
         transition:
           transform 180ms ease,
           box-shadow 180ms ease,
-          opacity 180ms ease;
+          opacity 180ms ease,
+          background 180ms ease;
       }
 
       .button:hover:not(:disabled) {
@@ -454,7 +669,8 @@ interface ContactMetric {
       }
 
       .button:disabled {
-        opacity: 0.62;
+        cursor: not-allowed;
+        opacity: 0.66;
       }
 
       .button--primary {
@@ -464,7 +680,13 @@ interface ContactMetric {
           color-mix(in srgb, var(--portfolio-primary) 66%, var(--portfolio-accent))
         );
         color: var(--portfolio-primary-contrast);
-        box-shadow: 0 18px 40px -28px color-mix(in srgb, var(--portfolio-primary) 80%, transparent);
+        box-shadow: 0 18px 38px -26px color-mix(in srgb, var(--portfolio-primary) 78%, transparent);
+      }
+
+      .button--secondary {
+        border: 1px solid var(--portfolio-border);
+        background: color-mix(in srgb, var(--portfolio-bg-elevated) 92%, transparent);
+        color: var(--portfolio-text);
       }
 
       .button__pulse {
@@ -476,40 +698,62 @@ interface ContactMetric {
         animation: button-pulse 1.2s ease-in-out infinite;
       }
 
-      .contact__success {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.85rem;
-        align-items: center;
-        padding: 1rem 1.1rem;
-        border-radius: 1.1rem;
-        border: 1px solid color-mix(in srgb, #0f8a55 22%, var(--portfolio-border));
-        background: color-mix(in srgb, #0f8a55 10%, transparent);
-        color: #0f8a55;
+      .backend-note {
+        max-width: 28rem;
+        line-height: 1.6;
       }
 
-      .contact-page__aside {
+      .feedback {
+        display: grid;
+        gap: 0.45rem;
+      }
+
+      .feedback span {
+        color: inherit;
+        font-weight: 800;
+      }
+
+      .feedback--success {
+        border-color: color-mix(in srgb, #1a9a69 24%, var(--portfolio-border));
+        background: color-mix(in srgb, #1a9a69 11%, transparent);
+        color: #1a9a69;
+      }
+
+      .feedback--error {
+        border-color: color-mix(in srgb, #ca4d55 22%, var(--portfolio-border));
+        background: color-mix(in srgb, #ca4d55 9%, transparent);
+        color: #ca4d55;
+      }
+
+      .contact-aside {
         display: grid;
         gap: 1.5rem;
       }
 
-      .link-list,
-      .setting-list {
+      .process-item {
         display: grid;
-        gap: 0.85rem;
+        grid-template-columns: auto 1fr;
+        gap: 0.9rem;
+        align-items: start;
+      }
+
+      .process-item__index {
+        inline-size: 2rem;
+        block-size: 2rem;
+        border-radius: 999px;
+        display: inline-grid;
+        place-items: center;
+        background: linear-gradient(
+          135deg,
+          var(--portfolio-primary),
+          color-mix(in srgb, var(--portfolio-primary) 72%, var(--portfolio-accent))
+        );
+        color: var(--portfolio-primary-contrast);
+        font-weight: 800;
       }
 
       .link-card,
       .setting-card {
-        display: grid;
-        gap: 0.4rem;
-        padding: 1rem;
-        border-radius: 1.2rem;
-        border: 1px solid var(--portfolio-border);
-        background: color-mix(in srgb, var(--portfolio-bg-soft) 82%, transparent);
-      }
-
-      .link-card {
         text-decoration: none;
         transition:
           transform 180ms ease,
@@ -517,27 +761,42 @@ interface ContactMetric {
           background 180ms ease;
       }
 
-      .link-card:hover {
-        transform: translateY(-1px);
-        border-color: color-mix(in srgb, var(--portfolio-primary) 30%, var(--portfolio-border));
+      .link-card:hover,
+      .setting-card:hover,
+      .promise-card:hover,
+      .metric-card:hover,
+      .process-item:hover,
+      .endpoint-card:hover {
+        transform: translateY(-2px);
+        border-color: color-mix(in srgb, var(--portfolio-primary) 28%, var(--portfolio-border));
         background: color-mix(in srgb, var(--portfolio-primary) 9%, transparent);
       }
 
+      .link-card span,
       .setting-card small {
         color: var(--portfolio-accent);
         font-weight: 700;
       }
 
       .setting-card span {
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         word-break: break-word;
       }
 
       @media (prefers-reduced-motion: no-preference) {
-        .contact-page__hero,
-        .contact-page__form,
+        .contact-hero,
+        .contact-form-card,
         .aside-card {
           animation: lift-in 420ms ease both;
+        }
+
+        .metric-card,
+        .promise-card,
+        .process-item,
+        .link-card,
+        .setting-card,
+        .endpoint-card {
+          animation: lift-in 520ms ease both;
         }
       }
 
@@ -561,17 +820,30 @@ interface ContactMetric {
         }
       }
 
-      @media (max-width: 1080px) {
-        .contact-page__hero,
-        .contact-page__content {
+      @media (max-width: 1180px) {
+        .contact-hero,
+        .contact-content,
+        .promise-list {
           grid-template-columns: 1fr;
         }
       }
 
+      @media (max-width: 900px) {
+        .metrics-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
       @media (max-width: 720px) {
-        .metrics-grid,
-        .contact__grid {
+        .contact-grid,
+        .metrics-grid {
           grid-template-columns: 1fr;
+        }
+
+        .field__header,
+        .contact-actions {
+          align-items: start;
+          flex-direction: column;
         }
       }
     `,
@@ -608,13 +880,42 @@ export class ContactPageComponent {
   readonly professionalLinks = computed(() => this.homePage()?.professionalLinks ?? []);
   readonly featuredSettings = computed(() =>
     this.settings()
-      .filter(setting => setting.valueType !== 4)
-      .slice(0, 4),
+      .filter(setting => setting.valueType !== 4 && setting.value.trim().length > 0)
+      .slice(0, 3),
   );
   readonly metrics = computed<ContactMetric[]>(() => [
-    { value: this.formatMetric(this.featuredSettings().length), label: this.copy().metricLiveSettings },
+    { value: '05', label: this.copy().metricFields },
+    { value: '04', label: this.copy().metricRequired },
     { value: this.formatMetric(this.professionalLinks().length), label: this.copy().metricLinks },
-    { value: this.formatMetric(2), label: this.copy().metricEndpoints },
+    { value: '02', label: this.copy().metricEndpoints },
+  ]);
+  readonly promiseCards = computed<ContactPromise[]>(() => [
+    {
+      title: this.copy().promiseValidationTitle,
+      description: this.copy().promiseValidationDescription,
+    },
+    {
+      title: this.copy().promiseStorageTitle,
+      description: this.copy().promiseStorageDescription,
+    },
+    {
+      title: this.copy().promiseSpamTitle,
+      description: this.copy().promiseSpamDescription,
+    },
+  ]);
+  readonly processSteps = computed<ContactStep[]>(() => [
+    {
+      title: this.copy().processStepCaptureTitle,
+      description: this.copy().processStepCaptureDescription,
+    },
+    {
+      title: this.copy().processStepReviewTitle,
+      description: this.copy().processStepReviewDescription,
+    },
+    {
+      title: this.copy().processStepResponseTitle,
+      description: this.copy().processStepResponseDescription,
+    },
   ]);
   readonly form = this.fb.nonNullable.group({
     name: ['', contactFormValidators.name],
@@ -633,6 +934,7 @@ export class ContactPageComponent {
 
     this.isSubmitting.set(true);
     this.submissionError.set(null);
+    this.submittedResult.set(null);
 
     this.contactApi
       .submitMessage(this.form.getRawValue())
@@ -648,7 +950,7 @@ export class ContactPageComponent {
       });
   }
 
-  fieldError(controlName: 'name' | 'email' | 'subject' | 'message'): string | null {
+  fieldError(controlName: ContactFieldName): string | null {
     const control = this.form.controls[controlName];
 
     if (!control.touched || !control.errors) {

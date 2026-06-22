@@ -30,20 +30,27 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.12em;
-        color: #6b7a90;
+        color: var(--portfolio-primary, #6b7a90);
       }
 
       h2 {
         margin: 0;
-        color: #132238;
+        color: var(--portfolio-text, #132238);
         font-size: clamp(1.5rem, 3vw, 2.3rem);
       }
 
       .section-header__description {
         margin: 0.6rem 0 0;
         max-width: 48rem;
-        color: #5f7088;
+        color: var(--portfolio-muted, #5f7088);
         line-height: 1.65;
+      }
+
+      @media (max-width: 720px) {
+        .section-header {
+          align-items: start;
+          flex-direction: column;
+        }
       }
     `,
   ],
