@@ -626,6 +626,292 @@
       }
     }
   },
+  "adminSkillsPage": {
+    "storyBadge": "Epic 5 / Story 5.4",
+    "eyebrow": "Skills management",
+    "title": "Manage portfolio skills through a modern, lightweight admin workspace.",
+    "summary": "This screen uses the live protected skills endpoints for real CRUD, category ordering, primary/secondary emphasis, and active visibility control across English LTR and Arabic RTL.",
+    "metricsAriaLabel": "Skills management metrics",
+    "metrics": {
+      "totalSkills": "skills in the catalog",
+      "activeSkills": "visible now",
+      "primarySkills": "primary strengths",
+      "categories": "active categories"
+    },
+    "tableEyebrow": "Live skills board",
+    "tableTitle": "A focused CRUD workspace for technical and business capabilities",
+    "tableDescription": "Search, filter, reorder, and tune public visibility without leaving the admin area.",
+    "refresh": "Refresh",
+    "createSkill": "Create skill",
+    "filtersAriaLabel": "Skills filters",
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search name or category",
+      "categoryLabel": "Category",
+      "statusLabel": "Visibility",
+      "priorityLabel": "Priority",
+      "allCategories": "All categories",
+      "allStatuses": "All visibility states",
+      "activeOnly": "Active only",
+      "inactiveOnly": "Inactive only",
+      "allPriorities": "All priorities",
+      "primaryOnly": "Primary only",
+      "secondaryOnly": "Secondary only",
+      "clear": "Clear filters"
+    },
+    "results": {
+      "single": "skill visible",
+      "plural": "skills visible"
+    },
+    "errorTitle": "Skills could not be loaded.",
+    "errorDescription": "Please make sure the protected admin skills endpoint is reachable and try again.",
+    "retry": "Try again",
+    "emptyTitle": "No skills are available yet.",
+    "emptyDescription": "Create the first skill to start shaping the public portfolio matrix.",
+    "emptyFilteredTitle": "No skills match these filters.",
+    "emptyFilteredDescription": "Adjust the filters or clear them to see the full list again.",
+    "columns": {
+      "name": "Skill",
+      "category": "Category",
+      "priority": "Priority",
+      "status": "Status",
+      "order": "Order",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "primary": "Primary",
+      "secondary": "Secondary"
+    },
+    "actions": {
+      "edit": "Edit",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "promote": "Promote",
+      "demote": "Demote"
+    },
+    "editor": {
+      "emptyBadge": "Story 5.4",
+      "emptyTitle": "Choose a skill or create a new one.",
+      "emptyDescription": "The editor writes directly to the backend-owned skills model, so the public portfolio reflects real content instead of placeholders.",
+      "createEyebrow": "Create skill",
+      "editEyebrow": "Edit skill",
+      "createTitle": "Add a new portfolio capability",
+      "editTitle": "Refine the selected skill",
+      "createDescription": "Add the skill name, place it in the right category, then decide whether it should be primary and public.",
+      "editDescription": "Fine-tune ordering, emphasis, and visibility while keeping the portfolio matrix clear and recruiter-friendly.",
+      "close": "Close editor",
+      "errorTitle": "Skill details could not be loaded.",
+      "errorDescription": "Please make sure the admin skill details endpoint is reachable and try again.",
+      "sections": {
+        "basics": "Skill basics",
+        "basicsHint": "Name, category, and ordering stay backend-owned and public-site ready.",
+        "visibility": "Visibility and emphasis",
+        "visibilityHint": "Use these toggles to control whether a skill appears publicly and whether it should be visually emphasized."
+      },
+      "fields": {
+        "name": "Skill name",
+        "category": "Category",
+        "displayOrder": "Display order",
+        "isPrimary": "Highlight as a primary strength",
+        "isActive": "Show on the public site"
+      },
+      "placeholders": {
+        "name": "ASP.NET Core APIs"
+      },
+      "hints": {
+        "isPrimary": "Primary skills receive stronger visual weight on the public portfolio.",
+        "isActive": "Inactive skills stay manageable in admin but are hidden from visitors."
+      },
+      "actions": {
+        "delete": "Delete skill",
+        "creating": "Creating...",
+        "saving": "Saving...",
+        "create": "Create skill",
+        "save": "Save changes"
+      }
+    },
+    "deleteConfirmation": {
+      "title": "Delete this skill?",
+      "description": "This removes the skill from the admin catalog and the public portfolio output. Please confirm before continuing.",
+      "cancel": "Cancel",
+      "confirm": "Confirm delete",
+      "deleting": "Deleting..."
+    },
+    "messages": {
+      "createSuccess": "Skill created successfully.",
+      "updateSuccess": "Skill updated successfully.",
+      "deleteSuccess": "Skill deleted successfully.",
+      "saveError": "The skill could not be saved.",
+      "deleteError": "The skill could not be deleted.",
+      "quickUpdateSuccess": "Skill status updated successfully.",
+      "quickUpdateError": "The skill status could not be updated."
+    },
+    "validation": {
+      "required": "This field is required.",
+      "invalid": "Please review this field."
+    },
+    "options": {
+      "categories": {
+        "backendApis": "Backend APIs",
+        "frontend": "Frontend",
+        "database": "Database",
+        "architecture": "Architecture",
+        "tools": "Tools",
+        "businessAndSoftSkills": "Business and soft skills"
+      }
+    }
+  },
+  "adminExperiencePage": {
+    "storyBadge": "Epic 5 / Story 5.4",
+    "eyebrow": "Experience management",
+    "title": "Shape the portfolio timeline with a polished admin experience powered by real APIs.",
+    "summary": "This screen manages the live experience timeline through the protected admin experience endpoints, including CRUD, ordering, primary emphasis, and public visibility across light/dark themes and bilingual layouts.",
+    "metricsAriaLabel": "Experience management metrics",
+    "metrics": {
+      "totalItems": "timeline items",
+      "activeItems": "visible now",
+      "primaryItems": "primary highlights",
+      "organizations": "organizations"
+    },
+    "tableEyebrow": "Live timeline board",
+    "tableTitle": "A clear editor for career stages, business value, and public proof points",
+    "tableDescription": "Keep the public timeline practical and easy to scan while maintaining real backend content.",
+    "refresh": "Refresh",
+    "createExperience": "Create experience item",
+    "filtersAriaLabel": "Experience filters",
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search title, organization, stage, type, or summary",
+      "typeLabel": "Timeline type",
+      "statusLabel": "Visibility",
+      "priorityLabel": "Priority",
+      "allTypes": "All timeline types",
+      "allStatuses": "All visibility states",
+      "activeOnly": "Active only",
+      "inactiveOnly": "Inactive only",
+      "allPriorities": "All priorities",
+      "primaryOnly": "Primary only",
+      "supportingOnly": "Supporting only",
+      "clear": "Clear filters"
+    },
+    "results": {
+      "single": "timeline item visible",
+      "plural": "timeline items visible"
+    },
+    "errorTitle": "Experience could not be loaded.",
+    "errorDescription": "Please make sure the protected admin experience endpoint is reachable and try again.",
+    "retry": "Try again",
+    "emptyTitle": "No experience items are available yet.",
+    "emptyDescription": "Create the first timeline item to start shaping the public experience story.",
+    "emptyFilteredTitle": "No experience items match these filters.",
+    "emptyFilteredDescription": "Adjust the filters or clear them to see the full timeline again.",
+    "columns": {
+      "title": "Title",
+      "stage": "Stage label",
+      "type": "Type",
+      "organization": "Organization",
+      "status": "Status",
+      "order": "Order",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "primary": "Primary",
+      "supporting": "Supporting"
+    },
+    "actions": {
+      "edit": "Edit",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "promote": "Promote",
+      "demote": "Demote"
+    },
+    "editor": {
+      "emptyBadge": "Story 5.4",
+      "emptyTitle": "Choose a timeline item or create a new one.",
+      "emptyDescription": "The editor updates the backend-owned experience timeline directly so the public page always reflects real content.",
+      "createEyebrow": "Create experience",
+      "editEyebrow": "Edit experience",
+      "createTitle": "Add a new timeline milestone",
+      "editTitle": "Refine the selected timeline item",
+      "createDescription": "Capture the stage label, role framing, organization, business value, and supporting proof in one place.",
+      "editDescription": "Tune the public story, highlight bullets, primary emphasis, and visibility without leaving the admin workspace.",
+      "close": "Close editor",
+      "errorTitle": "Experience details could not be loaded.",
+      "errorDescription": "Please make sure the admin experience details endpoint is reachable and try again.",
+      "sections": {
+        "identity": "Timeline identity",
+        "identityHint": "Define the type, stage, title, organization, and public order.",
+        "story": "Narrative and proof",
+        "storyHint": "Keep the public story concise, business-aware, and easy to scan.",
+        "visibility": "Visibility and emphasis",
+        "visibilityHint": "Control whether this item appears publicly and whether it should carry stronger prominence."
+      },
+      "fields": {
+        "type": "Timeline type",
+        "stageLabel": "Stage label",
+        "title": "Title",
+        "organization": "Organization",
+        "summary": "Summary",
+        "businessValue": "Business value",
+        "highlights": "Highlights",
+        "displayOrder": "Display order",
+        "isPrimary": "Mark as primary professional proof",
+        "isActive": "Show on the public site"
+      },
+      "placeholders": {
+        "stageLabel": "Current delivery focus",
+        "title": "Enterprise ERP Delivery",
+        "organization": "Kareem Zarif",
+        "summary": "Short public summary of this stage.",
+        "businessValue": "What this stage proves for recruiters, clients, or hiring teams.",
+        "highlights": "One highlight per line"
+      },
+      "hints": {
+        "highlights": "Add one proof point per line.",
+        "isPrimary": "Use this for the strongest proof of professional software delivery.",
+        "isActive": "Inactive items stay editable in admin but do not appear on the public timeline."
+      },
+      "actions": {
+        "delete": "Delete timeline item",
+        "creating": "Creating...",
+        "saving": "Saving...",
+        "create": "Create timeline item",
+        "save": "Save changes"
+      }
+    },
+    "deleteConfirmation": {
+      "title": "Delete this timeline item?",
+      "description": "This removes the experience item from the admin timeline and public portfolio output. Please confirm before continuing.",
+      "cancel": "Cancel",
+      "confirm": "Confirm delete",
+      "deleting": "Deleting..."
+    },
+    "messages": {
+      "createSuccess": "Experience item created successfully.",
+      "updateSuccess": "Experience item updated successfully.",
+      "deleteSuccess": "Experience item deleted successfully.",
+      "saveError": "The experience item could not be saved.",
+      "deleteError": "The experience item could not be deleted.",
+      "quickUpdateSuccess": "Experience status updated successfully.",
+      "quickUpdateError": "The experience status could not be updated."
+    },
+    "validation": {
+      "required": "This field is required.",
+      "invalid": "Please review this field."
+    },
+    "options": {
+      "types": {
+        "engineeringFoundation": "Engineering foundation",
+        "searchAdsEvaluatorExperience": "Search Ads Evaluator experience",
+        "dotNetFullStackTraining": ".NET full-stack training",
+        "enterpriseErpDelivery": "Enterprise ERP delivery"
+      }
+    }
+  },
   "notFoundPage": {
     "code": "404",
     "title": "Page not found",
