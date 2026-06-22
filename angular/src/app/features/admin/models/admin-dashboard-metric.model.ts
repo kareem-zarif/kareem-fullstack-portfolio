@@ -1,5 +1,7 @@
 export interface AdminDashboardMetric {
+  type: number;
   label: string;
-  value: string;
-  context: string;
+  value: number;
+  requiredPermissionName: string;
+  displayOrder: number;
 }
