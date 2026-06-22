@@ -1,22 +1,29 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Skill } from '@shared/models';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { environment } from '@env/environment';
+import {
+  PortfolioSkillAdminItem,
+  PortfolioSkillCategoryGroup,
+  PortfolioSkillItem,
+} from '@features/portfolio/models/skills.model';
+import { map, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PortfolioSkillsService {
-  private readonly skills: Skill[] = [
-    { id: 'skill-angular', name: 'Angular', category: 'Frontend', level: 'Expert', featured: true, yearsOfExperience: 5 },
-    { id: 'skill-abp', name: 'ABP Framework', category: 'Architecture', level: 'Advanced', featured: true, yearsOfExperience: 3 },
-    { id: 'skill-dotnet', name: '.NET', category: 'Backend', level: 'Expert', featured: true, yearsOfExperience: 6 },
-    { id: 'skill-sql', name: 'SQL Server', category: 'Data', level: 'Advanced', featured: false, yearsOfExperience: 5 },
-    { id: 'skill-ux', name: 'Enterprise UX', category: 'Design', level: 'Advanced', featured: false, yearsOfExperience: 4 },
-  ];
+  private readonly http = inject(HttpClient);
+  private readonly apiBaseUrl = environment.apis.default.url.replace(/\/$/, '');
 
-  getSkills(): Observable<Skill[]> {
-    return of(this.skills);
+  getSkillCategories(): Observable<PortfolioSkillCategoryGroup[]> {
+    return this.http.get<PortfolioSkillCategoryGroup[]>(`${this.apiBaseUrl}/api/skills`);
   }
 
-  getFeaturedSkills(): Observable<Skill[]> {
-    return of(this.skills.filter(skill => skill.featured));
+  getFeaturedSkills(): Observable<PortfolioSkillItem[]> {
+    return this.getSkillCategories().pipe(
+      map(categories => categories.flatMap(category => category.skills.filter(skill => skill.isPrimary))),
+    );
+  }
+
+  getAdminSkills(): Observable<PortfolioSkillAdminItem[]> {
+    return this.http.get<PortfolioSkillAdminItem[]>(`${this.apiBaseUrl}/api/admin/skills`);
   }
 }

@@ -79,6 +79,8 @@ export class AppShellService {
         return 'bi bi-grid';
       case '/experience':
         return 'bi bi-briefcase';
+      case '/skills':
+        return 'bi bi-grid-3x3-gap';
       case '/contact':
         return 'bi bi-chat-square-text';
       case '/admin/dashboard':

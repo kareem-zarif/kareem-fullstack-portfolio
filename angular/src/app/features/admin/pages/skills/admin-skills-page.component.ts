@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import { PortfolioSkillsService } from '@features/portfolio/services/portfolio-skills.service';
+import { PortfolioSkillAdminItem } from '@features/portfolio/models/skills.model';
 import { DataPanelComponent } from '@shared/organisms/data-panel.component';
 import { ChipComponent } from '@shared/atoms/chip.component';
 import { trackById } from '@core/utils/track-by.util';
-import { Skill } from '@shared/models';
 
 @Component({
   selector: 'app-admin-skills-page',
@@ -33,8 +34,11 @@ import { Skill } from '@shared/models';
               <strong>{{ skill.name }}</strong>
               <span>{{ skill.category }}</span>
             </div>
-            <app-chip [label]="skill.level" tone="neutral" />
-            <p>{{ skill.yearsOfExperience }} year(s) of experience</p>
+            <div class="skill-card__chips">
+              <app-chip [label]="skill.isPrimary ? 'Primary' : 'Secondary'" tone="neutral" />
+              <app-chip [label]="skill.isActive ? 'Active' : 'Inactive'" [tone]="skill.isActive ? 'success' : 'warning'" />
+            </div>
+            <p>Display order {{ skill.displayOrder }}</p>
           </article>
         }
       </div>
@@ -62,6 +66,12 @@ import { Skill } from '@shared/models';
         padding: 1rem;
         border-radius: 1rem;
         background: #f5f9fc;
+      }
+
+      .skill-card__chips {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
       }
 
       strong {
@@ -95,8 +105,15 @@ import { Skill } from '@shared/models';
 export class AdminSkillsPageComponent {
   readonly trackById = trackById;
   readonly search = signal('');
-  readonly skills = toSignal(inject(PortfolioSkillsService).getSkills(), {
-    initialValue: [] as Skill[],
+  readonly skills = toSignal(inject(PortfolioSkillsService).getAdminSkills().pipe(
+    map(skills =>
+      skills.map(skill => ({
+        ...skill,
+        category: skill.categoryLabel,
+      })),
+    ),
+  ), {
+    initialValue: [] as Array<PortfolioSkillAdminItem & { category: string }>,
   });
   readonly filteredSkills = computed(() => {
     const term = this.search().trim().toLowerCase();

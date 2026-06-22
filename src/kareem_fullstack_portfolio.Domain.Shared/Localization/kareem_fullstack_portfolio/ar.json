@@ -52,6 +52,7 @@
     "Enum:PortfolioRouteType.Projects": "المشاريع",
     "Enum:PortfolioRouteType.ProjectDetails": "تفاصيل المشروع",
     "Enum:PortfolioRouteType.Experience": "الخبرة",
+    "Enum:PortfolioRouteType.Skills": "المهارات",
     "Enum:PortfolioRouteType.Contact": "تواصل",
     "Enum:PortfolioRouteType.AdminLogin": "تسجيل دخول الإدارة",
     "Enum:PortfolioRouteType.AdminDashboard": "لوحة تحكم الإدارة",

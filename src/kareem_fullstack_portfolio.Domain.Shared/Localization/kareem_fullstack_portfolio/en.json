@@ -20,6 +20,7 @@
     "Enum:PortfolioRouteType.Projects": "Projects",
     "Enum:PortfolioRouteType.ProjectDetails": "Project details",
     "Enum:PortfolioRouteType.Experience": "Experience",
+    "Enum:PortfolioRouteType.Skills": "Skills",
     "Enum:PortfolioRouteType.Contact": "Contact",
     "Enum:PortfolioRouteType.AdminLogin": "Admin login",
     "Enum:PortfolioRouteType.AdminDashboard": "Admin dashboard",

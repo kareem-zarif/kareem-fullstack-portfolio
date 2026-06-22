@@ -18,7 +18,7 @@ export class AdminDashboardFacade {
   getOverviewMetrics(): Observable<AdminDashboardMetric[]> {
     return forkJoin({
       projects: this.projectsService.getProjects(),
-      skills: this.skillsService.getSkills(),
+      skills: this.skillsService.getAdminSkills(),
       experience: this.experienceService.getExperience(),
       messages: this.messagesService.getMessages(),
     }).pipe(

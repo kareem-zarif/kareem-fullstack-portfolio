@@ -13,5 +13,6 @@ public enum PortfolioRouteType
     AdminSkills = 9,
     AdminExperience = 10,
     AdminMessages = 11,
-    NotFound = 12
+    NotFound = 12,
+    Skills = 13
 }

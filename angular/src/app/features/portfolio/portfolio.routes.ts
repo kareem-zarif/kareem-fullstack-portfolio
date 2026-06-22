@@ -31,6 +31,11 @@ export const PORTFOLIO_ROUTES: Routes = [
           ),
       },
       {
+        path: 'skills',
+        loadComponent: () =>
+          import('@features/portfolio/pages/skills/skills-page.component').then(c => c.SkillsPageComponent),
+      },
+      {
         path: 'contact',
         loadComponent: () =>
           import('@features/portfolio/pages/contact/contact-page.component').then(c => c.ContactPageComponent),
