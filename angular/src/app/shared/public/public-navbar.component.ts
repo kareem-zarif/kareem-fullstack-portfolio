@@ -3,35 +3,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { AuthSessionService } from '@core/auth/auth-session.service';
 import { AppShellService } from '@core/services/app-shell.service';
+import { getPortfolioCopy } from '@localization/index';
 import { PublicThemeService } from '@core/services/public-theme.service';
 import { trackByRoute } from '@core/utils/track-by.util';
 import { PortfolioHomePageApiService } from '@features/portfolio/services/portfolio-home-page-api.service';
 import { catchError, of, switchMap } from 'rxjs';
-
-const NAVBAR_COPY = {
-  en: {
-    navigationLabel: 'Primary navigation',
-    languageToggle: 'العربية',
-    menu: 'Menu',
-    close: 'Close',
-    adminLogin: 'Admin login',
-    adminDashboard: 'Dashboard',
-    defaultHeadline: 'Business-oriented .NET and Angular full-stack developer',
-    switchToLight: 'Switch to light mode',
-    switchToDark: 'Switch to dark mode',
-  },
-  ar: {
-    navigationLabel: 'التنقل الرئيسي',
-    languageToggle: 'English',
-    menu: 'القائمة',
-    close: 'إغلاق',
-    adminLogin: 'تسجيل دخول الإدارة',
-    adminDashboard: 'لوحة التحكم',
-    defaultHeadline: 'مطوّر ويب متكامل باستخدام .NET و Angular مع تركيز على الأعمال',
-    switchToLight: 'التبديل إلى الوضع الفاتح',
-    switchToDark: 'التبديل إلى الوضع الداكن',
-  },
-} as const;
 
 @Component({
   selector: 'app-public-navbar',
@@ -87,7 +63,7 @@ const NAVBAR_COPY = {
               (click)="theme.toggleTheme()"
               [attr.aria-label]="themeLabel()"
             >
-              {{ theme.isDark() ? 'Light' : 'Dark' }}
+              {{ theme.isDark() ? copy().themeLight : copy().themeDark }}
             </button>
 
             <button type="button" class="navbar__cta" (click)="openAdmin()">
@@ -347,7 +323,7 @@ export class PublicNavbarComponent {
   readonly trackByRoute = trackByRoute;
   readonly menuOpen = signal(false);
 
-  readonly copy = computed(() => NAVBAR_COPY[this.theme.language()]);
+  readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'publicNavbar'));
   private readonly publicShell = toSignal(this.shell.publicShell$.pipe(catchError(() => of(null))), { initialValue: null });
   private readonly navigation = toSignal(this.shell.publicNavigation$.pipe(catchError(() => of([]))), { initialValue: [] });
   private readonly identity = toSignal(

@@ -4,23 +4,9 @@ import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AppShellService } from '@core/services/app-shell.service';
 import { AuthSessionService } from '@core/auth/auth-session.service';
+import { getPortfolioCopy } from '@localization/index';
 import { PublicThemeService } from '@core/services/public-theme.service';
 import { catchError, combineLatest, filter, map, of, startWith } from 'rxjs';
-
-const TOPBAR_COPY = {
-  en: {
-    eyebrow: 'Secure control room',
-    preview: 'Preview site',
-    account: 'Account',
-    switchLanguage: 'العربية',
-  },
-  ar: {
-    eyebrow: 'مساحة تحكم آمنة',
-    preview: 'معاينة الموقع',
-    account: 'الحساب',
-    switchLanguage: 'English',
-  },
-} as const;
 
 @Component({
   selector: 'app-admin-topbar',
@@ -36,7 +22,7 @@ const TOPBAR_COPY = {
       <div class="topbar__actions">
         <a routerLink="/">{{ copy().preview }}</a>
         <button type="button" (click)="theme.toggleLanguage()">{{ copy().switchLanguage }}</button>
-        <button type="button" (click)="theme.toggleTheme()">{{ theme.isDark() ? 'Light' : 'Dark' }}</button>
+        <button type="button" (click)="theme.toggleTheme()">{{ theme.isDark() ? copy().themeLight : copy().themeDark }}</button>
         <button type="button" (click)="session.navigateToAccount()">{{ copy().account }}</button>
       </div>
     </header>
@@ -107,7 +93,7 @@ export class AdminTopbarComponent {
   readonly shell = inject(AppShellService);
   readonly theme = inject(PublicThemeService);
   private readonly router = inject(Router);
-  readonly copy = computed(() => TOPBAR_COPY[this.theme.language()]);
+  readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'adminTopbar'));
   private readonly routeLabel = toSignal(
     combineLatest([
       this.shell.adminShell$.pipe(catchError(() => of(null))),

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PublicThemeService } from '@core/services/public-theme.service';
+import { getPortfolioCopy } from '@localization/index';
 import {
   PortfolioCallToAction,
   PortfolioCallToActionType,
@@ -25,105 +26,6 @@ interface HomeMetric {
   value: string;
   label: string;
 }
-
-const HOME_PAGE_COPY = {
-  en: {
-    loading: 'Loading portfolio homepage...',
-    identityErrorTitle: 'Portfolio identity could not be loaded.',
-    identityErrorDescription:
-      'Please make sure the API is running and the public portfolio endpoints are available.',
-    detailsWarningTitle: 'Identity loaded. Extra homepage sections are temporarily unavailable.',
-    detailsWarningDescription:
-      'The hero is still using the live identity endpoint while the rest of the homepage waits for the content endpoint.',
-    heroEyebrow: 'Full-stack portfolio',
-    heroSignalStack: 'Angular 21 + ASP.NET Core',
-    heroSignalWorkflow: 'ERP workflow focus',
-    heroSignalExperience: 'Responsive, dark/light, RTL ready',
-    heroMetricsFeatured: 'featured case studies',
-    heroMetricsStack: 'core stack pillars',
-    heroMetricsAudience: 'audience groups',
-    heroMetricsCapabilities: 'ERP capabilities',
-    directLinks: 'Direct links',
-    strategyCardEyebrow: 'Business-first positioning',
-    strategyCardTitle: 'Designed for recruiters, technical leads, and clients who want proof, not buzzwords.',
-    strategyCardSummary:
-      'The homepage leads with real backend content, clear navigation, and focused project signals instead of decorative filler.',
-    spotlightEyebrow: 'ERP spotlight',
-    spotlightFallback: 'Homepage details are loading, but the positioning and CTA flow are already live.',
-    spotlightCta: 'View case study',
-    viewAllProjects: 'View all projects',
-    techEyebrow: 'Tech stack quick cards',
-    techTitle: 'Modern frontend, reliable backend, and product-shaped architecture',
-    techDescription:
-      'Each card reflects a real delivery area used in the existing API contracts and project content.',
-    featuredEyebrow: 'Featured projects',
-    featuredTitle: 'Case studies built around systems, modules, and business outcomes',
-    featuredDescription:
-      'These highlights make the .NET + Angular specialization obvious while staying readable for hiring and freelance conversations.',
-    projectCaseStudy: 'Case study',
-    projectGithub: 'GitHub',
-    projectLiveDemo: 'Live demo',
-    erpEyebrow: 'ERP experience highlight',
-    erpTitle: 'Enterprise workflow thinking backed by implementation detail',
-    erpDescription:
-      'The ERP section ties together backend rules, Angular screens, reporting needs, and the case-study proof already exposed by the API.',
-    architectureNote: 'Architecture note',
-    capabilityLabel: 'Capability',
-    businessEyebrow: 'Business value',
-    businessTitle: 'Why this portfolio is positioned around outcomes, not just tooling',
-    businessDescription:
-      'The value section turns technical strengths into the language recruiters and clients actually evaluate.',
-    contactEyebrow: 'Let’s build',
-  },
-  ar: {
-    loading: 'جارٍ تحميل الصفحة الرئيسية...',
-    identityErrorTitle: 'تعذر تحميل هوية البورتفوليو.',
-    identityErrorDescription:
-      'يرجى التأكد من تشغيل الـ API وأن نقاط النهاية العامة الخاصة بالبورتفوليو متاحة.',
-    detailsWarningTitle: 'تم تحميل الهوية، لكن أقسام الصفحة الإضافية غير متاحة مؤقتًا.',
-    detailsWarningDescription:
-      'يعتمد القسم الرئيسي حاليًا على نقطة نهاية الهوية المباشرة بينما ينتظر باقي المحتوى نقطة نهاية الصفحة الرئيسية.',
-    heroEyebrow: 'بورتفوليو مطور متكامل',
-    heroSignalStack: 'Angular 21 مع ASP.NET Core',
-    heroSignalWorkflow: 'تركيز على تدفقات ERP',
-    heroSignalExperience: 'متجاوب مع الداكن والفاتح ويدعم RTL',
-    heroMetricsFeatured: 'دراسات حالة مميزة',
-    heroMetricsStack: 'محاور تقنية أساسية',
-    heroMetricsAudience: 'فئات مستهدفة',
-    heroMetricsCapabilities: 'قدرات ERP',
-    directLinks: 'روابط مباشرة',
-    strategyCardEyebrow: 'تموضع عملي للأعمال',
-    strategyCardTitle: 'مصمم ليوضح القيمة للمسؤولين عن التوظيف والقادة التقنيين والعملاء.',
-    strategyCardSummary:
-      'الصفحة الرئيسية تقود بمحتوى حقيقي من الخلفية البرمجية، وتنقل واضح، وإشارات مشاريع مركزة بدلًا من عناصر شكلية بلا قيمة.',
-    spotlightEyebrow: 'واجهة مشروع ERP',
-    spotlightFallback: 'يتم تحميل تفاصيل الصفحة الرئيسية الآن، لكن التموضع المهني ومسار الدعوات لاتخاذ إجراء يعملان بالفعل.',
-    spotlightCta: 'عرض دراسة الحالة',
-    viewAllProjects: 'عرض كل المشاريع',
-    techEyebrow: 'بطاقات التقنية السريعة',
-    techTitle: 'واجهة حديثة، خلفية موثوقة، وبنية موجهة للمنتج',
-    techDescription:
-      'كل بطاقة تعكس مجال تسليم حقيقي مستخدم بالفعل في عقود الـ API ومحتوى المشاريع الحالي.',
-    featuredEyebrow: 'المشاريع المميزة',
-    featuredTitle: 'دراسات حالة مبنية حول الأنظمة والوحدات ونتائج الأعمال',
-    featuredDescription:
-      'تُبرز هذه المشاريع تخصص .NET + Angular بشكل واضح مع الحفاظ على الوضوح للمقابلات وفرص العمل الحر.',
-    projectCaseStudy: 'دراسة الحالة',
-    projectGithub: 'GitHub',
-    projectLiveDemo: 'العرض المباشر',
-    erpEyebrow: 'خبرة ERP',
-    erpTitle: 'تفكير مؤسسي في سير العمل مدعوم بتفاصيل تنفيذية',
-    erpDescription:
-      'هذا القسم يربط بين قواعد الخلفية البرمجية، وشاشات Angular، واحتياجات التقارير، ودليل التنفيذ الموجود فعليًا في الـ API.',
-    architectureNote: 'ملاحظة معمارية',
-    capabilityLabel: 'قدرة',
-    businessEyebrow: 'القيمة التجارية',
-    businessTitle: 'لماذا يتم تقديم هذا البورتفوليو من زاوية النتائج وليس الأدوات فقط',
-    businessDescription:
-      'قسم القيمة يحول المهارات التقنية إلى لغة يفهمها مسؤولو التوظيف والعملاء بسهولة.',
-    contactEyebrow: 'لنبدأ العمل',
-  },
-} as const;
 
 @Component({
   selector: 'app-home-page',
@@ -1018,7 +920,7 @@ export class HomePageComponent {
   private readonly homePageApi = inject(PortfolioHomePageApiService);
   private readonly theme = inject(PublicThemeService);
 
-  readonly copy = computed(() => HOME_PAGE_COPY[this.theme.language()]);
+  readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'homePage'));
 
   readonly homeState = toSignal(
     combineLatest({

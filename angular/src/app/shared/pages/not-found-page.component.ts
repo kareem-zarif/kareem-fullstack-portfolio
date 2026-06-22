@@ -1,23 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { getPortfolioCopy } from '@localization/index';
 import { PublicThemeService } from '@core/services/public-theme.service';
-
-const NOT_FOUND_COPY = {
-  en: {
-    code: '404',
-    title: 'Page not found',
-    body: 'The route you requested is not part of the current portfolio workspace.',
-    goHome: 'Go home',
-    admin: 'Admin login',
-  },
-  ar: {
-    code: '404',
-    title: 'الصفحة غير موجودة',
-    body: 'المسار المطلوب غير متاح داخل البورتفوليو الحالي.',
-    goHome: 'العودة للرئيسية',
-    admin: 'تسجيل دخول الإدارة',
-  },
-} as const;
 
 @Component({
   selector: 'app-not-found-page',
@@ -112,5 +96,5 @@ const NOT_FOUND_COPY = {
 })
 export class NotFoundPageComponent {
   readonly theme = inject(PublicThemeService);
-  readonly copy = computed(() => NOT_FOUND_COPY[this.theme.language()]);
+  readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'notFoundPage'));
 }

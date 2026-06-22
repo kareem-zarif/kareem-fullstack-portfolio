@@ -2,41 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@a
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthSessionService } from '@core/auth/auth-session.service';
+import { getPortfolioCopy } from '@localization/index';
 import { PublicThemeService } from '@core/services/public-theme.service';
 import { map } from 'rxjs';
-
-const LOGIN_COPY = {
-  en: {
-    eyebrow: 'Protected portfolio admin',
-    title: 'Sign in to manage projects, skills, experience, and messages.',
-    description:
-      'This area stays visually separate from the public portfolio and keeps future backend integrations ready.',
-    primaryAction: 'Continue to sign in',
-    dashboardAction: 'Open dashboard',
-    backHome: 'Back to home',
-    securityTitle: 'Why this shell exists',
-    securityPoints: [
-      'Clear separation between public presentation and admin workflows.',
-      'Responsive layout for phone, tablet, laptop, and large desktop screens.',
-      'Theme and language controls stay consistent with the public experience.',
-    ],
-  },
-  ar: {
-    eyebrow: 'إدارة البورتفوليو المحمية',
-    title: 'سجّل الدخول لإدارة المشاريع والمهارات والخبرات ورسائل التواصل.',
-    description:
-      'هذه المساحة منفصلة بصريا عن البورتفوليو العام ومهيأة للتكاملات الخلفية القادمة.',
-    primaryAction: 'متابعة تسجيل الدخول',
-    dashboardAction: 'فتح لوحة التحكم',
-    backHome: 'العودة للرئيسية',
-    securityTitle: 'لماذا تم تصميم هذه الواجهة',
-    securityPoints: [
-      'فصل واضح بين العرض العام وعمليات الإدارة.',
-      'تصميم متجاوب للهاتف والتابلت واللابتوب والشاشات الكبيرة.',
-      'اللغة والثيم متسقان مع التجربة العامة للموقع.',
-    ],
-  },
-} as const;
 
 @Component({
   selector: 'app-admin-login-page',
@@ -250,7 +218,7 @@ const LOGIN_COPY = {
 export class AdminLoginPageComponent {
   readonly session = inject(AuthSessionService);
   readonly theme = inject(PublicThemeService);
-  readonly copy = computed(() => LOGIN_COPY[this.theme.language()]);
+  readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'adminLoginPage'));
   private readonly router = inject(Router);
   private readonly returnUrl = toSignal(
     inject(ActivatedRoute).queryParamMap.pipe(map(params => params.get('returnUrl') || '/admin/dashboard')),

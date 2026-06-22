@@ -2,20 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AppShellService } from '@core/services/app-shell.service';
+import { getPortfolioCopy } from '@localization/index';
 import { PublicThemeService } from '@core/services/public-theme.service';
 import { trackByRoute } from '@core/utils/track-by.util';
 import { catchError, of } from 'rxjs';
-
-const SIDEBAR_COPY = {
-  en: {
-    caption: 'Admin workspace',
-    helper: 'Protected operations for projects, skills, experience, and messages.',
-  },
-  ar: {
-    caption: 'مساحة الإدارة',
-    helper: 'عمليات محمية لإدارة المشاريع والمهارات والخبرات ورسائل التواصل.',
-  },
-} as const;
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -142,7 +132,7 @@ export class AdminSidebarComponent {
   readonly shell = inject(AppShellService);
   readonly theme = inject(PublicThemeService);
   readonly trackByRoute = trackByRoute;
-  readonly copy = computed(() => SIDEBAR_COPY[this.theme.language()]);
+  readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'adminSidebar'));
   private readonly adminShell = toSignal(this.shell.adminShell$.pipe(catchError(() => of(null))), { initialValue: null });
   private readonly navigation = toSignal(this.shell.adminNavigation$.pipe(catchError(() => of([]))), { initialValue: [] });
 

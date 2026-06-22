@@ -2,25 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { AppShellService } from '@core/services/app-shell.service';
+import { getPortfolioCopy } from '@localization/index';
 import { PublicThemeService } from '@core/services/public-theme.service';
 import { trackByRoute } from '@core/utils/track-by.util';
 import { PortfolioHomePageApiService } from '@features/portfolio/services/portfolio-home-page-api.service';
 import { catchError, of, switchMap } from 'rxjs';
-
-const FOOTER_COPY = {
-  en: {
-    explore: 'Explore',
-    connect: 'Connect',
-    defaultSummary: 'I build business systems that feel calm, fast, and useful.',
-    copyright: 'Crafted for recruiters, hiring managers, and product teams.',
-  },
-  ar: {
-    explore: 'استكشف',
-    connect: 'تواصل',
-    defaultSummary: 'أبني أنظمة أعمال واضحة وسريعة وسهلة الاستخدام.',
-    copyright: 'مصمم لمديري التوظيف والفرق التقنية وأصحاب المنتجات.',
-  },
-} as const;
 
 @Component({
   selector: 'app-public-footer',
@@ -167,7 +153,7 @@ export class PublicFooterComponent {
   readonly shell = inject(AppShellService);
   readonly theme = inject(PublicThemeService);
   readonly trackByRoute = trackByRoute;
-  readonly copy = computed(() => FOOTER_COPY[this.theme.language()]);
+  readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'publicFooter'));
   private readonly homePageApi = inject(PortfolioHomePageApiService);
   private readonly publicShell = toSignal(this.shell.publicShell$.pipe(catchError(() => of(null))), { initialValue: null });
   private readonly navigation = toSignal(this.shell.publicNavigation$.pipe(catchError(() => of([]))), { initialValue: [] });
@@ -181,7 +167,7 @@ export class PublicFooterComponent {
 
   readonly brandName = computed(() => this.publicShell()?.brandName ?? this.identity()?.fullName ?? 'Kareem Zarif');
   readonly title = computed(
-    () => this.identity()?.professionalTitle ?? 'Business-oriented .NET and Angular full-stack developer',
+    () => this.identity()?.professionalTitle ?? this.copy().defaultTitle,
   );
   readonly summary = computed(() => this.identity()?.mainMessage ?? this.copy().defaultSummary);
   readonly navigationItems = computed(() => this.navigation());
