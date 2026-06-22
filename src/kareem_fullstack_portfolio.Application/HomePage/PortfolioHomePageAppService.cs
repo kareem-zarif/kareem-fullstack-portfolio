@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using kareem_fullstack_portfolio.Projects;
 using kareem_fullstack_portfolio.PortfolioIdentity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 
 namespace kareem_fullstack_portfolio.HomePage;
 
 [AllowAnonymous]
+[Route("api/app/portfolio-home-page")]
 public class PortfolioHomePageAppService : kareem_fullstack_portfolioAppService, IPortfolioHomePageAppService
 {
     private readonly IPortfolioHomePageDefinitionProvider _homePageDefinitionProvider;
@@ -27,6 +29,7 @@ public class PortfolioHomePageAppService : kareem_fullstack_portfolioAppService,
         _portfolioProjectCaseStudyDefinitionProvider = portfolioProjectCaseStudyDefinitionProvider;
     }
 
+    [HttpGet]
     public async Task<PortfolioHomePageDto> GetAsync()
     {
         var definition = _homePageDefinitionProvider.Get();

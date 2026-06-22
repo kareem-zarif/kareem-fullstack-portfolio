@@ -1,10 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace kareem_fullstack_portfolio.AppShell;
 
 [AllowAnonymous]
+[Route("api/app/public-portfolio-app-shell")]
 public class PublicPortfolioAppShellAppService : PortfolioAppShellAppServiceBase, IPublicPortfolioAppShellAppService
 {
     public PublicPortfolioAppShellAppService(IPortfolioAppShellDefinitionProvider appShellDefinitionProvider)
@@ -12,6 +14,7 @@ public class PublicPortfolioAppShellAppService : PortfolioAppShellAppServiceBase
     {
     }
 
+    [HttpGet]
     public Task<PortfolioAppShellDto> GetAsync()
     {
         var definition = GetDefinition();

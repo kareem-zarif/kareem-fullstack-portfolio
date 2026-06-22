@@ -1,10 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace kareem_fullstack_portfolio.PortfolioIdentity;
 
 [AllowAnonymous]
+[Route("api/app/portfolio-identity")]
 public class PortfolioIdentityAppService : kareem_fullstack_portfolioAppService, IPortfolioIdentityAppService
 {
     private readonly IPortfolioIdentityDefinitionProvider _identityDefinitionProvider;
@@ -14,6 +16,7 @@ public class PortfolioIdentityAppService : kareem_fullstack_portfolioAppService,
         _identityDefinitionProvider = identityDefinitionProvider;
     }
 
+    [HttpGet]
     public Task<PortfolioIdentityDto> GetAsync()
     {
         var identity = _identityDefinitionProvider.Get();
