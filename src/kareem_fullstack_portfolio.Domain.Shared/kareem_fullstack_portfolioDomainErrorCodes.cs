@@ -90,6 +90,7 @@ public static class kareem_fullstack_portfolioDomainErrorCodes
     public const string PortfolioContactMessageBodyRequired = "kareem_fullstack_portfolio:010709";
     public const string PortfolioContactMessageBodyTooLong = "kareem_fullstack_portfolio:010710";
     public const string PortfolioContactMessageSpamDetected = "kareem_fullstack_portfolio:010711";
+    public const string PortfolioContactMessageNotFound = "kareem_fullstack_portfolio:010712";
     public const string AdminAuthenticationInvalidCredentials = "kareem_fullstack_portfolio:010901";
     public const string AdminAuthenticationAdminAccessRequired = "kareem_fullstack_portfolio:010902";
     public const string AdminAuthenticationUserInactive = "kareem_fullstack_portfolio:010903";
