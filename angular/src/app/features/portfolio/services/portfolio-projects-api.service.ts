@@ -1,7 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '@env/environment';
-import { GetPortfolioProjectListInput, PortfolioProjectList } from '@features/portfolio/models';
+import {
+  GetPortfolioProjectListInput,
+  PortfolioProjectCaseStudy,
+  PortfolioProjectList,
+} from '@features/portfolio/models';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -21,5 +25,9 @@ export class PortfolioProjectsApiService {
     }
 
     return this.http.get<PortfolioProjectList>(`${this.apiBaseUrl}/api/projects`, { params });
+  }
+
+  getProjectBySlug(slug: string): Observable<PortfolioProjectCaseStudy> {
+    return this.http.get<PortfolioProjectCaseStudy>(`${this.apiBaseUrl}/api/projects/${encodeURIComponent(slug)}`);
   }
 }
