@@ -24,13 +24,18 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
     [UnitOfWork]
     public async Task SeedAsync(DataSeedContext context)
     {
-        if (await _portfolioProjectRepository.GetCountAsync() > 0)
-        {
-            return;
-        }
+        var existingProjects = await _portfolioProjectRepository.GetListAsync();
+        var existingSlugs = existingProjects
+            .Select(project => project.Slug)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         foreach (var seed in GetSeeds())
         {
+            if (existingSlugs.Contains(seed.Slug))
+            {
+                continue;
+            }
+
             var project = new PortfolioProject(
                 seed.Id,
                 seed.Title,
@@ -107,7 +112,19 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 true,
                 null,
                 null,
-                4)
+                4),
+            new(
+                new Guid("7F0A4E6D-6A65-4C59-A28D-9B6F5D341005"),
+                "Database Entities",
+                "story-4-2-database-entities",
+                PortfolioProjectType.PortfolioPlatform,
+                "Epic 4, Story 4.2 for the portfolio platform: a database-first slice that turns content, settings, and contact flows into maintainable EF Core entities.",
+                "Shows practical backend ownership through Code First modeling, SQL Server persistence, ABP conventions, and real endpoint support for the Angular frontend.",
+                new List<string> { "ASP.NET Core", "EF Core", "ABP", "SQL Server", "Angular 21" },
+                false,
+                null,
+                null,
+                5)
         ];
     }
 

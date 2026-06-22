@@ -258,6 +258,77 @@ public class PortfolioProjectCaseStudyDefinitionProvider : IPortfolioProjectCase
                 [
                     "Turns the portfolio itself into evidence of backend-first product design and Angular-ready API thinking.",
                     "Makes recruiter-facing content easier to scale without moving business rules into the frontend."
+                ]),
+            new(
+                slug: "story-4-2-database-entities",
+                overview: "This story focuses on the database foundation for the portfolio platform, translating business content and contact workflows into a clean EF Core Code First model that can support public experiences and future admin tooling.",
+                businessProblem: "Without clear entities, common audited fields, and a stable persistence model, portfolio content becomes hard to evolve, contact submissions become fragile, and frontend work risks depending on database details instead of application contracts.",
+                solution: "The solution models portfolio content with ABP-style entities, EF Core configurations, and SQL Server-ready conventions. Existing APIs remain DTO-based so Angular consumes clean contracts while the backend keeps ownership of validation, persistence, and future extension points.",
+                roleSummary: "I owned the backend modeling slice of the feature by shaping the entities, deciding the shared fields, keeping the design maintainable, and making sure the database layer still supports real endpoints rather than fake content flows.",
+                roleResponsibilities:
+                [
+                    "Mapped backlog requirements into EF Core entities that represent both public portfolio content and protected admin concerns.",
+                    "Defined the shared audited and ordering fields so the schema stays consistent as more portfolio sections are added.",
+                    "Kept the API boundary DTO-first so Angular consumes stable responses without leaking EF entities directly."
+                ],
+                keyFeatures:
+                [
+                    "Project: Stores recruiter-facing case study content, business summaries, visibility flags, and ordered technology references for each showcased build.",
+                    "Skill: Keeps skill records grouped and publishable so the public site can render categorized strengths from real backend data.",
+                    "Experience: Captures timeline-based experience content with room for highlights, ordering, and recruiter-readable storytelling.",
+                    "ContactMessage: Persists validated contact submissions so inquiries are saved, reviewable, and ready for admin workflows.",
+                    "SiteSetting: Holds configurable public portfolio settings such as brand copy, calls to action, and presentation-supporting values.",
+                    "AdminUser: Covers the protected management surface needed for authenticated content operations without exposing internal access rules publicly."
+                ],
+                architectureNotes:
+                [
+                    "Common fields stay consistent across the model: Id, CreationTime, LastModificationTime, plus IsActive and DisplayOrder where they make sense.",
+                    "Implementation follows EF Core Code First through ABP entities, configurations, DbContext setup, and DbMigrator-friendly conventions.",
+                    "SQL Server remains the persistence target, while initial seed data gives the site real content from the first run.",
+                    "Entities are never exposed directly from API responses; application services return DTOs that stay safe for Angular consumption.",
+                    "The backend remains the source of truth for validation, visibility, business rules, and localized error behavior."
+                ],
+                highlightCards:
+                [
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.ReportingAndData,
+                        "A simple entity map that still covers real product needs",
+                        "The model handles projects, skills, experience, contact submissions, settings, and admin access without turning the schema into an overdesigned showcase.",
+                        1),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.AbpLayeredArchitecture,
+                        "Code First design aligned with ABP conventions",
+                        "Entities, configurations, DbContext behavior, and seed data follow the layered structure expected by the rest of the solution.",
+                        2),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration,
+                        "Existing endpoints stay DTO-first for Angular",
+                        "The database work strengthens the current API surface instead of asking the frontend to fake data or depend on EF models directly.",
+                        3),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.RoleBasedSecurity,
+                        "Protected admin concerns remain backend-owned",
+                        "Admin access, visibility rules, and future management flows stay on the backend side of the contract where they can be enforced consistently.",
+                        4)
+                ],
+                galleryItems:
+                [
+                    PortfolioProjectCaseStudyGalleryItemDefinition.Placeholder(
+                        "Entity boundaries and data ownership",
+                        "Placeholder for visuals that explain how project, skill, experience, settings, and contact data are separated cleanly.",
+                        1),
+                    PortfolioProjectCaseStudyGalleryItemDefinition.Placeholder(
+                        "DbContext and configuration structure",
+                        "Placeholder for diagrams or screenshots showing how EF Core mappings are organized inside the portfolio backend.",
+                        2)
+                ],
+                results:
+                [
+                    "EF Core entities exist for Project, Skill, Experience, ContactMessage, SiteSetting, and the admin access surface.",
+                    "Entity configurations and DbContext structure keep SQL Server mapping simple, maintainable, and ready for growth.",
+                    "Initial seed data supports a first-run experience without fake frontend placeholders.",
+                    "Existing endpoints keep returning DTOs rather than exposing EF entities directly.",
+                    "The database layer now supports responsive Angular pages with real backend content and clear ownership boundaries."
                 ])
         ];
     }

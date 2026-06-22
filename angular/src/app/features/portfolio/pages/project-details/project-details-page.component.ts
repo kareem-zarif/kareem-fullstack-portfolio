@@ -81,15 +81,19 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                   @if (project.isFeatured) {
                     <span class="hero__badge hero__badge--featured">{{ copy().featuredBadge }}</span>
                   }
+
+                  @if (isDatabaseEntitiesStory()) {
+                    <span class="hero__badge hero__badge--story">{{ copy().databaseStoryBadge }}</span>
+                  }
                 </div>
 
                 <h1 id="project-case-study-title">{{ project.title }}</h1>
                 <p class="hero__summary">{{ project.shortSummary }}</p>
 
                 <div class="hero__signals" [attr.aria-label]="copy().sectionNavigation">
-                  <span>{{ copy().heroSignalBusiness }}</span>
-                  <span>{{ copy().heroSignalResponsive }}</span>
-                  <span>{{ copy().heroSignalTheme }}</span>
+                  @for (signal of heroSignals(); track signal) {
+                    <span>{{ signal }}</span>
+                  }
                 </div>
 
                 <div class="hero__actions">
@@ -126,11 +130,33 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
             @if (project.highlightCards.length) {
               <section class="surface spotlight" [class.spotlight--erp]="isErpCaseStudy()" aria-labelledby="project-highlights-title">
                 <div class="section-heading">
-                  <p class="eyebrow">{{ isErpCaseStudy() ? copy().erpSpotlightEyebrow : copy().highlightsEyebrow }}</p>
+                  <p class="eyebrow">
+                    {{
+                      isErpCaseStudy()
+                        ? copy().erpSpotlightEyebrow
+                        : isDatabaseEntitiesStory()
+                          ? copy().databaseSpotlightEyebrow
+                          : copy().highlightsEyebrow
+                    }}
+                  </p>
                   <h2 id="project-highlights-title">
-                    {{ isErpCaseStudy() ? copy().erpSpotlightTitle : copy().highlightsTitle }}
+                    {{
+                      isErpCaseStudy()
+                        ? copy().erpSpotlightTitle
+                        : isDatabaseEntitiesStory()
+                          ? copy().databaseSpotlightTitle
+                          : copy().highlightsTitle
+                    }}
                   </h2>
-                  <p>{{ isErpCaseStudy() ? copy().erpSpotlightDescription : copy().highlightsDescription }}</p>
+                  <p>
+                    {{
+                      isErpCaseStudy()
+                        ? copy().erpSpotlightDescription
+                        : isDatabaseEntitiesStory()
+                          ? copy().databaseSpotlightDescription
+                          : copy().highlightsDescription
+                    }}
+                  </p>
                 </div>
 
                 @if (isErpCaseStudy()) {
@@ -243,11 +269,37 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                 @if (hasVisibleSection(sectionType.keyFeatures) && project.keyFeatures.length) {
                   <article class="surface section-card" [attr.id]="sectionAnchor(sectionType.keyFeatures)">
                     <div class="section-heading">
-                      <p class="eyebrow">{{ isErpCaseStudy() ? copy().workflowEyebrow : sectionLabel(sectionType.keyFeatures) }}</p>
-                      <h2>{{ isErpCaseStudy() ? copy().workflowTitle : sectionLabel(sectionType.keyFeatures) }}</h2>
+                      <p class="eyebrow">
+                        {{
+                          isErpCaseStudy()
+                            ? copy().workflowEyebrow
+                            : isDatabaseEntitiesStory()
+                              ? copy().databaseEntitiesEyebrow
+                              : sectionLabel(sectionType.keyFeatures)
+                        }}
+                      </p>
+                      <h2>
+                        {{
+                          isErpCaseStudy()
+                            ? copy().workflowTitle
+                            : isDatabaseEntitiesStory()
+                              ? copy().databaseEntitiesTitle
+                              : sectionLabel(sectionType.keyFeatures)
+                        }}
+                      </h2>
                     </div>
 
-                    @if (isErpCaseStudy()) {
+                    @if (isDatabaseEntitiesStory()) {
+                      <div class="entity-card-grid">
+                        @for (feature of project.keyFeatures; track feature; let index = $index) {
+                          <article class="entity-card">
+                            <small>{{ copy().entityCardLabel }} {{ index + 1 }}</small>
+                            <h3>{{ storyCardTitle(feature) }}</h3>
+                            <p>{{ storyCardSummary(feature) }}</p>
+                          </article>
+                        }
+                      </div>
+                    } @else if (isErpCaseStudy()) {
                       <div class="workflow-card-grid">
                         @for (feature of project.keyFeatures; track feature) {
                           <article class="workflow-card">
@@ -270,12 +322,35 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                   <article class="surface section-card" [attr.id]="sectionAnchor(sectionType.architectureNotes)">
                     <div class="section-heading">
                       <p class="eyebrow">
-                        {{ isErpCaseStudy() ? copy().architectureEyebrow : sectionLabel(sectionType.architectureNotes) }}
+                        {{
+                          isErpCaseStudy()
+                            ? copy().architectureEyebrow
+                            : isDatabaseEntitiesStory()
+                              ? copy().databaseStandardsEyebrow
+                              : sectionLabel(sectionType.architectureNotes)
+                        }}
                       </p>
-                      <h2>{{ isErpCaseStudy() ? copy().architectureTitle : sectionLabel(sectionType.architectureNotes) }}</h2>
+                      <h2>
+                        {{
+                          isErpCaseStudy()
+                            ? copy().architectureTitle
+                            : isDatabaseEntitiesStory()
+                              ? copy().databaseStandardsTitle
+                              : sectionLabel(sectionType.architectureNotes)
+                        }}
+                      </h2>
                     </div>
 
-                    @if (isErpCaseStudy()) {
+                    @if (isDatabaseEntitiesStory()) {
+                      <div class="requirement-grid">
+                        @for (note of project.architectureNotes; track note; let index = $index) {
+                          <article class="requirement-card">
+                            <small>{{ copy().requirementCardLabel }} {{ index + 1 }}</small>
+                            <p>{{ note }}</p>
+                          </article>
+                        }
+                      </div>
+                    } @else if (isErpCaseStudy()) {
                       <div class="insight-grid">
                         @for (note of project.architectureNotes; track note) {
                           <article class="insight-card">
@@ -326,15 +401,38 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
                 @if (hasVisibleSection(sectionType.resultsImpact) && project.results.length) {
                   <article class="surface section-card" [attr.id]="sectionAnchor(sectionType.resultsImpact)">
                     <div class="section-heading">
-                      <p class="eyebrow">{{ sectionLabel(sectionType.resultsImpact) }}</p>
-                      <h2>{{ sectionLabel(sectionType.resultsImpact) }}</h2>
+                      <p class="eyebrow">
+                        {{
+                          isDatabaseEntitiesStory()
+                            ? copy().databaseAcceptanceEyebrow
+                            : sectionLabel(sectionType.resultsImpact)
+                        }}
+                      </p>
+                      <h2>
+                        {{
+                          isDatabaseEntitiesStory()
+                            ? copy().databaseAcceptanceTitle
+                            : sectionLabel(sectionType.resultsImpact)
+                        }}
+                      </h2>
                     </div>
 
-                    <ul class="bullet-list">
-                      @for (result of project.results; track result) {
-                        <li>{{ result }}</li>
-                      }
-                    </ul>
+                    @if (isDatabaseEntitiesStory()) {
+                      <div class="acceptance-grid">
+                        @for (result of project.results; track result; let index = $index) {
+                          <article class="acceptance-card">
+                            <small>{{ copy().acceptanceCardLabel }} {{ index + 1 }}</small>
+                            <p>{{ result }}</p>
+                          </article>
+                        }
+                      </div>
+                    } @else {
+                      <ul class="bullet-list">
+                        @for (result of project.results; track result) {
+                          <li>{{ result }}</li>
+                        }
+                      </ul>
+                    }
                   </article>
                 }
               </div>
@@ -465,6 +563,7 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
       h1,
       h2,
       h3,
+      small,
       p,
       dl,
       dt,
@@ -537,6 +636,12 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
       .metric-card {
         border-color: color-mix(in srgb, var(--portfolio-primary) 22%, var(--portfolio-border));
         background: color-mix(in srgb, var(--portfolio-primary) 10%, transparent);
+      }
+
+      .hero__badge--story {
+        border-color: color-mix(in srgb, var(--portfolio-accent) 28%, var(--portfolio-border));
+        background: color-mix(in srgb, var(--portfolio-accent) 12%, transparent);
+        color: var(--portfolio-accent);
       }
 
       .hero__summary {
@@ -762,7 +867,13 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
       .workflow-card-grid,
       .workflow-card,
       .insight-grid,
-      .insight-card {
+      .insight-card,
+      .entity-card-grid,
+      .entity-card,
+      .requirement-grid,
+      .requirement-card,
+      .acceptance-grid,
+      .acceptance-card {
         display: grid;
         gap: 1rem;
       }
@@ -790,11 +901,47 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
       }
 
       .workflow-card,
-      .insight-card {
+      .insight-card,
+      .entity-card,
+      .requirement-card,
+      .acceptance-card {
         padding: 1.15rem;
         border: 1px solid var(--portfolio-border);
         border-radius: 1.35rem;
         background: color-mix(in srgb, var(--portfolio-bg-soft) 82%, transparent);
+      }
+
+      .entity-card-grid,
+      .acceptance-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .requirement-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .entity-card small,
+      .requirement-card small,
+      .acceptance-card small {
+        color: var(--portfolio-accent);
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .entity-card h3 {
+        font-size: 1.1rem;
+      }
+
+      .acceptance-card {
+        background:
+          linear-gradient(
+            150deg,
+            color-mix(in srgb, var(--portfolio-primary) 10%, transparent),
+            transparent 62%
+          ),
+          color-mix(in srgb, var(--portfolio-bg-soft) 84%, transparent);
       }
 
       .workflow-card span {
@@ -937,7 +1084,10 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
         .highlight-card,
         .gallery-card,
         .metric-card,
-        .summary-card {
+        .summary-card,
+        .entity-card,
+        .requirement-card,
+        .acceptance-card {
           animation: card-rise 520ms ease both;
         }
 
@@ -971,7 +1121,10 @@ const INITIAL_STATE: ProjectDetailsPageState = { kind: 'loading' };
         .highlight-grid--erp,
         .erp-spotlight,
         .workflow-card-grid,
-        .insight-grid {
+        .insight-grid,
+        .entity-card-grid,
+        .requirement-grid,
+        .acceptance-grid {
           grid-template-columns: 1fr;
         }
 
@@ -1044,6 +1197,7 @@ export class ProjectDetailsPageComponent {
     return state.kind === 'ready' ? state.project : null;
   });
   readonly isErpCaseStudy = computed(() => this.project()?.slug === 'enterprise-erp-system');
+  readonly isDatabaseEntitiesStory = computed(() => this.project()?.slug === 'story-4-2-database-entities');
   readonly visibleSections = computed(() =>
     [...(this.project()?.sections ?? [])]
       .filter(section => section.isVisible)
@@ -1062,6 +1216,23 @@ export class ProjectDetailsPageComponent {
       return [];
     }
 
+    if (this.isDatabaseEntitiesStory()) {
+      return [
+        {
+          value: this.formatMetric(project.keyFeatures.length),
+          label: this.copy().metricEntities,
+        },
+        {
+          value: this.formatMetric(project.architectureNotes.length),
+          label: this.copy().metricRequirements,
+        },
+        {
+          value: this.formatMetric(project.results.length),
+          label: this.copy().metricAcceptance,
+        },
+      ];
+    }
+
     return [
       {
         value: this.formatMetric(project.techStack.length),
@@ -1077,6 +1248,11 @@ export class ProjectDetailsPageComponent {
       },
     ];
   });
+  readonly heroSignals = computed(() =>
+    this.isDatabaseEntitiesStory()
+      ? [this.copy().storySignalScope, this.copy().storySignalCodeFirst, this.copy().storySignalReady]
+      : [this.copy().heroSignalBusiness, this.copy().heroSignalResponsive, this.copy().heroSignalTheme],
+  );
   readonly erpSpotlightMetrics = computed<ProjectDetailsMetric[]>(() => {
     const project = this.project();
 
@@ -1182,5 +1358,15 @@ export class ProjectDetailsPageComponent {
 
   private formatMetric(value: number): string {
     return String(value).padStart(2, '0');
+  }
+
+  storyCardTitle(value: string): string {
+    const separatorIndex = value.indexOf(':');
+    return separatorIndex >= 0 ? value.slice(0, separatorIndex).trim() : value;
+  }
+
+  storyCardSummary(value: string): string {
+    const separatorIndex = value.indexOf(':');
+    return separatorIndex >= 0 ? value.slice(separatorIndex + 1).trim() : value;
   }
 }
