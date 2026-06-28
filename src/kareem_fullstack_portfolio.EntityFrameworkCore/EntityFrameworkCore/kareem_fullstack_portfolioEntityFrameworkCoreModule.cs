@@ -45,11 +45,6 @@ public class kareem_fullstack_portfolioEntityFrameworkCoreModule : AbpModule
             options.AddDefaultRepositories(includeAllEntities: true);
         });
 
-        if (AbpStudioAnalyzeHelper.IsInAnalyzeMode)
-        {
-            return;
-        }
-
         Configure<AbpDbContextOptions>(options =>
         {
             /* The main point to change your DBMS.
@@ -58,6 +53,11 @@ public class kareem_fullstack_portfolioEntityFrameworkCoreModule : AbpModule
             options.UseSqlServer();
 
         });
+
+        if (AbpStudioAnalyzeHelper.IsInAnalyzeMode)
+        {
+            return;
+        }
         
     }
 }
