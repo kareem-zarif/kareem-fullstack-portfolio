@@ -1,0 +1,283 @@
+/* ============================================================================
+   Kareem Zarif Portfolio — Global Design Tokens & Shared Styles
+   IBM Plex Sans · Lime-on-near-black brand · Bilingual EN/AR · Light/Dark
+   ============================================================================ */
+
+/* ── Fonts ─────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+
+/* ── Constant tokens (theme-agnostic) ──────────────────────────────────────── */
+:root {
+  --font-en: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-ar: 'IBM Plex Sans Arabic', 'IBM Plex Sans', system-ui, sans-serif;
+
+  /* brand */
+  --lime:           #a8d234;
+  --lime-bright:    #b2e742;
+  --olive:          #6ea30d;
+  --dash-green:     #537c0f;
+  --gradient-brand: linear-gradient(94deg, #85bb23 0%, #6ea30d 100%);
+  --shadow-btn:
+    0px 0.75px 0.75px 0px #2a2a2a14,
+    0px 2.25px 3px -0.75px #2a2a2a24,
+    inset 0px -2.25px 2.25px 0px #0000001a,
+    inset 0px  2.25px 2.25px 0px #ffffff1a,
+    inset 0px 0px 0px 0.75px #1018283d;
+
+  /* status */
+  --teal:  #00a389;
+  --amber: #ff8400;
+  --info:  #0b84b5;
+
+  /* motion */
+  --dur-fast: 150ms;
+  --dur:      240ms;
+  --ease:     cubic-bezier(.2, .7, .3, 1);
+
+  /* radii */
+  --r-sm:   6px;
+  --r:      8px;
+  --r-lg:   12px;
+  --r-xl:   16px;
+  --r-full: 9999px;
+
+  /* layout */
+  --rail: 1180px;
+}
+
+/* ── Dark theme (default — matches the design reference) ───────────────────── */
+:root,
+[data-theme="dark"] {
+  --bg:          #141414;
+  --bg-tint:     #181a14;
+  --surface:     #1e1e1e;
+  --surface-2:   #1a1a1a;
+  --nav-bg:      rgba(20, 20, 20, .74);
+  --nav-border:  #2a2a2a;
+  --text:        #f4f5f0;
+  --text-muted:  #c7c9c2;
+  --text-faint:  #9a9c95;
+  --border:      #2e2e2e;
+  --border-soft: rgba(255, 255, 255, .06);
+  --chip-bg:     #1f1f1f;
+  --chip-border: #333333;
+  --accent-text: #b2e742;
+  --accent-line: #b2e742;
+  --shadow-sm:   0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-lift: 0 12px 30px rgba(0, 0, 0, .5);
+  --shadow-xl:   0 30px 70px -16px rgba(0, 0, 0, .7);
+  --glow:        radial-gradient(55% 55% at 82% 10%, rgba(178, 231, 66, .16), transparent 70%);
+  --grid-line:   rgba(255, 255, 255, .035);
+}
+
+/* ── Light theme ────────────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg:          #f8f8f8;
+  --bg-tint:     #f1f4ea;
+  --surface:     #ffffff;
+  --surface-2:   #f5f5f5;
+  --nav-bg:      rgba(255, 255, 255, .82);
+  --nav-border:  #e5e7eb;
+  --text:        #111827;
+  --text-muted:  #4b5563;
+  --text-faint:  #6b7280;
+  --border:      #e5e7eb;
+  --border-soft: #eef2f7;
+  --chip-bg:     #ffffff;
+  --chip-border: #e5e7eb;
+  --accent-text: #537c0f;
+  --accent-line: #a8d234;
+  --shadow-sm:   0 1px 2px rgba(15, 23, 42, .05);
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, .05);
+  --shadow-lift: 0 10px 24px rgba(15, 23, 42, .10);
+  --shadow-xl:   0 26px 60px -18px rgba(15, 23, 42, .28);
+  --glow:        radial-gradient(60% 60% at 80% 12%, rgba(168, 210, 52, .18), transparent 70%);
+  --grid-line:   rgba(17, 24, 39, .04);
+}
+
+/* ── Base resets ────────────────────────────────────────────────────────────── */
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg);
+  transition: background var(--dur) var(--ease);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-en);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-ar);
+  letter-spacing: .01em;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Decorative background ──────────────────────────────────────────────────── */
+.bg-fx {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-fx::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glow);
+}
+
+.bg-fx::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 78%);
+          mask-image: radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 78%);
+}
+
+/* ── Shared animations ──────────────────────────────────────────────────────── */
+@keyframes kz-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 163, 137, .45); }
+  50%       { box-shadow: 0 0 0 5px rgba(0, 163, 137, 0); }
+}
+
+@keyframes kz-rise {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes kz-rise-visual {
+  from { transform: translateY(20px) scale(.985); opacity: 0; }
+  to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+
+@keyframes kz-floaty {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes kz-slide-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes kz-slide-in-rtl {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+/* Entrance helper — applies when [data-rise] attribute is present */
+@media (prefers-reduced-motion: no-preference) {
+  [data-rise] {
+    animation: kz-rise .6s var(--ease) both;
+  }
+  [data-rise="0"] { animation-delay: .00s; }
+  [data-rise="1"] { animation-delay: .08s; }
+  [data-rise="2"] { animation-delay: .16s; }
+  [data-rise="3"] { animation-delay: .24s; }
+  [data-rise="4"] { animation-delay: .32s; }
+  [data-rise="5"] { animation-delay: .40s; }
+}
+
+/* ── Shared button base ─────────────────────────────────────────────────────── */
+.kz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease),
+    filter var(--dur) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.kz-btn:active { transform: scale(.98); }
+
+.kz-btn--primary {
+  background: var(--gradient-brand);
+  color: #fff;
+  border-color: rgba(255, 255, 255, .12);
+  box-shadow: var(--shadow-btn);
+}
+.kz-btn--primary:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+.kz-btn--outline {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.kz-btn--outline:hover {
+  border-color: var(--accent-line);
+  transform: translateY(-1px);
+}
+
+.kz-btn--ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: transparent;
+}
+.kz-btn--ghost:hover {
+  color: var(--text);
+  background: var(--border-soft);
+}
+
+/* ── Icon button ────────────────────────────────────────────────────────────── */
+.kz-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.kz-icon-btn:hover  { border-color: var(--accent-line); }
+.kz-icon-btn:active { transform: scale(.96); }
+
+/* ── Large screen rail ──────────────────────────────────────────────────────── */
+@media (min-width: 1600px) {
+  :root { --rail: 1320px; }
+}

@@ -7,11 +7,11 @@ import {
   PortfolioCallToActionType,
   PortfolioHomeFeaturedProject,
   PortfolioHomePage,
-  PortfolioHomeProfessionalLink,
   PortfolioIdentity,
 } from '@features/portfolio/models';
 import { PortfolioHomePageApiService } from '@features/portfolio/services/portfolio-home-page-api.service';
 import { catchError, combineLatest, map, of, startWith } from 'rxjs';
+import { HeroSectionComponent, HeroStack } from '@shared/organisms/hero-section.component';
 
 interface HomePageState {
   data: PortfolioHomePage | null;
@@ -20,12 +20,38 @@ interface HomePageState {
   detailsError: boolean;
 }
 
+/* Default tech stack shown while API loads or if API omits it */
+const DEFAULT_STACK: HeroStack[] = [
+  { label: 'ASP.NET Core', accent: 'lime' },
+  { label: 'Angular',      accent: 'lime' },
+  { label: 'SQL Server',   accent: 'teal' },
+  { label: 'EF Core',      accent: 'lime' },
+  { label: 'JWT Auth',     accent: 'info' },
+  { label: 'Azure',        accent: 'info' },
+];
+
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [],
+  imports: [HeroSectionComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<div></div>`,
+  template: `
+    <app-hero-section
+      [greeting]="copy().heroGreeting"
+      [fullName]="identity()?.fullName ?? 'Kareem Zarif'"
+      [heroLead]="copy().heroLead"
+      [heroAccent]="copy().heroAccent"
+      [heroTail]="copy().heroTail"
+      [professionalTitle]="identity()?.professionalTitle ?? copy().heroTitle"
+      [summary]="identity()?.businessSummary ?? ''"
+      [callToActions]="ctaActions()"
+      [stack]="stack()"
+      [stackLabel]="copy().heroStackLabel"
+      [availabilityBadge]="copy().heroBadge"
+      [winTitle]="copy().heroWinTitle"
+      [secureLabel]="copy().heroSecure"
+    />
+  `,
   styles: [],
 })
 export class HomePageComponent {
@@ -34,84 +60,63 @@ export class HomePageComponent {
 
   readonly copy = computed(() => getPortfolioCopy(this.theme.language(), 'homePage'));
 
-  readonly homeState = toSignal(
+  private readonly _state = toSignal(
     combineLatest({
       identity: this.homePageApi.getIdentity().pipe(catchError(() => of(null))),
       details: this.homePageApi.getHomePage().pipe(
         map(data => ({ data, error: false })),
-        catchError(() => of({ data: null, error: true })),
+        catchError(() => of({ data: null as PortfolioHomePage | null, error: true })),
       ),
     }).pipe(
       map(({ identity, details }) => ({
-        data: details.data,
+        data:         details.data,
         identity,
-        loading: false,
+        loading:      false,
         detailsError: details.error,
       })),
       startWith({ data: null, identity: null, loading: true, detailsError: false }),
     ),
-    {
-      initialValue: { data: null, identity: null, loading: true, detailsError: false } satisfies HomePageState,
-    },
+    { initialValue: { data: null, identity: null, loading: true, detailsError: false } satisfies HomePageState },
   );
 
-  readonly professionalLinks = computed(() => this.homeState().data?.professionalLinks ?? []);
+  readonly identity = computed(() => this._state().identity);
 
-  readonly heroActions = computed(() =>
-    this.homeState().identity?.callToActions.filter(
-      a => a.type === PortfolioCallToActionType.DownloadCv || a.type === PortfolioCallToActionType.GitHub,
-    ) ?? [],
+  /** All CTAs from identity, ordered by displayOrder */
+  readonly ctaActions = computed<PortfolioCallToAction[]>(() =>
+    (this._state().identity?.callToActions ?? [])
+      .slice()
+      .sort((a, b) => a.displayOrder - b.displayOrder),
   );
 
-  readonly linkedInLinks = computed(() =>
-    this.professionalLinks().filter(link => link.type === 2),
-  );
+  /** Build tech stack from home-page tech cards, fall back to defaults */
+  readonly stack = computed<HeroStack[]>(() => {
+    const cards = this._state().data?.techStackCards;
+    if (!cards?.length) return DEFAULT_STACK;
+
+    const accentMap: Record<number, HeroStack['accent']> = { 1: 'lime', 2: 'teal', 3: 'info' };
+    return cards
+      .slice()
+      .sort((a, b) => a.displayOrder - b.displayOrder)
+      .flatMap(c =>
+        c.technologies.map((tech, i) => ({
+          label:  tech,
+          accent: accentMap[(c.type % 3) + 1] ?? (i % 3 === 0 ? 'lime' : i % 3 === 1 ? 'teal' : 'info'),
+        })),
+      )
+      .slice(0, 8);
+  });
 
   readonly featuredProject = computed<PortfolioHomeFeaturedProject | null>(() => {
-    const page = this.homeState().data;
-    if (!page?.featuredProjects.length) {
-      return null;
-    }
-
+    const page = this._state().data;
+    if (!page?.featuredProjects.length) return null;
     return (
-      page.featuredProjects.find(project => project.caseStudyRoute === page.erpExperienceHighlight.projectRoute) ??
+      page.featuredProjects.find(p => p.caseStudyRoute === page.erpExperienceHighlight.projectRoute) ??
       page.featuredProjects[0]
     );
   });
 
   isDownloadAction(action: PortfolioCallToAction): boolean {
     return action.type === PortfolioCallToActionType.DownloadCv;
-  }
-
-  ctaClass(action: PortfolioCallToAction): string {
-    const style = action.style === 'primary' || action.style === 'secondary' ? action.style : 'link';
-    return `cta cta--${style}`;
-  }
-
-  actionIcon(type: PortfolioCallToActionType): string {
-    switch (type) {
-      case PortfolioCallToActionType.ViewProjects:
-        return 'bi bi-grid-1x2-fill';
-      case PortfolioCallToActionType.DownloadCv:
-        return 'bi bi-file-earmark-arrow-down';
-      case PortfolioCallToActionType.ContactMe:
-        return 'bi bi-chat-square-text';
-      case PortfolioCallToActionType.GitHub:
-        return 'bi bi-github';
-      default:
-        return 'bi bi-arrow-right';
-    }
-  }
-
-  professionalLinkIcon(link: PortfolioHomeProfessionalLink): string {
-    switch (link.type) {
-      case 1:
-        return 'bi bi-github';
-      case 2:
-        return 'bi bi-linkedin';
-      default:
-        return 'bi bi-link-45deg';
-    }
   }
 
   projectRoute(project: PortfolioHomeFeaturedProject): string {

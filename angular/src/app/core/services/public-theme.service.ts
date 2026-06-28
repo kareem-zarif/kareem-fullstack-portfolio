@@ -25,6 +25,7 @@ export class PublicThemeService {
       const root = this.document.documentElement;
 
       root.dataset['publicTheme'] = theme;
+      root.dataset['theme'] = theme;
       root.lang = language;
       root.dir = direction;
       root.style.colorScheme = theme;

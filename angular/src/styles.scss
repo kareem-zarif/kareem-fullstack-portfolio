@@ -1,26 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+/* Portfolio global design tokens, fonts, animations */
+@import './styles/main.css';
 
-html {
-  background: #07131f;
-}
-
-body {
-  margin: 0;
-  font-family: 'Aptos', 'Segoe UI Variable Display', 'Trebuchet MS', sans-serif;
-  background: transparent;
-  color: #102033;
-}
-
-html[dir='rtl'] body {
-  font-family: 'Tahoma', 'Segoe UI', 'Aptos', sans-serif;
-}
-
+/* ── Form element font inheritance ─────────────────────────────────────────── */
 button,
 input,
 textarea,
@@ -28,10 +14,7 @@ select {
   font: inherit;
 }
 
-a {
-  color: inherit;
-}
-
+/* ── ABP / Lepton-X overrides ───────────────────────────────────────────────── */
 :root {
   --lpx-theme-light-bg: url('assets/images/login/login-bg-img-light.svg');
   --lpx-theme-dim-bg: url('assets/images/login/login-bg-img-dim.svg');
