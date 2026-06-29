@@ -32,6 +32,8 @@ public class PortfolioProject : FullAuditedAggregateRoot<Guid>
 
     public string? GitHubUrl { get; private set; }
 
+    public string? GitHubFrontendUrl { get; private set; }
+
     public string? LiveDemoUrl { get; private set; }
 
     public int DisplayOrder { get; private set; }
@@ -53,6 +55,7 @@ public class PortfolioProject : FullAuditedAggregateRoot<Guid>
         bool isFeatured,
         bool isActive,
         string? gitHubUrl,
+        string? gitHubFrontendUrl,
         string? liveDemoUrl,
         int displayOrder)
         : base(id)
@@ -62,7 +65,7 @@ public class PortfolioProject : FullAuditedAggregateRoot<Guid>
         SetProjectType(projectType);
         SetShortSummary(shortSummary);
         SetBusinessValue(businessValue);
-        SetExternalUrls(gitHubUrl, liveDemoUrl);
+        SetExternalUrls(gitHubUrl, gitHubFrontendUrl, liveDemoUrl);
         SetDisplayOrder(displayOrder);
         SetTechStack(techStack);
 
@@ -80,6 +83,7 @@ public class PortfolioProject : FullAuditedAggregateRoot<Guid>
         bool isFeatured,
         bool isActive,
         string? gitHubUrl,
+        string? gitHubFrontendUrl,
         string? liveDemoUrl,
         int displayOrder)
     {
@@ -88,12 +92,18 @@ public class PortfolioProject : FullAuditedAggregateRoot<Guid>
         SetProjectType(projectType);
         SetShortSummary(shortSummary);
         SetBusinessValue(businessValue);
-        SetExternalUrls(gitHubUrl, liveDemoUrl);
+        SetExternalUrls(gitHubUrl, gitHubFrontendUrl, liveDemoUrl);
         SetDisplayOrder(displayOrder);
         SetTechStack(techStack);
 
         IsFeatured = isFeatured;
         IsActive = isActive;
+    }
+
+    /// <summary>Updates only the external links. Used by seeding to backfill URLs on existing rows.</summary>
+    public void SetExternalLinks(string? gitHubUrl, string? gitHubFrontendUrl, string? liveDemoUrl)
+    {
+        SetExternalUrls(gitHubUrl, gitHubFrontendUrl, liveDemoUrl);
     }
 
     public string GetCaseStudyRoute()
@@ -234,9 +244,10 @@ public class PortfolioProject : FullAuditedAggregateRoot<Guid>
         BusinessValue = normalizedBusinessValue;
     }
 
-    private void SetExternalUrls(string? gitHubUrl, string? liveDemoUrl)
+    private void SetExternalUrls(string? gitHubUrl, string? gitHubFrontendUrl, string? liveDemoUrl)
     {
         GitHubUrl = NormalizeUrl(gitHubUrl, "GitHubUrl");
+        GitHubFrontendUrl = NormalizeUrl(gitHubFrontendUrl, "GitHubFrontendUrl");
         LiveDemoUrl = NormalizeUrl(liveDemoUrl, "LiveDemoUrl");
     }
 

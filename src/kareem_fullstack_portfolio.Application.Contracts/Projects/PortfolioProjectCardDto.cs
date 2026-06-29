@@ -35,6 +35,10 @@ public class PortfolioProjectCardDto
 
     public bool HasGitHubLink { get; set; }
 
+    public string? GitHubFrontendUrl { get; set; }
+
+    public bool HasGitHubFrontendLink { get; set; }
+
     public string? LiveDemoUrl { get; set; }
 
     public bool HasLiveDemoLink { get; set; }

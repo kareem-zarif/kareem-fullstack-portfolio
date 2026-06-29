@@ -403,6 +403,66 @@ public class PortfolioProjectCaseStudyDefinitionProvider : IPortfolioProjectCase
                     "The public contact endpoint validates required fields before accepting a submission.",
                     "The public contact endpoint saves contact messages in the database for later review.",
                     "Swagger exposes the public endpoints as part of the visible backend contract."
+                ]),
+            new(
+                slug: "ks-ecommerce-platform",
+                overview: "A standalone e-commerce platform that covers the full shopping journey for three distinct roles — Admin, Seller, and Buyer — backed by a dynamic admin engine that regenerates the management panel from entity configuration instead of hand-written CRUD screens.",
+                businessProblem: "Small commerce projects often hardcode the admin panel and access rules, so every new entity means rewriting forms, listings, and permissions. That slows delivery and makes role separation between sellers, buyers, and administrators fragile.",
+                solution: "The platform separates the three roles cleanly and introduces a dynamic Admin Controller Engine that builds the management UI from configuration. Buyers browse, search, filter by category, and check out; sellers manage their products and inventory; admins oversee users, products, and orders from the generated panel.",
+                roleSummary: "I built the application end to end on a JavaScript and Node.js stack, owning the role-based access model, the dynamic admin engine, and the buyer-facing catalog, cart, and checkout flows.",
+                roleResponsibilities:
+                [
+                    "Designed the Admin, Seller, and Buyer roles and the access rules that separate their capabilities.",
+                    "Implemented the dynamic admin engine that rebuilds the management panel from entity configuration.",
+                    "Built the catalog browsing, category filtering, cart, checkout, and image-upload flows on Express."
+                ],
+                keyFeatures:
+                [
+                    "Role-based access control for Admin, Seller, and Buyer accounts.",
+                    "Product listing, search, and category filtering for buyers.",
+                    "Shopping cart and checkout flow.",
+                    "Admin dashboard for managing users, products, and orders.",
+                    "Image upload support and real-time inventory updates."
+                ],
+                architectureNotes:
+                [
+                    "A dynamic Admin Controller Engine generates the management panel from entity configuration rather than fixed CRUD pages.",
+                    "An Express server handles application logic and file uploads while a JSON-based data layer backs the catalog and orders.",
+                    "The frontend is built with plain HTML, CSS, and JavaScript so the buying flow stays lightweight and dependency-light."
+                ],
+                highlightCards:
+                [
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.RoleBasedSecurity,
+                        "Three roles with separated capabilities",
+                        "Admin, Seller, and Buyer accounts each get their own access rules so management, selling, and shopping stay isolated from one another.",
+                        1),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.BusinessWorkflowAutomation,
+                        "Configuration-driven admin engine",
+                        "A dynamic Admin Controller Engine rebuilds the management panel from entity configuration, so new entities do not require hand-written admin screens.",
+                        2),
+                    new(
+                        PortfolioProjectCaseStudyHighlightType.FrontendBackendIntegration,
+                        "Full buyer journey on a Node/Express stack",
+                        "Catalog browsing, category filtering, cart, checkout, and image uploads are wired from the JavaScript frontend through Express endpoints.",
+                        3)
+                ],
+                galleryItems:
+                [
+                    PortfolioProjectCaseStudyGalleryItemDefinition.Placeholder(
+                        "Storefront and category browsing",
+                        "Placeholder for the buyer-facing catalog, search, and category filtering screens.",
+                        1),
+                    PortfolioProjectCaseStudyGalleryItemDefinition.Placeholder(
+                        "Generated admin management panel",
+                        "Placeholder for the dynamic admin dashboard that manages users, products, and orders.",
+                        2)
+                ],
+                results:
+                [
+                    "Demonstrates a complete commerce build with authentication, roles, catalog, cart, and checkout in one project.",
+                    "Shows engineering leverage through a configuration-driven admin engine instead of repetitive CRUD screens."
                 ])
         ];
     }

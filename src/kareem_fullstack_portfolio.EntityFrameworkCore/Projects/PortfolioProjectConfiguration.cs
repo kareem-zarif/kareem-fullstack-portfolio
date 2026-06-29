@@ -41,6 +41,9 @@ public class PortfolioProjectConfiguration : IEntityTypeConfiguration<PortfolioP
         builder.Property(project => project.GitHubUrl)
             .HasMaxLength(PortfolioProjectConsts.MaxUrlLength);
 
+        builder.Property(project => project.GitHubFrontendUrl)
+            .HasMaxLength(PortfolioProjectConsts.MaxUrlLength);
+
         builder.Property(project => project.LiveDemoUrl)
             .HasMaxLength(PortfolioProjectConsts.MaxUrlLength);
 

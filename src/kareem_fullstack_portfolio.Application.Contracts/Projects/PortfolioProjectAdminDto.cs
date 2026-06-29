@@ -27,6 +27,8 @@ public class PortfolioProjectAdminDto
 
     public string? GitHubUrl { get; set; }
 
+    public string? GitHubFrontendUrl { get; set; }
+
     public string? LiveDemoUrl { get; set; }
 
     public string CaseStudyRoute { get; set; } = string.Empty;

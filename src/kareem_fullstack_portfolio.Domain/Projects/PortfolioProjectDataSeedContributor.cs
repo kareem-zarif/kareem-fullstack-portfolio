@@ -26,14 +26,23 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
     public async Task SeedAsync(DataSeedContext context)
     {
         var existingProjects = await _portfolioProjectRepository.GetListAsync();
-        var existingSlugs = existingProjects
-            .Select(project => project.Slug)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var existingBySlug = existingProjects
+            .ToDictionary(project => project.Slug, StringComparer.OrdinalIgnoreCase);
 
         foreach (var seed in GetSeeds())
         {
-            if (existingSlugs.Contains(seed.Slug))
+            if (existingBySlug.TryGetValue(seed.Slug, out var existingProject))
             {
+                // Backfill external links onto already-seeded rows (e.g. GitHub/live-demo URLs
+                // added after the project was first inserted) without disturbing edited content.
+                if (existingProject.GitHubUrl != seed.GitHubUrl ||
+                    existingProject.GitHubFrontendUrl != seed.GitHubFrontendUrl ||
+                    existingProject.LiveDemoUrl != seed.LiveDemoUrl)
+                {
+                    existingProject.SetExternalLinks(seed.GitHubUrl, seed.GitHubFrontendUrl, seed.LiveDemoUrl);
+                    await _portfolioProjectRepository.UpdateAsync(existingProject, autoSave: true);
+                }
+
                 continue;
             }
 
@@ -48,6 +57,7 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 seed.IsFeatured,
                 isActive: true,
                 seed.GitHubUrl,
+                seed.GitHubFrontendUrl,
                 seed.LiveDemoUrl,
                 seed.DisplayOrder);
 
@@ -77,6 +87,7 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 true,
                 null,
                 null,
+                null,
                 1),
             new(
                 new Guid("7F0A4E6D-6A65-4C59-A28D-9B6F5D341002"),
@@ -87,7 +98,8 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 "Demonstrates product catalog modeling, checkout workflow thinking, and backend contracts that support both business administration and customer UX.",
                 new List<string> { "ASP.NET Core", "Angular", "SQL Server", "EF Core", "REST APIs" },
                 false,
-                null,
+                "https://github.com/kareem-zarif/Horas",
+                "https://github.com/kareem-zarif/angu",
                 null,
                 2),
             new(
@@ -101,6 +113,7 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 false,
                 null,
                 null,
+                null,
                 3),
             new(
                 new Guid("7F0A4E6D-6A65-4C59-A28D-9B6F5D341004"),
@@ -111,6 +124,7 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 "Demonstrates product thinking, layered backend design, and an Angular-ready API surface where the backend owns permissions, validation, and localization.",
                 new List<string> { "ASP.NET Core", "Angular", "ABP", "REST APIs" },
                 true,
+                "https://github.com/kareem-zarif/kareem-zarif-portfolio",
                 null,
                 null,
                 4),
@@ -125,6 +139,7 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 false,
                 null,
                 null,
+                null,
                 5),
             new(
                 new Guid("7F0A4E6D-6A65-4C59-A28D-9B6F5D341006"),
@@ -137,7 +152,21 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
                 false,
                 null,
                 null,
-                6)
+                null,
+                6),
+            new(
+                new Guid("7F0A4E6D-6A65-4C59-A28D-9B6F5D341007"),
+                "K&S E-Commerce Platform",
+                "ks-ecommerce-platform",
+                PortfolioProjectType.ECommercePlatform,
+                "A full e-commerce web app with role-based access for Admin, Seller, and Buyer, plus a dynamic admin engine that rebuilds the management panel from entity configuration.",
+                "Shows end-to-end commerce delivery — authentication, catalog and category filtering, cart and checkout, image uploads, and inventory — built on a Node/Express stack with a configuration-driven admin.",
+                new List<string> { "JavaScript", "Node.js", "Express.js", "HTML", "CSS" },
+                false,
+                "https://github.com/kareem-zarif/ECOM",
+                null,
+                null,
+                7)
         ];
     }
 
@@ -151,6 +180,7 @@ public class PortfolioProjectDataSeedContributor : IDataSeedContributor, ITransi
         IReadOnlyCollection<string> TechStack,
         bool IsFeatured,
         string? GitHubUrl,
+        string? GitHubFrontendUrl,
         string? LiveDemoUrl,
         int DisplayOrder);
 }

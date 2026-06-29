@@ -77,6 +77,7 @@ public class AdminPortfolioProjectAppService : PortfolioProjectAppServiceBase, I
             input.IsFeatured,
             input.IsActive,
             input.GitHubUrl,
+            input.GitHubFrontendUrl,
             input.LiveDemoUrl,
             input.DisplayOrder);
 
@@ -105,6 +106,7 @@ public class AdminPortfolioProjectAppService : PortfolioProjectAppServiceBase, I
             input.IsFeatured,
             input.IsActive,
             input.GitHubUrl,
+            input.GitHubFrontendUrl,
             input.LiveDemoUrl,
             input.DisplayOrder);
 

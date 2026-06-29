@@ -36,6 +36,9 @@ public class CreateUpdatePortfolioProjectDto
     public string? GitHubUrl { get; set; }
 
     [StringLength(PortfolioProjectConsts.MaxUrlLength)]
+    public string? GitHubFrontendUrl { get; set; }
+
+    [StringLength(PortfolioProjectConsts.MaxUrlLength)]
     public string? LiveDemoUrl { get; set; }
 
     [Range(0, int.MaxValue)]

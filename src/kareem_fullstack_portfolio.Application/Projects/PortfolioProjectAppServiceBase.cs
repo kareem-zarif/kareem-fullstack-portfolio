@@ -109,6 +109,7 @@ public abstract class PortfolioProjectAppServiceBase : kareem_fullstack_portfoli
             IsFeatured = project.IsFeatured,
             IsActive = project.IsActive,
             GitHubUrl = project.GitHubUrl,
+            GitHubFrontendUrl = project.GitHubFrontendUrl,
             LiveDemoUrl = project.LiveDemoUrl,
             CaseStudyRoute = project.GetCaseStudyRoute(),
             HasCaseStudyContent = hasCaseStudyContent,

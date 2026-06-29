@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 using kareem_fullstack_portfolio.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using kareem_fullstack_portfolio.EntityFrameworkCore;
 namespace kareem_fullstack_portfolio.Migrations
 {
     [DbContext(typeof(kareem_fullstack_portfolioDbContext))]
-    partial class kareem_fullstack_portfolioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260629220346_Add_PortfolioProject_GitHubFrontendUrl")]
+    partial class Add_PortfolioProject_GitHubFrontendUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

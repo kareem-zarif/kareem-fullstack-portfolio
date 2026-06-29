@@ -160,6 +160,8 @@ public class PortfolioProjectAppService : PortfolioProjectAppServiceBase, IPortf
             IsFeatured = project.IsFeatured,
             GitHubUrl = project.GitHubUrl,
             HasGitHubLink = !project.GitHubUrl.IsNullOrWhiteSpace(),
+            GitHubFrontendUrl = project.GitHubFrontendUrl,
+            HasGitHubFrontendLink = !project.GitHubFrontendUrl.IsNullOrWhiteSpace(),
             LiveDemoUrl = project.LiveDemoUrl,
             HasLiveDemoLink = !project.LiveDemoUrl.IsNullOrWhiteSpace(),
             CaseStudyRoute = hasCaseStudyLink ? project.GetCaseStudyRoute() : string.Empty,
@@ -209,6 +211,18 @@ public class PortfolioProjectAppService : PortfolioProjectAppServiceBase, IPortf
             });
         }
 
+        if (!project.GitHubFrontendUrl.IsNullOrWhiteSpace())
+        {
+            links.Add(new PortfolioProjectCaseStudyLinkDto
+            {
+                Type = PortfolioProjectCaseStudyLinkType.GitHub,
+                Label = L[$"Enum:PortfolioProjectCaseStudyLinkType.{PortfolioProjectCaseStudyLinkType.GitHub}"],
+                Url = project.GitHubFrontendUrl!,
+                IsExternal = true,
+                DisplayOrder = 2
+            });
+        }
+
         if (!project.LiveDemoUrl.IsNullOrWhiteSpace())
         {
             links.Add(new PortfolioProjectCaseStudyLinkDto
@@ -217,7 +231,7 @@ public class PortfolioProjectAppService : PortfolioProjectAppServiceBase, IPortf
                 Label = L[$"Enum:PortfolioProjectCaseStudyLinkType.{PortfolioProjectCaseStudyLinkType.LiveDemo}"],
                 Url = project.LiveDemoUrl!,
                 IsExternal = true,
-                DisplayOrder = 2
+                DisplayOrder = 3
             });
         }
 
