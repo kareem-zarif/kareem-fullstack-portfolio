@@ -234,14 +234,18 @@ import { NavBrandComponent } from '@shared/molecules/nav-brand.component';
       font-family: inherit;
     }
 
-    /* Language toggle wide style */
-    .lang-btn {
+    /* Language toggle wide style
+       (.kz-icon-btn.lang-btn for specificity so width:auto beats the
+        later .kz-icon-btn { width: 40px } rule and the border wraps the label) */
+    .kz-icon-btn.lang-btn {
       width: auto;
+      min-width: 40px;
       padding: 0 14px;
       gap: 8px;
       font-size: 14px;
       font-weight: 600;
       color: var(--text, #111827);
+      white-space: nowrap;
     }
 
     .lang-label {

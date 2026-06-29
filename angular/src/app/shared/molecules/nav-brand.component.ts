@@ -23,6 +23,9 @@ import { LogoMarkComponent } from '@shared/atoms/logo-mark.component';
       flex-shrink: 0;
       text-decoration: none;
       color: var(--text, #f4f5f0);
+      /* Keep logo-mark before the Latin name in both LTR and RTL
+         so the brand reads identically in English and Arabic. */
+      direction: ltr;
     }
 
     .brand-name {
