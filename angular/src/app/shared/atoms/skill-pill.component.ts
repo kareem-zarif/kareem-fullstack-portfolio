@@ -27,13 +27,13 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     .skill {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      height: 34px;
-      padding: 0 13px;
+      gap: 6px;
+      height: 28px;
+      padding: 0 10px;
       border-radius: var(--r-full, 9999px);
       background: var(--chip-bg, #1f1f1f);
       border: 1px solid var(--chip-border, #333333);
-      font-size: 13px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--text, #f4f5f0);
       white-space: nowrap;
@@ -51,8 +51,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     }
 
     .sd {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background: var(--text-faint, #9a9c95);
       flex-shrink: 0;
@@ -74,8 +74,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     }
 
     .skill--core svg {
-      width: 14px;
-      height: 14px;
+      width: 11px;
+      height: 11px;
       color: #fff;
       flex-shrink: 0;
     }

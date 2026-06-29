@@ -422,7 +422,7 @@ const DEFAULT_META = { icon: 'default' as const, tint: '#b2e742', tintSoft: 'rgb
       margin-top: 18px;
       display: flex;
       flex-wrap: wrap;
-      gap: 9px;
+      gap: 7px;
     }
 
     /* ── Summary strip ───────────────────────────────────────────────────── */
@@ -688,17 +688,22 @@ export class SkillsPageComponent {
     ];
   });
 
+  private observer?: IntersectionObserver;
+
   constructor() {
     // Content (and its .reveal-item nodes) only renders once loading flips to
-    // false, so wait for data, then wire the scroll reveal exactly once.
-    const ref = effect(() => {
+    // false. Re-run after every render that changes the displayed cards —
+    // filtering drops/re-adds category cards as fresh DOM nodes, and those new
+    // nodes need to be (re)observed or they stay stuck at opacity: 0.
+    effect(() => {
+      // Track both data load and active filter so re-renders re-observe.
+      this.displayedCategories();
       if (this.pageState().loading) return;
-      afterNextRender(() => this.setupReveal(), { injector: this.injector });
-      ref.destroy();
+      afterNextRender(() => this.observeReveal(), { injector: this.injector });
     });
   }
 
-  private setupReveal(): void {
+  private observeReveal(): void {
     const elements = Array.from(
       this.hostEl.nativeElement.querySelectorAll('.reveal-item'),
     ) as HTMLElement[];
@@ -708,19 +713,22 @@ export class SkillsPageComponent {
       return;
     }
 
-    const observer = new IntersectionObserver(
+    this.observer ??= new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('revealed');
-            observer.unobserve(entry.target);
+            this.observer!.unobserve(entry.target);
           }
         });
       },
       { threshold: 0, rootMargin: '0px 0px -8% 0px' },
     );
 
-    elements.forEach(el => observer.observe(el));
+    const observer = this.observer;
+    elements.forEach(el => {
+      if (!el.classList.contains('revealed')) observer.observe(el);
+    });
 
     /* Safety: guarantee visibility even if the observer never fires */
     setTimeout(() => elements.forEach(el => el.classList.add('revealed')), 1800);
