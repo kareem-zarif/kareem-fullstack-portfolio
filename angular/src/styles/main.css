@@ -11,6 +11,9 @@
   --font-en: 'IBM Plex Sans', system-ui, sans-serif;
   --font-ar: 'IBM Plex Sans Arabic', 'IBM Plex Sans', system-ui, sans-serif;
 
+  /* extended palette */
+  --indigo: #4338ca;
+
   /* brand */
   --lime:           #a8d234;
   --lime-bright:    #b2e742;
@@ -63,6 +66,7 @@
   --chip-border: #333333;
   --accent-text: #b2e742;
   --accent-line: #b2e742;
+  --accent-soft: rgba(178, 231, 66, .10);
   --shadow-sm:   0 1px 2px rgba(0, 0, 0, .4);
   --shadow-card: 0 1px 2px rgba(0, 0, 0, .4);
   --shadow-lift: 0 12px 30px rgba(0, 0, 0, .5);
@@ -77,8 +81,9 @@
   --bg-tint:     #f1f4ea;
   --surface:     #ffffff;
   --surface-2:   #f5f5f5;
-  --nav-bg:      rgba(255, 255, 255, .82);
+  --nav-bg:      rgba(255, 255, 255, .92);
   --nav-border:  #e5e7eb;
+  --nav-shadow:  0 1px 8px rgba(15, 23, 42, .08);
   --text:        #111827;
   --text-muted:  #4b5563;
   --text-faint:  #6b7280;
@@ -88,6 +93,7 @@
   --chip-border: #e5e7eb;
   --accent-text: #537c0f;
   --accent-line: #a8d234;
+  --accent-soft: rgba(168, 210, 52, .12);
   --shadow-sm:   0 1px 2px rgba(15, 23, 42, .05);
   --shadow-card: 0 1px 2px rgba(15, 23, 42, .05);
   --shadow-lift: 0 10px 24px rgba(15, 23, 42, .10);
@@ -280,4 +286,24 @@ button { font-family: inherit; cursor: pointer; }
 /* ── Large screen rail ──────────────────────────────────────────────────────── */
 @media (min-width: 1600px) {
   :root { --rail: 1320px; }
+}
+
+/* ── Scroll-reveal animation ────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .6s var(--ease), transform .6s var(--ease);
+  }
+  .reveal-item.revealed {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-item[data-d="1"] { transition-delay: .07s; }
+  .reveal-item[data-d="2"] { transition-delay: .14s; }
+  .reveal-item[data-d="3"] { transition-delay: .21s; }
+  .reveal-item[data-d="4"] { transition-delay: .28s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-item { opacity: 1; transform: none; }
 }

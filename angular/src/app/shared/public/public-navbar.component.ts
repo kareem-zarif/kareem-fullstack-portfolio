@@ -15,8 +15,6 @@ import { trackByRoute } from '@core/utils/track-by.util';
 import { PortfolioHomePageApiService } from '@features/portfolio/services/portfolio-home-page-api.service';
 import { catchError, of, switchMap } from 'rxjs';
 import { NavBrandComponent } from '@shared/molecules/nav-brand.component';
-import { IconBtnComponent } from '@shared/atoms/icon-btn.component';
-import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
 @Component({
   selector: 'app-public-navbar',
   standalone: true,
@@ -24,13 +22,11 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
     RouterLink,
     RouterLinkActive,
     NavBrandComponent,
-    IconBtnComponent,
-    PortfolioBtnComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!-- ── Sticky nav ──────────────────────────────────────────────────────── -->
-    <header class="nav" role="banner">
+    <header class="kz-nav" role="banner">
       <div class="nav-inner">
 
         <!-- Brand -->
@@ -55,22 +51,25 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
         <div class="nav-right">
 
           <!-- Language toggle -->
-          <app-icon-btn
-            [ariaLabel]="copy().languageToggle"
-            [wide]="true"
-            (clicked)="theme.toggleLanguage()"
+          <button
+            type="button"
+            class="kz-icon-btn lang-btn"
+            [attr.aria-label]="copy().languageToggle"
+            (click)="theme.toggleLanguage()"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
             </svg>
-            <span>{{ langToggleLabel() }}</span>
-          </app-icon-btn>
+            <span class="lang-label">{{ langToggleLabel() }}</span>
+          </button>
 
           <!-- Theme toggle -->
-          <app-icon-btn
-            [ariaLabel]="themeLabel()"
-            (clicked)="theme.toggleTheme()"
+          <button
+            type="button"
+            class="kz-icon-btn"
+            [attr.aria-label]="themeLabel()"
+            (click)="theme.toggleTheme()"
           >
             @if (theme.isDark()) {
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -85,29 +84,27 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
                 <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
               </svg>
             }
-          </app-icon-btn>
+          </button>
 
           <!-- CTA (desktop) -->
-          <app-portfolio-btn
-            class="nav-cta"
-            variant="primary"
-            routerPath="/contact"
-          >
-            {{ copy().contactMe }}
-          </app-portfolio-btn>
+          <a
+            [routerLink]="'/contact'"
+            class="kz-btn kz-btn--primary nav-cta"
+          >{{ copy().contactMe }}</a>
 
           <!-- Mobile menu toggle -->
-          <app-icon-btn
-            class="menu-btn"
-            [ariaLabel]="copy().menu"
-            (clicked)="openMenu()"
+          <button
+            type="button"
+            class="kz-icon-btn menu-btn"
+            [attr.aria-label]="copy().menu"
+            (click)="openMenu()"
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="3" y1="12" x2="21" y2="12"/>
               <line x1="3" y1="6"  x2="21" y2="6"/>
               <line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
-          </app-icon-btn>
+          </button>
         </div>
       </div>
     </header>
@@ -128,11 +125,16 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
             [firstName]="firstName()"
             [lastName]="lastName()"
           />
-          <app-icon-btn [ariaLabel]="copy().close" (clicked)="closeMenu()">
+          <button
+            type="button"
+            class="kz-icon-btn"
+            [attr.aria-label]="copy().close"
+            (click)="closeMenu()"
+          >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
-          </app-icon-btn>
+          </button>
         </div>
 
         <nav class="sheet-links">
@@ -142,9 +144,9 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
         </nav>
 
         <div class="sheet-actions">
-          <app-portfolio-btn variant="primary" routerPath="/contact" (click)="closeMenu()">
+          <a [routerLink]="'/contact'" class="kz-btn kz-btn--primary" (click)="closeMenu()">
             {{ copy().contactMe }}
-          </app-portfolio-btn>
+          </a>
           <button type="button" class="sheet-theme-row" (click)="theme.toggleTheme()">
             <span>{{ themeLabel() }}</span>
             <span class="theme-indicator" [class.dark]="theme.isDark()"></span>
@@ -155,8 +157,9 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
   `,
   styles: [`
     /* ── Nav shell ─────────────────────────────────────────────────────────── */
-    .nav {
+    .kz-nav {
       position: sticky;
+      display: block;
       top: 0;
       z-index: 50;
       height: 70px;
@@ -164,9 +167,11 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       backdrop-filter: saturate(140%) blur(14px);
       -webkit-backdrop-filter: saturate(140%) blur(14px);
       border-bottom: 1px solid var(--nav-border, #2a2a2a);
+      box-shadow: var(--nav-shadow, none);
       transition:
         background var(--dur, 240ms) var(--ease),
-        border-color var(--dur, 240ms) var(--ease);
+        border-color var(--dur, 240ms) var(--ease),
+        box-shadow var(--dur, 240ms) var(--ease);
     }
 
     .nav-inner {
@@ -192,7 +197,7 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       border-radius: var(--r-sm, 6px);
       font-size: 14px;
       font-weight: 500;
-      color: var(--text-muted, #c7c9c2);
+      color: var(--text-muted, #4b5563);
       transition:
         color var(--dur-fast, 150ms) var(--ease),
         background var(--dur-fast, 150ms) var(--ease);
@@ -212,7 +217,7 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       height: 2px;
       width: 18px;
       margin: 4px auto 0;
-      background: var(--accent-line, #b2e742);
+      background: var(--accent-line, #a8d234);
       border-radius: var(--r-full, 9999px);
     }
 
@@ -224,9 +229,76 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       gap: 10px;
     }
 
-    .nav-cta { display: block; }
+    /* Override Tailwind preflight / browser defaults for buttons in nav */
+    .nav-right button {
+      font-family: inherit;
+    }
 
-    .menu-btn { display: none !important; }
+    /* Language toggle wide style */
+    .lang-btn {
+      width: auto;
+      padding: 0 14px;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text, #111827);
+    }
+
+    .lang-label {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* kz-icon-btn styles (local, since we're not using the atom) */
+    .kz-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--r-sm, 6px);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface, #ffffff);
+      border: 1px solid var(--border, #e5e7eb);
+      color: var(--text, #111827);
+      cursor: pointer;
+      transition:
+        border-color var(--dur-fast, 150ms) var(--ease),
+        transform var(--dur-fast, 150ms) var(--ease),
+        background var(--dur-fast, 150ms) var(--ease),
+        color var(--dur-fast, 150ms) var(--ease);
+    }
+    .kz-icon-btn:hover  { border-color: var(--accent-line, #a8d234); }
+    .kz-icon-btn:active { transform: scale(.96); }
+
+    /* CTA button */
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: 0 18px;
+      border-radius: var(--r, 8px);
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      background: var(--gradient-brand, linear-gradient(94deg, #85bb23 0%, #6ea30d 100%));
+      color: #fff !important;
+      border: 1px solid rgba(255, 255, 255, .12);
+      box-shadow: var(--shadow-btn);
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        filter var(--dur-fast, 150ms) var(--ease),
+        transform var(--dur-fast, 150ms) var(--ease);
+    }
+    .nav-cta:hover {
+      filter: brightness(1.07);
+      transform: translateY(-1px);
+      color: #fff !important;
+    }
+    .nav-cta:active { transform: scale(.98); }
+
+    .menu-btn { display: none; }
 
     /* ── Mobile sheet ─────────────────────────────────────────────────────── */
     .sheet {
@@ -246,8 +318,8 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       inset-inline-end: 0;
       height: 100%;
       width: min(82vw, 320px);
-      background: var(--surface, #1e1e1e);
-      border-inline-start: 1px solid var(--border, #2e2e2e);
+      background: var(--surface, #ffffff);
+      border-inline-start: 1px solid var(--border, #e5e7eb);
       padding: 22px;
       display: flex;
       flex-direction: column;
@@ -278,7 +350,7 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       border-radius: var(--r, 8px);
       font-size: 16px;
       font-weight: 600;
-      color: var(--text, #f4f5f0);
+      color: var(--text, #111827);
       text-decoration: none;
       transition: background var(--dur-fast, 150ms) var(--ease);
     }
@@ -292,6 +364,22 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       gap: 10px;
     }
 
+    .sheet-actions a.kz-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      padding: 0 18px;
+      border-radius: var(--r, 8px);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      background: var(--gradient-brand, linear-gradient(94deg, #85bb23 0%, #6ea30d 100%));
+      color: #fff !important;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow-btn);
+    }
+
     .sheet-theme-row {
       display: flex;
       align-items: center;
@@ -299,19 +387,20 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       width: 100%;
       padding: 12px;
       border-radius: var(--r, 8px);
-      border: 1px solid var(--border, #2e2e2e);
+      border: 1px solid var(--border, #e5e7eb);
       background: transparent;
-      color: var(--text-muted, #c7c9c2);
+      color: var(--text-muted, #4b5563);
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
+      font-family: inherit;
     }
 
     .theme-indicator {
       width: 32px;
       height: 18px;
       border-radius: 9px;
-      background: var(--border, #2e2e2e);
+      background: var(--border, #e5e7eb);
       position: relative;
       transition: background var(--dur-fast, 150ms) var(--ease);
     }
@@ -324,7 +413,7 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: var(--text-muted, #c7c9c2);
+      background: var(--text-muted, #4b5563);
       transition: transform var(--dur-fast, 150ms) var(--ease);
     }
 
@@ -335,9 +424,9 @@ import { PortfolioBtnComponent } from '@shared/atoms/portfolio-btn.component';
 
     /* ── Responsive ──────────────────────────────────────────────────────── */
     @media (max-width: 760px) {
-      .nav-links { display: none !important; }
-      .nav-cta   { display: none !important; }
-      .menu-btn  { display: inline-flex !important; }
+      .nav-links { display: none; }
+      .nav-cta   { display: none; }
+      .menu-btn  { display: inline-flex; }
       .nav-inner { padding: 0 18px; gap: 12px; }
     }
   `],
@@ -346,6 +435,7 @@ export class PublicNavbarComponent {
   readonly shell = inject(AppShellService);
   readonly session = inject(AuthSessionService);
   readonly theme = inject(PublicThemeService);
+  private readonly homeApi = inject(PortfolioHomePageApiService);
   readonly trackByRoute = trackByRoute;
   readonly menuOpen = signal(false);
 
@@ -353,7 +443,7 @@ export class PublicNavbarComponent {
 
   private readonly _identity = toSignal(
     toObservable(this.theme.language).pipe(
-      switchMap(() => inject(PortfolioHomePageApiService).getIdentity().pipe(catchError(() => of(null)))),
+      switchMap(() => this.homeApi.getIdentity().pipe(catchError(() => of(null)))),
     ),
     { initialValue: null },
   );
@@ -366,7 +456,19 @@ export class PublicNavbarComponent {
   readonly brandName   = computed(() => this._identity()?.fullName ?? 'Kareem Zarif');
   readonly firstName   = computed(() => this.brandName().split(' ')[0]);
   readonly lastName    = computed(() => this.brandName().split(' ').slice(1).join(' '));
-  readonly navigationItems = computed(() => this._navigation());
+
+  readonly navigationItems = computed(() => {
+    const api = this._navigation();
+    if (api.length > 0) return api;
+    const c = this.copy();
+    return [
+      { label: c.navHome,       path: '/',           exactMatch: true  },
+      { label: c.navProjects,   path: '/projects',   exactMatch: false },
+      { label: c.navExperience, path: '/experience', exactMatch: false },
+      { label: c.navSkills,     path: '/skills',     exactMatch: false },
+      { label: c.navContact,    path: '/contact',    exactMatch: false },
+    ];
+  });
 
   readonly langToggleLabel = computed(() =>
     this.theme.language() === 'en' ? 'العربية' : 'English',
